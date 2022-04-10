@@ -7,3 +7,66 @@ generator client {
   provider      = "prisma-client-js"
   binaryTargets = "native"
 }
+
+model User {
+  id                  String    @id @default(uuid())
+  email               String    @unique
+  hashedPassword      String
+  salt                String
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  firstName           String
+  lastName            String
+  roles               String    @default("moderator")
+  createdAt           DateTime  @default(now())
+  // patients            Patient[]
+  // clinic              Clinic?   @relation(fields: [clinicId], references: [id])
+  // clinicId            String?
+}
+
+// model Patient {
+//   id            String      @id @default(uuid())
+//   firstName     String
+//   lastName      String
+//   email         String      @unique
+//   clinic        Clinic      @relation(fields: [clinicId], references: [id])
+//   phoneNumber   PhoneNumber @relation(fields: [phoneNumberId], references: [id])
+//   address       Address     @relation(fields: [addressId], references: [id])
+//   clinician     User        @relation(fields: [userId], references: [id])
+//   clinicId      String
+//   userId        String
+//   addressId     String
+//   phoneNumberId String      @unique
+//   createdAt     DateTime    @default(now())
+
+// }
+
+// model Clinic {
+//   id            String      @id @default(uuid())
+//   name          String
+//   address       Address     @relation(fields: [addressId], references: [id])
+//   phoneNumber   PhoneNumber @relation(fields: [phoneNumberId], references: [id])
+//   patients      Patient[]
+//   clinicians    User[]
+//   addressId     String
+//   phoneNumberId String      @unique
+// }
+
+// model PhoneNumber {
+//   id          String    @id @default(uuid())
+//   countryCode String
+//   number      String
+//   patient     Patient[]
+//   clinic      Clinic[]
+// }
+
+// model Address {
+//   id             String    @id @default(uuid())
+//   flatNumber     String?
+//   buildingNumber String
+//   street         String
+//   city           String
+//   postCode       String
+//   patient        Patient[]
+//   clinic         Clinic[]
+// }
