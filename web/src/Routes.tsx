@@ -4,7 +4,7 @@ import WebLayout from 'src/layouts/WebLayout/WebLayout'
 const Routes = () => {
   return (
     <Router>
-      <Set wrap={WebLayout}>
+      <Set wrap={WebLayout} prerender>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/login" page={LoginPage} name="login" />
         <Route path="/signup" page={SignupPage} name="signup" />
