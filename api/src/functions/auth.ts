@@ -1,5 +1,17 @@
 import { db } from 'src/lib/db'
 import { DbAuthHandler } from '@redwoodjs/api'
+import { sendEmail } from 'src/lib/email'
+
+function sendForgotPasswordEmail(emailAddress: string, resetToken: string) {
+  const subject = 'Reset your password | Juno'
+  const text =
+    'Follow the link below to reset your password.\n\n' +
+    `http://localhost:8910/reset-password?resetToken=${resetToken}`
+  const html =
+    'Follow the link below to reset your password.<br><br>' +
+    `http://localhost:8910/reset-password?resetToken=${resetToken}`
+  return sendEmail({ to: emailAddress, subject, text, html })
+}
 
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
@@ -15,7 +27,8 @@ export const handler = async (event, context) => {
     // You could use this return value to, for example, show the email
     // address in a toast message so the user will know it worked and where
     // to look for the email.
-    handler: (user) => {
+    handler: async (user) => {
+      await sendForgotPasswordEmail(user.email, user.resetToken)
       return user
     },
 
