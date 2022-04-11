@@ -67,7 +67,7 @@ const SignupPage = () => {
             <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
               <Form
                 onSubmit={onSubmit}
-                config={{ mode: 'onBlur' }}
+                config={{ mode: 'onChange' }}
                 className="space-y-6"
               >
                 <div className="flex flex-col">
