@@ -12,7 +12,8 @@ import {
 } from '@redwoodjs/forms'
 
 const ResetPasswordPage = ({ resetToken }) => {
-  const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } = useAuth()
+  const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
+    useAuth()
   const [enabled, setEnabled] = useState(true)
 
   useEffect(() => {
@@ -60,53 +61,57 @@ const ResetPasswordPage = ({ resetToken }) => {
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-        <div className="rw-scaffold rw-login-container">
-          <div className="rw-segment">
-            <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">
-                Reset Password
-              </h2>
-            </header>
+        <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md">
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+              Reset your password
+            </h2>
+          </div>
 
-            <div className="rw-segment-main">
-              <div className="rw-form-wrapper">
-                <Form onSubmit={onSubmit} className="rw-form-wrapper">
-                  <div className="text-left">
-                    <Label
-                      name="password"
-                      className="rw-label"
-                      errorClassName="rw-label rw-label-error"
-                    >
-                      New Password
-                    </Label>
-                    <PasswordField
-                      name="password"
-                      autoComplete="new-password"
-                      className="rw-input"
-                      errorClassName="rw-input rw-input-error"
-                      disabled={!enabled}
-                      ref={passwordRef}
-                      validation={{
-                        required: {
-                          value: true,
-                          message: 'Password is required',
-                        },
-                      }}
-                    />
+          <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+            <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+              <Form
+                onSubmit={onSubmit}
+                config={{ mode: 'onChange' }}
+                className="space-y-6"
+              >
+                <div className="flex flex-col">
+                  <Label
+                    name="password"
+                    className="block text-sm font-medium text-gray-700"
+                    errorClassName="block text-sm font-medium text-red-500"
+                  >
+                    New Password
+                  </Label>
+                  <PasswordField
+                    name="password"
+                    autoComplete="new-password"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    errorClassName="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                    disabled={!enabled}
+                    ref={passwordRef}
+                    validation={{
+                      required: {
+                        value: true,
+                        message: 'Password is required',
+                      },
+                    }}
+                  />
+                </div>
+                <FieldError
+                  name="password"
+                  className="block text-sm font-medium text-red-500"
+                />
 
-                    <FieldError name="password" className="rw-field-error" />
-                  </div>
-
-                  <div className="rw-button-group">
-                    <Submit
-                      className="rw-button rw-button-blue"
-                      disabled={!enabled}
-                    >
-                      Submit
-                    </Submit>
-                  </div>
-                </Form>
-              </div>
+                <div>
+                  <Submit
+                    disabled={!enabled}
+                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    Submit
+                  </Submit>
+                </div>
+              </Form>
             </div>
           </div>
         </div>
