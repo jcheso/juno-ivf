@@ -7,6 +7,7 @@ import {
   PasswordField,
   FieldError,
   Submit,
+  SelectField,
 } from '@redwoodjs/forms'
 import { useAuth } from '@redwoodjs/auth'
 import { MetaTags } from '@redwoodjs/web'
@@ -29,7 +30,6 @@ const SignupPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    console.log(data)
     const response = await signUp({ ...data })
 
     if (response.message) {
@@ -115,6 +115,28 @@ const SignupPage = () => {
                   />
                   <FieldError
                     name="lastName"
+                    className="block text-sm font-medium text-red-500"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <Label
+                    name="clinicId"
+                    className="block text-sm font-medium text-gray-700"
+                    errorClassName="block text-sm font-medium text-red-500"
+                  >
+                    Clinic
+                  </Label>
+                  <SelectField
+                    name="clinicId"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    errorClassName="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                  >
+                    <option value="894358f9-fbd4-4833-9882-5baaaddacae3">
+                      Hammersmith
+                    </option>
+                  </SelectField>
+                  <FieldError
+                    name="clinicId"
                     className="block text-sm font-medium text-red-500"
                   />
                 </div>

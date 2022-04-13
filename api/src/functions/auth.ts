@@ -122,6 +122,7 @@ export const handler = async (event, context) => {
           salt: salt,
           firstName: userAttributes.firstName,
           lastName: userAttributes.lastName,
+          clinicId: userAttributes.clinicId,
         },
       })
     },
