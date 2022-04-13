@@ -45,9 +45,9 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     { name: 'Cycle Summary', to: '#', icon: CalendarIcon, current: false },
   ]
   const userNavigation = [
-    { name: 'Your Profile', to: '#' },
-    { name: 'Settings', to: '#' },
-    { name: 'Sign out', to: '#' },
+    { name: 'Your Profile', to: '#', onClick: null },
+    { name: 'Settings', to: '#', onClick: null },
+    { name: 'Sign out', to: '#', onClick: logOut },
   ]
 
   return (
@@ -235,10 +235,15 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                               to={item.to}
                               className={classNames(
                                 active ? 'bg-gray-100' : '',
-                                'block px-4 py-2 text-sm text-gray-700'
+                                'block text-sm text-gray-700'
                               )}
                             >
-                              {item.name}
+                              <button
+                                className="w-full px-4 py-2 h-full text-left"
+                                onClick={() => item.onClick()}
+                              >
+                                {item.name}
+                              </button>
                             </Link>
                           )}
                         </Menu.Item>
