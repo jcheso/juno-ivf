@@ -1,0 +1,45 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = "native"
+}
+
+model User {
+  id                  String    @id @default(uuid())
+  email               String    @unique
+  firstName           String
+  lastName            String
+  hashedPassword      String
+  salt                String
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  roles               String    @default("admin")
+  patients            Patient[]
+  clinic              Clinic    @relation(fields: [clinicId], references: [id])
+  clinicId            String
+  createdAt           DateTime  @default(now())
+}
+
+model Patient {
+  id          String   @id @default(uuid())
+  firstName   String
+  lastName    String
+  email       String   @unique
+  clinic      Clinic   @relation(fields: [clinicId], references: [id])
+  clinicId    String
+  clinician   User     @relation(fields: [clinicianId], references: [id])
+  clinicianId String
+  createdAt   DateTime @default(now())
+
+}
+
+model Clinic {
+  id         String    @id @default(uuid())
+  name       String
+  patients   Patient[]
+  clinicians User[]
+}
