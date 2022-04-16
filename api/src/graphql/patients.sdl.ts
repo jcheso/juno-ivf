@@ -11,9 +11,16 @@ export const schema = gql`
     createdAt: DateTime!
   }
 
+  input SearchPatientInput {
+    firstName: String
+    lastName: String
+    clinicId: String
+  }
+
   type Query {
     patients: [Patient!]! @requireAuth
     patient(id: String!): Patient @requireAuth
+    searchPatients(input: SearchPatientInput): Patient @skipAuth
   }
 
   input CreatePatientInput {

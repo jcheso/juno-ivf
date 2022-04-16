@@ -46,3 +46,16 @@ export const Patient = {
   clinician: (_obj, { root }: ResolverArgs<ReturnType<typeof patient>>) =>
     db.patient.findUnique({ where: { id: root.id } }).clinician(),
 }
+
+export const searchPatients = ({ input }) => {
+  console.log(input)
+  return db.patient.findMany({
+    where: {
+      OR: [
+        { firstName: { startsWith: input.firstName } },
+        { lastName: { startsWith: input.lastName } },
+        { clinicId: { equals: input.clinicId } },
+      ],
+    },
+  })
+}
