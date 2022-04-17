@@ -20,7 +20,13 @@ export const schema = gql`
   type Query {
     patients: [Patient!]! @requireAuth
     patient(id: String!): Patient @requireAuth
-    searchPatients(input: SearchPatientInput): Patient @skipAuth
+    searchPatients(input: SearchPatientInput): [Patient] @skipAuth
+  }
+
+  input SearchPatientInput {
+    firstName: String
+    lastName: String
+    clinic: String
   }
 
   input CreatePatientInput {

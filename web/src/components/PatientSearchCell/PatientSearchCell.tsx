@@ -1,3 +1,4 @@
+import type { SearchPatientInput } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { Link } from '@redwoodjs/router'
 
@@ -20,7 +21,7 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ patients }: CellSuccessProps) => {
+export const Success = ({ patients }: CellSuccessProps<SearchPatientInput>) => {
   return (
     <div className="mt-2 flex flex-col">
       <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">

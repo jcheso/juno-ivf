@@ -48,13 +48,12 @@ export const Patient = {
 }
 
 export const searchPatients = ({ input }) => {
-  console.log(input)
   return db.patient.findMany({
     where: {
-      OR: [
-        { firstName: { startsWith: input.firstName } },
-        { lastName: { startsWith: input.lastName } },
-        { clinicId: { equals: input.clinicId } },
+      AND: [
+        { firstName: { contains: input.firstName } },
+        { lastName: { contains: input.lastName } },
+        { clinicId: { contains: input.clinicId } },
       ],
     },
   })
