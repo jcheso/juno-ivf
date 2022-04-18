@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import PatientSearch from './PatientSearch'
+import PatientSearchResults from './PatientSearchResults'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('PatientSearch', () => {
+describe('PatientSearchResults', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<PatientSearch />)
+      render(<PatientSearchResults />)
     }).not.toThrow()
   })
 })
