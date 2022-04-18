@@ -36,6 +36,7 @@ const PatientSearch = () => {
               value={firstName}
               onChange={(e) => updateFirstName(e.target.value)}
               type="text"
+              autoComplete="off"
               name="firstName"
               id="firstName"
               className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
@@ -55,6 +56,7 @@ const PatientSearch = () => {
               value={lastName}
               onChange={(e) => updateLastName(e.target.value)}
               type="text"
+              autoComplete="off"
               name="lastName"
               id="lastName"
               className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
