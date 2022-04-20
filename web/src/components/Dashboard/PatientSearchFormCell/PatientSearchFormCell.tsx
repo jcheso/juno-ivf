@@ -18,17 +18,13 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ clinics, input, updateState }: CellSuccessProps) => {
+export const Success = ({ clinics, input, updateInput }: CellSuccessProps) => {
   return (
     <>
       <PatientSearchForm
         clinics={clinics}
-        firstName={input.firstName}
-        lastName={input.lastName}
-        clinic={input.clinic}
-        updateFirstName={updateState.updateFirstName}
-        updateLastName={updateState.updateLastName}
-        updateClinic={updateState.updateClinic}
+        input={input}
+        updateInput={updateInput}
       />
     </>
   )

@@ -35,7 +35,7 @@ describe('PatientSearchCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success patientSearch={standard().patientSearch} />)
+      render(<Success patients={standard} />)
     }).not.toThrow()
   })
 })

@@ -130,12 +130,20 @@ const WebLayout = ({ children }: WebLayoutProps) => {
               </div>
             )}
             {isAuthenticated && (
-              <button
-                onClick={logOut}
-                className="inline-block bg-indigo-500 py-2 px-4 border border-transparent rounded-md text-base font-medium text-white hover:bg-opacity-75"
-              >
-                Sign out
-              </button>
+              <div className="ml-10 space-x-4">
+                <Link
+                  to={routes.dashboard()}
+                  className="inline-block bg-indigo-500 py-2 px-4 border border-transparent rounded-md text-base font-medium text-white hover:bg-opacity-75"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={logOut}
+                  className="inline-block bg-white py-2 px-4 border border-transparent rounded-md text-base font-medium text-indigo-600 hover:bg-indigo-50"
+                >
+                  Sign out
+                </button>
+              </div>
             )}
           </div>
           <div className="py-4 flex flex-wrap justify-center space-x-6 lg:hidden">

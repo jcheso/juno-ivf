@@ -1,5 +1,9 @@
 import PatientSearch from './PatientSearchForm'
-
+const searchInput = {
+  firstName: '',
+  lastName: '',
+  clinicId: '',
+}
 const clinics = [
   {
     id: '894358f9-fbd4-4833-9882-5baaaddacae3',
@@ -17,15 +21,7 @@ const clinics = [
 
 export const generated = () => {
   return (
-    <PatientSearch
-      firstName=""
-      lastName=""
-      clinics={clinics}
-      clinic={undefined}
-      updateFirstName={undefined}
-      updateLastName={undefined}
-      updateClinic={undefined}
-    />
+    <PatientSearch clinics={clinics} input={searchInput} updateInput={null} />
   )
 }
 

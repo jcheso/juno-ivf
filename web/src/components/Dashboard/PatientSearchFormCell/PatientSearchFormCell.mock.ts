@@ -14,6 +14,8 @@ export const standard = (/* vars, { ctx, req } */) => ({
       name: 'South Kensington',
     },
   ],
-  firstName: 'Jane',
-  lastName: 'Deer',
+  input: {
+    firstName: 'Jane',
+    lastName: 'Deer',
+  },
 })

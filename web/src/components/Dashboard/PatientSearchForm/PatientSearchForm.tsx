@@ -1,16 +1,13 @@
 import React from 'react'
 
-const PatientSearchForm = ({
-  clinics,
-  firstName,
-  lastName,
-  clinic,
-  updateFirstName,
-  updateLastName,
-  updateClinic,
-}) => {
+const PatientSearchForm = ({ clinics, input, updateInput }) => {
+  const handleInputChange = (event) => {
+    const { name, value } = event.target
+    updateInput({ ...input, [name]: value })
+  }
+
   return (
-    <>
+    <div className="flex-col flex">
       <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
         <div className="ml-4 mt-2">
           <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -36,8 +33,8 @@ const PatientSearchForm = ({
           </label>
           <div className="mt-1">
             <input
-              value={firstName}
-              onChange={(e) => updateFirstName(e.target.value)}
+              value={input.firstName}
+              onChange={(e) => handleInputChange(e)}
               type="text"
               autoComplete="off"
               name="firstName"
@@ -56,8 +53,8 @@ const PatientSearchForm = ({
           </label>
           <div className="mt-1">
             <input
-              value={lastName}
-              onChange={(e) => updateLastName(e.target.value)}
+              value={input.lastName}
+              onChange={(e) => handleInputChange(e)}
               type="text"
               autoComplete="off"
               name="lastName"
@@ -75,10 +72,10 @@ const PatientSearchForm = ({
             Clinic
           </label>
           <select
-            value={clinic}
-            onChange={(e) => updateClinic(e.target.value)}
-            id="clinic"
-            name="clinic"
+            value={input.clinicId}
+            onChange={(e) => handleInputChange(e)}
+            id="clinicId"
+            name="clinicId"
             className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
           >
             {clinics.map((clinic) => (
@@ -89,7 +86,7 @@ const PatientSearchForm = ({
           </select>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
