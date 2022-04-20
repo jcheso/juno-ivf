@@ -1,6 +1,5 @@
 import type { Prisma } from '@prisma/client'
 import type { ResolverArgs } from '@redwoodjs/graphql-server'
-
 import { db } from 'src/lib/db'
 
 export const patients = () => {
@@ -45,4 +44,17 @@ export const Patient = {
     db.patient.findUnique({ where: { id: root.id } }).clinic(),
   clinician: (_obj, { root }: ResolverArgs<ReturnType<typeof patient>>) =>
     db.patient.findUnique({ where: { id: root.id } }).clinician(),
+}
+
+export const searchPatients = ({ input }) => {
+  return db.patient.findMany({
+    where: {
+      AND: [
+        { firstName: { startsWith: input.firstName } },
+        { lastName: { startsWith: input.lastName } },
+        { clinicId: { startsWith: input.clinicId } },
+      ],
+    },
+    take: 5,
+  })
 }

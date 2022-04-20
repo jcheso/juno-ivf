@@ -18,6 +18,7 @@ const Routes = () => {
       <Private unauthenticated="login" roles="admin">
         <Set wrap={AppLayout}>
           <Route path="/dashboard" page={DashboardPage} name="dashboard" />
+          <Route path="/add-patient" page={AddPatientPage} name="addPatient" />
         </Set>
         <Set wrap={UsersLayout}>
           <Route path="/users/new" page={UserNewUserPage} name="newUser" />

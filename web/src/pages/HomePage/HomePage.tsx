@@ -21,7 +21,8 @@ const HomePage = () => {
             </h1>
             <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
               A modern cloud-based web application for tracking your patients
-              IVF Cycle from Day 1.
+              IVF Cycle from Day 1. Coupled with AI technology to give data
+              driven decision making for the optimal treatment strategies.
             </p>
             <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
               <p className="text-base font-medium text-gray-900">
