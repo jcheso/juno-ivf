@@ -1,6 +1,6 @@
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { SearchPatients } from 'types/graphql'
-import PatientSearchResults from '../PatientSearchResults/PatientSearchResults'
+import PatientSearchResults from 'src/components/PatientSearch/PatientSearchResults/PatientSearchResults'
 
 export const QUERY = gql`
   query SearchPatients($input: SearchPatientsInput!) {

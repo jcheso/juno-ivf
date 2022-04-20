@@ -1,5 +1,4 @@
 import PatientSearchResults from './PatientSearchResults'
-import { standard } from '../PatientSearchResultsCell/PatientSearchResultsCell.mock'
 
 const patients = [
   {

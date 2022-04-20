@@ -1,4 +1,4 @@
-import { render, screen } from '@redwoodjs/testing/web'
+import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './PatientSearchFormCell'
 import { standard } from './PatientSearchFormCell.mock'
 
@@ -35,7 +35,13 @@ describe('PatientSearchFormCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success clinics={standard()} />)
+      render(
+        <Success
+          clinics={standard().clinics}
+          input={standard().input}
+          updateInput={null}
+        />
+      )
     }).not.toThrow()
   })
 })

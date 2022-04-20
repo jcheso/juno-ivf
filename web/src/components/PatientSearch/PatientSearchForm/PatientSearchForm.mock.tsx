@@ -1,10 +1,9 @@
-import PatientSearch from './PatientSearchForm'
-const searchInput = {
+export const searchInput = {
   firstName: '',
   lastName: '',
   clinicId: '',
 }
-const clinics = [
+export const clinics = [
   {
     id: '894358f9-fbd4-4833-9882-5baaaddacae3',
     name: 'Hammersmith',
@@ -18,11 +17,3 @@ const clinics = [
     name: 'South Kensington',
   },
 ]
-
-export const generated = () => {
-  return (
-    <PatientSearch clinics={clinics} input={searchInput} updateInput={null} />
-  )
-}
-
-export default { title: 'Components/PatientSearch' }

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link, routes } from '@redwoodjs/router'
 
 const PatientSearchForm = ({ clinics, input, updateInput }) => {
   const handleInputChange = (event) => {
@@ -15,12 +16,13 @@ const PatientSearchForm = ({ clinics, input, updateInput }) => {
           </h3>
         </div>
         <div className="ml-4 mt-2 flex-shrink-0">
-          <button
+          <Link
+            to={routes.addPatient()}
             type="button"
             className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Add new patient
-          </button>
+          </Link>
         </div>
       </div>
       <div className="flex flex-col md:flex-row justify-start py-4">
