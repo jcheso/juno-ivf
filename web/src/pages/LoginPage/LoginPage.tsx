@@ -12,7 +12,6 @@ import { useAuth } from '@redwoodjs/auth'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import { useEffect } from 'react'
-import { loading } from '../../components/AddPatientCell/AddPatientCell.stories'
 import CircleLoader from 'react-spinners/CircleLoader'
 
 const LoginPage = () => {
