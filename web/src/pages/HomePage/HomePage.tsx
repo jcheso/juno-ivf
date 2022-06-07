@@ -1,6 +1,6 @@
 import { Form, Submit } from '@redwoodjs/forms'
-import { Link } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
+import familyIcon from './pablita-family-1.png'
 
 const HomePage = () => {
   return (
@@ -43,41 +43,11 @@ const HomePage = () => {
                   Notify me
                 </Submit>
               </Form>
-              <p className="mt-3 text-sm text-gray-500">
-                We care about the protection of your data. Read our{' '}
-                <Link to="#" className="font-medium text-gray-900 underline">
-                  Privacy Policy
-                </Link>
-                .
-              </p>
             </div>
           </div>
           <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
-            <div className="relative mx-auto w-full rounded-lg shadow-lg lg:max-w-md">
-              <button
-                type="button"
-                className="relative block w-full bg-white rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                <span className="sr-only">Watch our video to learn more</span>
-                <img
-                  className="w-full"
-                  src="https://images.unsplash.com/photo-1556740758-90de374c12ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-                  alt=""
-                />
-                <div
-                  className="absolute inset-0 w-full h-full flex items-center justify-center"
-                  aria-hidden="true"
-                >
-                  <svg
-                    className="h-20 w-20 text-indigo-500"
-                    fill="currentColor"
-                    viewBox="0 0 84 84"
-                  >
-                    <circle opacity="0.9" cx={42} cy={42} r={42} fill="white" />
-                    <path d="M55.5039 40.3359L37.1094 28.0729C35.7803 27.1869 34 28.1396 34 29.737V54.263C34 55.8604 35.7803 56.8131 37.1094 55.9271L55.5038 43.6641C56.6913 42.8725 56.6913 41.1275 55.5039 40.3359Z" />
-                  </svg>
-                </div>
-              </button>
+            <div className="relative mx-auto w-full  lg:max-w-md">
+              <img className="w-full" src={familyIcon} alt="Family Cartoon" />
             </div>
           </div>
         </div>
