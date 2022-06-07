@@ -6,10 +6,10 @@ function sendForgotPasswordEmail(emailAddress: string, resetToken: string) {
   const subject = 'Reset your password | Juno'
   const text =
     'Follow the link below to reset your password.\n\n' +
-    `http://localhost:8910/reset-password?resetToken=${resetToken}`
+    `https://juno-ivf.vercel.app/reset-password?resetToken=${resetToken}`
   const html =
     'Follow the link below to reset your password.<br><br>' +
-    `http://localhost:8910/reset-password?resetToken=${resetToken}`
+    `https://juno-ivf.vercel.app/reset-password?resetToken=${resetToken}`
   return sendEmail({ to: emailAddress, subject, text, html })
 }
 
@@ -115,11 +115,11 @@ export const handler = async (event, context) => {
     // If this returns anything else, it will be returned by the
     // `signUp()` function in the form of: `{ message: 'String here' }`.
     handler: ({ username, hashedPassword, salt, userAttributes }) => {
-      // Trim any whitespace before/after username entered
-      const trimmedEmail = username.trim()
+      // Lowercase the email address
+      const parsedEmail = username.trim().toLowerCase()
       return db.user.create({
         data: {
-          email: trimmedEmail,
+          email: parsedEmail,
           hashedPassword: hashedPassword,
           salt: salt,
           firstName: userAttributes.firstName,
