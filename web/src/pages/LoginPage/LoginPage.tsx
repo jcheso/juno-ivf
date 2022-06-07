@@ -15,8 +15,7 @@ import { useEffect } from 'react'
 import CircleLoader from 'react-spinners/CircleLoader'
 
 const LoginPage = () => {
-  const { isAuthenticated, logIn } = useAuth()
-  const [loading, setLoading] = useState(false)
+  const { isAuthenticated, logIn, loading } = useAuth()
   useEffect(() => {
     if (isAuthenticated) {
       navigate(routes.dashboard())
@@ -29,11 +28,9 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    setLoading(true)
     const username = data.username.toLowerCase().trim()
     const updatedData = { ...data, username }
     const response = await logIn({ ...updatedData })
-    setLoading(false)
     if (response.message) {
       toast(response.message)
     } else if (response.error) {

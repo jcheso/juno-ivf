@@ -25,16 +25,26 @@ model User {
 }
 
 model Patient {
-  id          String   @id @default(uuid())
-  firstName   String
-  lastName    String
-  email       String   @unique
-  clinic      Clinic   @relation(fields: [clinicId], references: [id])
-  clinicId    String
-  clinician   User     @relation(fields: [clinicianId], references: [id])
-  clinicianId String
-  createdAt   DateTime @default(now())
-
+  id                   String   @id @default(uuid())
+  firstName            String
+  lastName             String
+  phone                String
+  email                String   @unique
+  clinic               Clinic   @relation(fields: [clinicId], references: [id])
+  clinicId             String
+  clinician            User     @relation(fields: [clinicianId], references: [id])
+  clinicianId          String
+  dob                  DateTime
+  address              String
+  city                 String
+  county               String
+  country              String
+  postcode             String
+  medicalHistory       String
+  surgicalHistory      String
+  medications          String
+  infertilityDiagnosis String
+  createdAt            DateTime @default(now())
 }
 
 model Clinic {

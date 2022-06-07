@@ -10,11 +10,10 @@ import {
 } from '@redwoodjs/forms'
 import { Link, routes } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/toast'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import CircleLoader from 'react-spinners/CircleLoader'
 const SignupForm = ({ clinics }) => {
-  const { signUp } = useAuth()
-  const [loading, setLoading] = useState(false)
+  const { signUp, loading } = useAuth()
 
   // focus on email box on page load
   const usernameRef = useRef<HTMLInputElement>()
@@ -23,10 +22,7 @@ const SignupForm = ({ clinics }) => {
   }, [])
 
   const onSubmit = async (data) => {
-    setLoading(true)
     const response = await signUp({ ...data })
-    setLoading(false)
-
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
