@@ -1,11 +1,36 @@
-import { Form, Submit } from '@redwoodjs/forms'
-import { MetaTags } from '@redwoodjs/web'
+import { Form, Submit, Label, TextField } from '@redwoodjs/forms'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import familyIcon from './pablita-family-1.png'
+import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const HomePage = () => {
+  const ADD_TO_WAITLIST = gql`
+    mutation CreateContactMutation($input: CreateWaitListInput!) {
+      addToWaitList(input: $input) {
+        id
+        email
+        createdAt
+      }
+    }
+  `
+
+  const [add, { loading }] = useMutation(ADD_TO_WAITLIST, {
+    onError: () => {
+      toast.error("You've already signed up, be patient!")
+    },
+    onCompleted: () => {
+      toast.success('Thanks for your interest!')
+    },
+  })
+
+  const onSubmit = (data) => {
+    add({ variables: { input: data } })
+  }
+
   return (
     <>
       <MetaTags title="Home" description="Home page" />
+      <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
 
       <main className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24 sm:px-6 lg:mt-32">
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
@@ -28,18 +53,27 @@ const HomePage = () => {
               <p className="text-base font-medium text-gray-900">
                 Sign up to get notified when it’s ready.
               </p>
-              <Form className="mt-3 sm:flex">
-                <label htmlFor="email" className="sr-only">
-                  Email
-                </label>
-                <input
-                  type="email"
+              <Form onSubmit={onSubmit} className="mt-3 sm:flex">
+                <TextField
                   name="email"
                   id="email"
                   className="block w-full py-3 text-base rounded-md placeholder-gray-500 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:flex-1 border-gray-300"
                   placeholder="Enter your email"
+                  validation={{
+                    required: {
+                      value: true,
+                      message: 'Email is required',
+                    },
+                    pattern: {
+                      value: /^[^@]+@[^.]+\..+$/,
+                      message: 'Please enter a valid email address',
+                    },
+                  }}
                 />
-                <Submit className="mt-3 w-full px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:flex-shrink-0 sm:inline-flex sm:items-center sm:w-auto">
+                <Submit
+                  disabled={loading}
+                  className="mt-3 w-full px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:flex-shrink-0 sm:inline-flex sm:items-center sm:w-auto"
+                >
                   Notify me
                 </Submit>
               </Form>

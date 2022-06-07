@@ -43,3 +43,9 @@ model Clinic {
   patients   Patient[]
   clinicians User[]
 }
+
+model WaitList {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
