@@ -1,5 +1,5 @@
 import { Link, navigate, routes } from '@redwoodjs/router'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import {
   Form,
   Label,
@@ -12,10 +12,12 @@ import { useAuth } from '@redwoodjs/auth'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import { useEffect } from 'react'
+import { loading } from '../../components/AddPatientCell/AddPatientCell.stories'
+import CircleLoader from 'react-spinners/CircleLoader'
 
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
-
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     if (isAuthenticated) {
       navigate(routes.dashboard())
@@ -28,10 +30,11 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
+    setLoading(true)
     const username = data.username.toLowerCase().trim()
     const updatedData = { ...data, username }
     const response = await logIn({ ...updatedData })
-
+    setLoading(false)
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
@@ -138,9 +141,22 @@ const LoginPage = () => {
                 </div>
 
                 <div>
-                  <Submit className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Sign in
-                  </Submit>
+                  {!loading ? (
+                    <Submit
+                      disabled={loading}
+                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      Sign in
+                    </Submit>
+                  ) : (
+                    <div className="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                      <CircleLoader
+                        loading={loading}
+                        color="#ffffff"
+                        size={20}
+                      />
+                    </div>
+                  )}
                 </div>
               </Form>
             </div>

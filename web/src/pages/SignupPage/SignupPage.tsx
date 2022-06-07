@@ -16,7 +16,7 @@ const SignupPage = () => {
 
   return (
     <>
-      <MetaTags title="Signup" />
+      <MetaTags title="Sign Up" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
