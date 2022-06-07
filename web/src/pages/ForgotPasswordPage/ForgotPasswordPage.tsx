@@ -20,7 +20,8 @@ const ForgotPasswordPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await forgotPassword(data.username)
+    const username = data.username.toLowerCase().trim()
+    const response = await forgotPassword(username)
 
     if (response.error) {
       toast.error(response.error)

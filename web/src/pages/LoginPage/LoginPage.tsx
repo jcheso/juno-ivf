@@ -28,7 +28,9 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await logIn({ ...data })
+    const username = data.username.toLowerCase().trim()
+    const updatedData = { ...data, username }
+    const response = await logIn({ ...updatedData })
 
     if (response.message) {
       toast(response.message)
