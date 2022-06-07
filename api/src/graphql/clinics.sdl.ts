@@ -20,7 +20,7 @@ export const schema = gql`
   }
 
   type Mutation {
-    createClinic(input: CreateClinicInput!): Clinic! @requireAuth
+    createClinic(input: CreateClinicInput!): Clinic! @skipAuth
     updateClinic(id: String!, input: UpdateClinicInput!): Clinic! @requireAuth
     deleteClinic(id: String!): Clinic! @requireAuth
   }
