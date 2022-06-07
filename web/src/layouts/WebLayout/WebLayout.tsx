@@ -86,17 +86,17 @@ const WebLayout = ({ children }: WebLayoutProps) => {
         >
           <div className="w-full py-6 flex items-center justify-between border-b border-indigo-500 lg:border-none">
             <div className="flex items-center">
-              <Link to="/">
+              <Link to={routes.home()}>
                 <span className="sr-only">Juno</span>
                 <img
                   className="h-10 w-auto"
-                  src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
-                  alt=""
+                  src="https://img.icons8.com/external-wanicon-lineal-wanicon/FFFFFF/256/undefined/external-pregnancy-medical-wanicon-lineal-wanicon.png"
+                  alt="Juno Logo"
                 />
               </Link>
               <div className="align-middle pl-4">
                 <Link to="/">
-                  <h1 className=" font-bold text-white text-3xl lg:pb-2">
+                  <h1 className="font-bold text-white text-3xl lg:pb-2">
                     Juno
                   </h1>
                 </Link>

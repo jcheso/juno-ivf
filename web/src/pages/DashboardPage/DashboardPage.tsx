@@ -18,10 +18,7 @@ const DashboardPage = () => {
           input={searchInput}
           updateInput={updateSearchInput}
         />
-        <PatientSearchResultsCell
-          input={searchInput}
-          updateInput={updateSearchInput}
-        />
+        <PatientSearchResultsCell input={searchInput} />
       </div>
     </>
   )

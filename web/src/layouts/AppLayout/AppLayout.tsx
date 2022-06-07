@@ -106,8 +106,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                 <div className="flex-shrink-0 flex items-center px-4">
                   <img
                     className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
-                    alt="Juno"
+                    src="https://img.icons8.com/external-wanicon-lineal-wanicon/FFFFFF/256/undefined/external-pregnancy-medical-wanicon-lineal-wanicon.png"
+                    alt="Juno Logo"
                   />
                   <h1 className="pl-4 font-bold text-white text-3xl">Juno</h1>
                 </div>
@@ -144,8 +144,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             <div className="flex items-center flex-shrink-0 px-4">
               <img
                 className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
-                alt="Juno"
+                src="https://img.icons8.com/external-wanicon-lineal-wanicon/FFFFFF/256/undefined/external-pregnancy-medical-wanicon-lineal-wanicon.png"
+                alt="Juno Logo"
               />
               <h1 className="pl-4 font-bold text-white text-3xl">Juno</h1>
             </div>
