@@ -5,7 +5,7 @@ import { toast, Toaster } from '@redwoodjs/web/toast'
 
 const HomePage = () => {
   const ADD_TO_WAITLIST = gql`
-    mutation CreateContactMutation($input: CreateWaitListInput!) {
+    mutation AddToWaitList($input: CreateWaitListInput!) {
       addToWaitList(input: $input) {
         id
         email

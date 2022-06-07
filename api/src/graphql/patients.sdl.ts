@@ -8,7 +8,23 @@ export const schema = gql`
     clinicId: String!
     clinician: User!
     clinicianId: String!
+    dob: DateTime!
+    address: String!
+    city: String!
+    county: String!
+    country: String!
+    postcode: String!
+    medicalHistory: String
+    surgicalHistory: String
+    medications: String
+    infertilityDiagnosis: String
     createdAt: DateTime!
+  }
+
+  type Query {
+    patients: [Patient!]! @requireAuth
+    patient(id: String!): Patient @requireAuth
+    searchPatients(input: SearchPatientsInput): [Patient] @requireAuth
   }
 
   input SearchPatientsInput {
@@ -17,18 +33,23 @@ export const schema = gql`
     clinicId: String
   }
 
-  type Query {
-    patients: [Patient!]! @requireAuth
-    patient(id: String!): Patient @requireAuth
-    searchPatients(input: SearchPatientsInput): [Patient] @skipAuth
-  }
-
   input CreatePatientInput {
     firstName: String!
     lastName: String!
     email: String!
     clinicId: String!
     clinicianId: String!
+    dob: DateTime!
+    address: String!
+    city: String!
+    county: String!
+    country: String!
+    postcode: String!
+    medicalHistory: String
+    surgicalHistory: String
+    medications: String
+    infertilityDiagnosis: String
+    phone: String!
   }
 
   input UpdatePatientInput {
@@ -37,6 +58,17 @@ export const schema = gql`
     email: String
     clinicId: String
     clinicianId: String
+    dob: DateTime
+    address: String
+    city: String
+    county: String
+    country: String
+    postcode: String
+    medicalHistory: String
+    surgicalHistory: String
+    medications: String
+    infertilityDiagnosis: String
+    phone: String
   }
 
   type Mutation {

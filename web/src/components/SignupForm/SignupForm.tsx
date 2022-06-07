@@ -11,9 +11,9 @@ import {
 import { Link, routes } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/toast'
 import { useEffect, useRef } from 'react'
-
+import CircleLoader from 'react-spinners/CircleLoader'
 const SignupForm = ({ clinics }) => {
-  const { signUp } = useAuth()
+  const { signUp, loading } = useAuth()
 
   // focus on email box on page load
   const usernameRef = useRef<HTMLInputElement>()
@@ -23,13 +23,12 @@ const SignupForm = ({ clinics }) => {
 
   const onSubmit = async (data) => {
     const response = await signUp({ ...data })
-
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Welcome!')
+      toast.success('Welcome to Juno!')
     }
   }
 
@@ -185,9 +184,18 @@ const SignupForm = ({ clinics }) => {
             </div>
 
             <div>
-              <Submit className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Register
-              </Submit>
+              {!loading ? (
+                <Submit
+                  disabled={loading}
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Register
+                </Submit>
+              ) : (
+                <div className="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                  <CircleLoader loading={loading} color="#ffffff" size={20} />
+                </div>
+              )}
             </div>
           </Form>
         </div>
