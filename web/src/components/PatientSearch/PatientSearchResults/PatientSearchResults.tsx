@@ -1,7 +1,6 @@
 import { navigate, Link, routes } from '@redwoodjs/router'
 import React from 'react'
 import { PatientContext } from 'src/providers/context/PatientContext'
-import { patientSummary } from '../../PatientSummaryCell/PatientSummaryCell.mock'
 
 const PatientSearchResults = ({ patients }) => {
   const [patient, setPatient] = React.useContext(PatientContext)
