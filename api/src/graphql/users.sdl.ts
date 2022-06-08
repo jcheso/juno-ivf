@@ -13,6 +13,7 @@ export const schema = gql`
     clinic: Clinic!
     clinicId: String!
     createdAt: DateTime!
+    treatments: [Treatment]
   }
 
   type Query {

@@ -45,7 +45,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     },
     {
       name: 'Treatments',
-      to: '#',
+      to: routes.treatments(),
       icon: ChartBarIcon,
       current: false,
       hidden: hidden,

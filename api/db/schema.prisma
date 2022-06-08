@@ -9,30 +9,31 @@ generator client {
 }
 
 model User {
-  id                  String    @id @default(uuid())
-  email               String    @unique
+  id                  String      @id @default(uuid())
+  email               String      @unique
   firstName           String
   lastName            String
   hashedPassword      String
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
-  roles               String    @default("admin")
+  roles               String      @default("admin")
   patients            Patient[]
-  clinic              Clinic    @relation(fields: [clinicId], references: [id])
+  clinic              Clinic      @relation(fields: [clinicId], references: [id])
   clinicId            String
-  createdAt           DateTime  @default(now())
+  createdAt           DateTime    @default(now())
+  treatments          Treatment[]
 }
 
 model Patient {
-  id                   String   @id @default(uuid())
+  id                   String      @id @default(uuid())
   firstName            String
   lastName             String
   phone                String
-  email                String   @unique
-  clinic               Clinic   @relation(fields: [clinicId], references: [id])
+  email                String      @unique
+  clinic               Clinic      @relation(fields: [clinicId], references: [id])
   clinicId             String
-  clinician            User     @relation(fields: [clinicianId], references: [id])
+  clinician            User        @relation(fields: [clinicianId], references: [id])
   clinicianId          String
   dob                  DateTime
   address              String
@@ -40,11 +41,12 @@ model Patient {
   county               String
   country              String
   postcode             String
-  medicalHistory       String
-  surgicalHistory      String
-  medications          String
-  infertilityDiagnosis String
-  createdAt            DateTime @default(now())
+  medicalHistory       String?
+  surgicalHistory      String?
+  medications          String?
+  infertilityDiagnosis String?
+  createdAt            DateTime    @default(now())
+  treatments           Treatment[]
 }
 
 model Clinic {
@@ -58,4 +60,17 @@ model WaitList {
   id        String   @id @default(uuid())
   email     String   @unique
   createdAt DateTime @default(now())
+}
+
+model Treatment {
+  id            String    @id @default(uuid())
+  clinician     User      @relation(fields: [clinicianId], references: [id])
+  clinicianId   String
+  patient       Patient   @relation(fields: [patientId], references: [id])
+  patientId     String
+  startDate     DateTime
+  endDate       DateTime?
+  wasSuccessful Boolean?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
 }
