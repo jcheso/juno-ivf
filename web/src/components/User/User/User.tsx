@@ -66,41 +66,53 @@ const User = ({ user }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">User {user.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            User {user.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
               <td>{user.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Email</th>
               <td>{user.email}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>First name</th>
               <td>{user.firstName}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Last name</th>
               <td>{user.lastName}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Hashed password</th>
               <td>{user.hashedPassword}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Salt</th>
               <td>{user.salt}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Reset token</th>
               <td>{user.resetToken}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Reset token expires at</th>
               <td>{timeTag(user.resetTokenExpiresAt)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Roles</th>
               <td>{user.roles}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Clinic id</th>
               <td>{user.clinicId}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(user.createdAt)}</td>
             </tr>

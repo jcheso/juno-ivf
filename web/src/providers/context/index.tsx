@@ -1,8 +1,13 @@
 // web/src/providers/context/index.js
 import { PatientContextProvider } from './PatientContext'
+import { TreatmentContextProvider } from './TreatmentContext'
 
 const AllContextProviders = ({ children }) => {
   // Add additional context providers here
-  return <PatientContextProvider>{children}</PatientContextProvider>
+  return (
+    <TreatmentContextProvider>
+      <PatientContextProvider>{children}</PatientContextProvider>
+    </TreatmentContextProvider>
+  )
 }
 export default AllContextProviders

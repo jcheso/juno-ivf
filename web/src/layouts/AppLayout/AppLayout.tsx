@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useContext, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   CalendarIcon,
@@ -15,6 +15,7 @@ import {
 import { Link, navigate, NavLink, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import { PatientContext } from 'src/providers/context/PatientContext'
+import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -28,6 +29,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { logOut } = useAuth()
   const [patient, setPatient] = React.useContext(PatientContext)
+  const [activeTreatment, setActiveTreatment] = useContext(TreatmentContext)
   const hidden = patient.id == undefined ? true : false
   const navigation = [
     {
@@ -45,8 +47,15 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     },
     {
       name: 'Treatments',
-      to: '#',
+      to: routes.treatments(),
       icon: ChartBarIcon,
+      current: false,
+      hidden: hidden,
+    },
+    {
+      name: 'Cycle Summary',
+      to: routes.cycleSummary(),
+      icon: CalendarIcon,
       current: false,
       hidden: hidden,
     },
@@ -75,13 +84,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       name: 'Lab Status',
       to: '#',
       icon: ClipboardListIcon,
-      current: false,
-      hidden: hidden,
-    },
-    {
-      name: 'Cycle Summary',
-      to: '#',
-      icon: CalendarIcon,
       current: false,
       hidden: hidden,
     },
@@ -257,6 +259,35 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                   <div className="flex-1">
                     <h3 className="text-2xl font-bold leading-tight pt-1 text-gray-900">
                       No patient selected
+                    </h3>
+                  </div>
+                )}
+                {activeTreatment.id !== undefined ? (
+                  <div className="flex-1 flex justify-between">
+                    <div className="flex-1">
+                      <h2 className="text-2xl font-bold leading-tight text-gray-900">
+                        Cycle Details
+                      </h2>
+                      <div className="flex flex-row justify-start space-x-2">
+                        <p className="text-sm leading-tight">
+                          <span className="text-gray-600 font-medium">
+                            Start Date:{' '}
+                          </span>
+                          {activeTreatment.startDate.slice(0, 10)}
+                        </p>
+                        <p className="text-sm leading-tight">
+                          <span className="text-gray-600 font-medium">
+                            Current Stage:{' '}
+                          </span>
+                          Oocyte Activation
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold leading-tight pt-1 text-gray-900">
+                      No treatment cycle selected
                     </h3>
                   </div>
                 )}
