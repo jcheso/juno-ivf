@@ -233,7 +233,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                 {patient.id !== undefined ? (
                   <div className="flex-1 flex justify-between">
                     <div className="flex-1">
-                      <h2 className="text-2xl font-bold leading-tight">
+                      <h2 className="text-2xl font-bold leading-tight text-gray-900">
                         {patient.firstName} {patient.lastName}
                       </h2>
                       <div className="flex flex-row justify-start space-x-2">
@@ -255,8 +255,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                   </div>
                 ) : (
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold leading-tight pt-1">
-                      Select a patient
+                    <h3 className="text-2xl font-bold leading-tight pt-1 text-gray-900">
+                      No patient selected
                     </h3>
                   </div>
                 )}

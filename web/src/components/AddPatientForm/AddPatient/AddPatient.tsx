@@ -50,9 +50,9 @@ const AddPatient = ({ clinics, clinicians }) => {
     },
   })
 
-  const onSubmit = (data) => {
-    const response = addPatient({ variables: { input: data } })
-    setPatient(response)
+  const onSubmit = async (data) => {
+    const response = await addPatient({ variables: { input: data } })
+    setPatient(response.data.createPatient)
     navigate(routes.patientSummary())
   }
 
