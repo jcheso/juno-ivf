@@ -29,7 +29,7 @@ export const Loading = () => (
   </div>
 )
 
-export const Empty = () => <div>Empty</div>
+export const Empty = (treatments) => <Treatments treatments={null} />
 
 export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>

@@ -287,7 +287,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                 ) : (
                   <div className="flex-1">
                     <h3 className="text-2xl font-bold leading-tight pt-1 text-gray-900">
-                      No patient selected
+                      No treatment cycle selected
                     </h3>
                   </div>
                 )}
