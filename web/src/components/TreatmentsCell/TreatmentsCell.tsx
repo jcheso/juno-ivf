@@ -4,10 +4,7 @@ import Treatments from '../Treatments/Treatments'
 
 export const QUERY = gql`
   query TreatmentsQuery($patientId: String!) {
-    treatments: treatmentsByPatient(
-      patientId: $patientId
-      sortBy: "startDate:desc"
-    ) {
+    treatments: treatmentsByPatient(patientId: $patientId) {
       id
       startDate
       endDate

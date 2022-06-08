@@ -20,6 +20,7 @@ export const treatmentsByPatient: QueryResolvers['treatmentsByPatient'] = ({
 }) => {
   return db.treatment.findMany({
     where: { patientId },
+    orderBy: { startDate: 'desc' },
   })
 }
 

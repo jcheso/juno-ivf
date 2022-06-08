@@ -21,6 +21,7 @@ const Routes = () => {
           <Route path="/add-patient" page={AddPatientPage} name="addPatient" />
           <Route path="/patient-summary" page={PatientSummaryPage} name="patientSummary" />
           <Route path="/treatments" page={TreatmentsPage} name="treatments" />
+          <Route path="/cycle-summary" page={CycleSummaryPage} name="cycleSummary" />
         </Set>
         <Set wrap={UsersLayout}>
           <Route path="/users/new" page={UserNewUserPage} name="newUser" />

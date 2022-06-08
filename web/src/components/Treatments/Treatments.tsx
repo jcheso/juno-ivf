@@ -1,43 +1,14 @@
-import { treatment } from '../../../../api/src/services/treatments/treatments'
 import { Treatment } from '../../../types/graphql'
-import { clinic } from '../../../../api/src/services/clinics/clinics'
 import {
   CalendarIcon,
   LocationMarkerIcon,
   UsersIcon,
 } from '@heroicons/react/solid'
-import { Link } from '@redwoodjs/router'
+import { Link, navigate, routes } from '@redwoodjs/router'
+import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 const Treatments = ({ treatments }) => {
-  const positions = [
-    {
-      id: 1,
-      title: 'Back End Developer',
-      type: 'Full-time',
-      location: 'Remote',
-      department: 'Engineering',
-      closeDate: '2020-01-07',
-      closeDateFull: 'January 7, 2020',
-    },
-    {
-      id: 2,
-      title: 'Front End Developer',
-      type: 'Full-time',
-      location: 'Remote',
-      department: 'Engineering',
-      closeDate: '2020-01-07',
-      closeDateFull: 'January 7, 2020',
-    },
-    {
-      id: 3,
-      title: 'User Interface Designer',
-      type: 'Full-time',
-      location: 'Remote',
-      department: 'Design',
-      closeDate: '2020-01-14',
-      closeDateFull: 'January 14, 2020',
-    },
-  ]
+  const [activeTreatment, setTreatment] = React.useContext(TreatmentContext)
 
   console.log(treatments)
   return (
@@ -64,11 +35,17 @@ const Treatments = ({ treatments }) => {
         <ul role="list" className="divide-y divide-gray-200">
           {treatments.map((treatment: Treatment, index) => (
             <li key={treatment.id}>
-              <Link to="#" className="block hover:bg-gray-50">
+              <button
+                onClick={() => {
+                  setTreatment(treatment)
+                  navigate(routes.cycleSummary())
+                }}
+                className="block w-full hover:bg-gray-50 cursor-pointer"
+              >
                 <div className="px-4 py-4 sm:px-6">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium text-indigo-600 truncate">
-                      {`Cycle  ${index + 1}`}
+                      {`Cycle  ${treatments.length - index}`}
                     </p>
                     <div className="ml-2 flex-shrink-0 flex">
                       <p
@@ -118,7 +95,7 @@ const Treatments = ({ treatments }) => {
                     </div>
                   </div>
                 </div>
-              </Link>
+              </button>
             </li>
           ))}
         </ul>

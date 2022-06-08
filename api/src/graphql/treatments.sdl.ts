@@ -14,8 +14,7 @@ export const schema = gql`
 
   type Query {
     treatments: [Treatment!]! @requireAuth
-    treatmentsByPatient(patientId: String!, sortBy: String!): [Treatment]
-      @requireAuth
+    treatmentsByPatient(patientId: String!): [Treatment] @requireAuth
     treatment(id: String!): Treatment @requireAuth
   }
 
