@@ -1,15 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
-import { clinics, users } from '../AddPatientCell/AddPatientCell.mock'
 
-import AddPatient from './AddPatient'
+import PatientSummary from './PatientSummary'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('AddPatient', () => {
+describe('PatientSummary', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<AddPatient clinics={clinics} clinicians={users} />)
+      render(<PatientSummary />)
     }).not.toThrow()
   })
 })

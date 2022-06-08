@@ -1,7 +1,6 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
-  BellIcon,
   CalendarIcon,
   ChartBarIcon,
   FolderIcon,
@@ -13,11 +12,9 @@ import {
   ClipboardListIcon,
   PhotographIcon,
 } from '@heroicons/react/outline'
-import { SearchIcon } from '@heroicons/react/solid'
-import { Link, NavLink, routes } from '@redwoodjs/router'
+import { Link, navigate, NavLink, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import { PatientContext } from 'src/providers/context/PatientContext'
-import { patient } from '../../../../api/src/services/patients/patients'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -29,10 +26,9 @@ type AppLayoutProps = {
 
 const AppLayout = ({ children }: AppLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { logOut, hasRole } = useAuth()
+  const { logOut } = useAuth()
   const [patient, setPatient] = React.useContext(PatientContext)
-  console.log(patient.patientId == undefined)
-  console.log(patient)
+  const hidden = patient.id == undefined ? true : false
   const navigation = [
     {
       name: 'Dashboard',
@@ -40,14 +36,57 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       icon: HomeIcon,
       current: true,
     },
-    { name: 'Patient Summary', to: '#', icon: UsersIcon, current: false },
-    { name: 'Treatments', to: '#', icon: ChartBarIcon, current: false },
-    { name: 'Medicine', to: '#', icon: FolderIcon, current: false },
-    { name: 'Test Results', to: '#', icon: BeakerIcon, current: false },
-    { name: 'Ultrasounds', to: '#', icon: PhotographIcon, current: false },
-    { name: 'Lab Status', to: '#', icon: ClipboardListIcon, current: false },
-    { name: 'Cycle Summary', to: '#', icon: CalendarIcon, current: false },
+    {
+      name: 'Patient Summary',
+      to: routes.patientSummary(),
+      icon: UsersIcon,
+      current: false,
+      hidden: hidden,
+    },
+    {
+      name: 'Treatments',
+      to: '#',
+      icon: ChartBarIcon,
+      current: false,
+      hidden: hidden,
+    },
+    {
+      name: 'Medicine',
+      to: '#',
+      icon: FolderIcon,
+      current: false,
+      hidden: hidden,
+    },
+    {
+      name: 'Test Results',
+      to: '#',
+      icon: BeakerIcon,
+      current: false,
+      hidden: hidden,
+    },
+    {
+      name: 'Ultrasounds',
+      to: '#',
+      icon: PhotographIcon,
+      current: false,
+      hidden: hidden,
+    },
+    {
+      name: 'Lab Status',
+      to: '#',
+      icon: ClipboardListIcon,
+      current: false,
+      hidden: hidden,
+    },
+    {
+      name: 'Cycle Summary',
+      to: '#',
+      icon: CalendarIcon,
+      current: false,
+      hidden: hidden,
+    },
   ]
+
   const userNavigation = [
     { name: 'Your Profile', to: '#', onClick: null },
     { name: 'Settings', to: '#', onClick: null },
@@ -121,7 +160,10 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                       <NavLink
                         key={item.name}
                         to={item.to}
-                        className="text-indigo-100 hover:bg-indigo-600 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                        className={
+                          `text-indigo-100 hover:bg-indigo-600 group flex items-center px-2 py-2 text-base font-medium rounded-md` +
+                          (item.hidden ? ' hidden' : '')
+                        }
                         activeClassName="bg-indigo-800 text-white group flex items-center px-2 py-2 text-base font-medium rounded-md"
                       >
                         <item.icon
@@ -159,7 +201,10 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                   <NavLink
                     key={item.name}
                     to={item.to}
-                    className="text-indigo-100 hover:bg-indigo-600 link group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                    className={
+                      `animate-fade text-indigo-100 hover:bg-indigo-600 link group flex items-center px-2 py-2 text-sm font-medium rounded-md` +
+                      (item.hidden ? ' hidden' : '')
+                    }
                     activeClassName="activeLink group flex items-center px-2 py-2 text-sm font-medium rounded-md bg-indigo-800 text-white"
                   >
                     <item.icon
@@ -185,36 +230,51 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             </button>
             <div className="flex-1 px-4 flex justify-between">
               <div className="flex-1 flex align-middle pt-3">
-                {patient.patientId !== undefined ? (
+                {patient.id !== undefined ? (
                   <div className="flex-1 flex justify-between">
                     <div className="flex-1">
                       <h2 className="text-2xl font-bold leading-tight">
                         {patient.firstName} {patient.lastName}
                       </h2>
-                      <p className="text-sm leading-tight">
-                        <span className="text-gray-600 font-medium">
-                          Clinician:{' '}
-                        </span>
-                        {patient.clinicianName}
-                      </p>
+                      <div className="flex flex-row justify-start space-x-2">
+                        <p className="text-sm leading-tight">
+                          <span className="text-gray-600 font-medium">
+                            Clinician:{' '}
+                          </span>
+                          {patient.clinician.firstName}{' '}
+                          {patient.clinician.lastName}
+                        </p>
+                        <p className="text-sm leading-tight">
+                          <span className="text-gray-600 font-medium">
+                            Clinic:{' '}
+                          </span>
+                          {patient.clinic.name}{' '}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ) : (
                   <div className="flex-1">
-                    <h2 className="text-2xl font-bold leading-tight">
-                      No Patient Selected
-                    </h2>
+                    <h3 className="text-2xl font-bold leading-tight pt-1">
+                      Select a patient
+                    </h3>
                   </div>
                 )}
               </div>
               <div className="ml-4 flex items-center md:ml-6">
-                <button
-                  type="button"
-                  className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
+                {patient.id !== undefined && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigate(routes.dashboard())
+                      setPatient('')
+                    }}
+                    className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    <span className="sr-only">Clear patient</span>
+                    <XIcon className="h-6 w-6" aria-hidden="true" />
+                  </button>
+                )}
 
                 {/* Profile dropdown */}
                 <Menu as="div" className="ml-3 relative">

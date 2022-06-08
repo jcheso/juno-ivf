@@ -1,4 +1,5 @@
 import PatientSearchResults from './PatientSearchResults'
+import { PatientContext } from 'src/providers/context/PatientContext'
 
 const patients = [
   {
@@ -6,10 +7,15 @@ const patients = [
     firstName: 'Jane',
     lastName: 'Deer',
     email: 'jane.deer@gmail.com',
+    dob: '1952-01-01T00:00:00.000Z',
     clinician: {
       id: '9e420ac0-1c2d-4ed3-b9c8-05b030b88016',
       firstName: 'Jarryd',
       lastName: 'Cheso',
+    },
+    clinic: {
+      id: '9e420ac0-1c2d-4ed3-b9c8-05b030b88016',
+      name: 'Clinic 1',
     },
   },
   {
@@ -17,10 +23,15 @@ const patients = [
     firstName: 'Maria',
     lastName: 'Theresa',
     email: 'maryt@gmail.com',
+    dob: '1952-01-01T00:00:00.000Z',
     clinician: {
       id: '9e420ac0-1c2d-4ed3-b9c8-05b030b88016',
       firstName: 'Jarryd',
       lastName: 'Cheso',
+    },
+    clinic: {
+      id: '9e420ac0-1c2d-4ed3-b9c8-05b030b88016',
+      name: 'Clinic 1',
     },
   },
   {
@@ -28,38 +39,46 @@ const patients = [
     firstName: 'Adele',
     lastName: 'Zhou',
     email: 'adelez@gmail.com',
+    dob: '1952-01-01T00:00:00.000Z',
     clinician: {
       id: '9e420ac0-1c2d-4ed3-b9c8-05b030b88016',
       firstName: 'Jarryd',
       lastName: 'Cheso',
     },
-  },
-  {
-    id: '727bb22a-5dc8-40ac-81a9-b6d35ab07ef4',
-    firstName: 'Tina',
-    lastName: 'Turner',
-    email: 'tt@gmail.com',
-    clinician: {
+    clinic: {
       id: '9e420ac0-1c2d-4ed3-b9c8-05b030b88016',
-      firstName: 'Jarryd',
-      lastName: 'Cheso',
-    },
-  },
-  {
-    id: 'ac27b98c-7317-4e22-9698-07ea0b4f459c',
-    firstName: 'Gal',
-    lastName: 'Gadot',
-    email: 'gg@gmail.com',
-    clinician: {
-      id: '9e420ac0-1c2d-4ed3-b9c8-05b030b88016',
-      firstName: 'Jarryd',
-      lastName: 'Cheso',
+      name: 'Clinic 1',
     },
   },
 ]
 
 export const generated = () => {
-  return <PatientSearchResults patients={patients} />
+  return (
+    <PatientContext.Provider
+      value={[
+        {
+          id: '55ba30bb-717b-4002-bebc-6b463050b4d7',
+          firstName: 'Maria',
+          lastName: 'Theresa',
+          email: 'maryt@gmail.com',
+          dob: '1952-01-01T00:00:00.000Z',
+          clinician: {
+            id: '9e420ac0-1c2d-4ed3-b9c8-05b030b88016',
+            firstName: 'Jarryd',
+            lastName: 'Cheso',
+          },
+          clinic: {
+            id: '9e420ac0-1c2d-4ed3-b9c8-05b030b88016',
+            name: 'Clinic 1',
+          },
+        },
+
+        () => {},
+      ]}
+    >
+      <PatientSearchResults patients={patients} />
+    </PatientContext.Provider>
+  )
 }
 
 export default { title: 'Components/PatientSearchResults' }

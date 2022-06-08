@@ -7,4 +7,4 @@ export const generated = () => {
   )
 }
 
-export default { title: 'Components/PatientSearch' }
+export default { title: 'Components/PatientSearchForm' }

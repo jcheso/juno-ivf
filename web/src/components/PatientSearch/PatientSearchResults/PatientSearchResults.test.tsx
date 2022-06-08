@@ -1,5 +1,5 @@
 import { render } from '@redwoodjs/testing/web'
-
+import { patients } from '../PatientSearchResultsCell/PatientSearchResultsCell.mock'
 import PatientSearchResults from './PatientSearchResults'
 
 //   Improve this test with help from the Redwood Testing Doc:
@@ -8,7 +8,7 @@ import PatientSearchResults from './PatientSearchResults'
 describe('PatientSearchResults', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<PatientSearchResults />)
+      render(<PatientSearchResults patients={patients} />)
     }).not.toThrow()
   })
 })
