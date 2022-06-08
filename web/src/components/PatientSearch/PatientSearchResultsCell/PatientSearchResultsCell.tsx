@@ -2,6 +2,7 @@ import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { SearchPatients } from 'types/graphql'
 import PatientSearchResults from 'src/components/PatientSearch/PatientSearchResults/PatientSearchResults'
 import CircleLoader from 'react-spinners/CircleLoader'
+
 export const QUERY = gql`
   query SearchPatients($input: SearchPatientsInput!) {
     patients: searchPatients(input: $input) {
@@ -9,10 +10,15 @@ export const QUERY = gql`
       firstName
       lastName
       email
+      dob
       clinician {
         id
         firstName
         lastName
+      }
+      clinic {
+        id
+        name
       }
     }
   }

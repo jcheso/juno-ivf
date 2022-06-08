@@ -19,6 +19,7 @@ export const schema = gql`
     medications: String
     infertilityDiagnosis: String
     createdAt: DateTime!
+    phone: String
   }
 
   type Query {

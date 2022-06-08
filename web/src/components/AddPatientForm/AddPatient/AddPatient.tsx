@@ -9,12 +9,16 @@ import {
   TextAreaField,
   TextField,
 } from '@redwoodjs/forms'
-import { Link, routes } from '@redwoodjs/router'
+import { navigate, Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import CircleLoader from 'react-spinners/CircleLoader'
+import { useContext } from 'react'
+import { PatientContext } from 'src/providers/context/PatientContext'
 
 const AddPatient = ({ clinics, clinicians }) => {
+  const [patient, setPatient] = useContext(PatientContext)
+
   const CREATE_PATIENT = gql`
     mutation CreatePatient($input: CreatePatientInput!) {
       createPatient(input: $input) {
@@ -22,6 +26,16 @@ const AddPatient = ({ clinics, clinicians }) => {
         firstName
         lastName
         dob
+        email
+        clinician {
+          firstName
+          lastName
+          id
+        }
+        clinic {
+          name
+          id
+        }
         createdAt
       }
     }
@@ -36,9 +50,10 @@ const AddPatient = ({ clinics, clinicians }) => {
     },
   })
 
-  const onSubmit = (data) => {
-    console.log(data)
-    addPatient({ variables: { input: data } })
+  const onSubmit = async (data) => {
+    const response = await addPatient({ variables: { input: data } })
+    setPatient(response.data.createPatient)
+    navigate(routes.patientSummary())
   }
 
   return (

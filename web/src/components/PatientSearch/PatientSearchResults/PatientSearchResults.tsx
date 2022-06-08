@@ -1,7 +1,10 @@
-import { Link } from '@redwoodjs/router'
+import { navigate, Link, routes } from '@redwoodjs/router'
 import React from 'react'
+import { PatientContext } from 'src/providers/context/PatientContext'
 
 const PatientSearchResults = ({ patients }) => {
+  const [patient, setPatient] = React.useContext(PatientContext)
+
   return (
     <div className="mt-2 flex flex-col">
       <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -20,6 +23,12 @@ const PatientSearchResults = ({ patients }) => {
                   className="py-3.5 px-3 text-left text-sm font-semibold text-gray-900"
                 >
                   Last Name
+                </th>
+                <th
+                  scope="col"
+                  className="py-3.5 px-3 text-left text-sm font-semibold text-gray-900"
+                >
+                  Date of Birth
                 </th>
                 <th
                   scope="col"
@@ -51,6 +60,9 @@ const PatientSearchResults = ({ patients }) => {
                     {person.lastName}
                   </td>
                   <td className="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                    {person.dob.slice(0, 10)}
+                  </td>
+                  <td className="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
                     {person.email}
                   </td>
                   <td className="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
@@ -59,13 +71,16 @@ const PatientSearchResults = ({ patients }) => {
                       person.clinician.lastName}
                   </td>
                   <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
-                    <Link
-                      to="#"
+                    <button
+                      onClick={() => {
+                        setPatient(person)
+                        navigate(routes.patientSummary())
+                      }}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
                       View
                       <span className="sr-only">, {person.firstName} </span>
-                    </Link>
+                    </button>
                   </td>
                 </tr>
               ))}
