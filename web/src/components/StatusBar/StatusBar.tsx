@@ -26,7 +26,7 @@ const StatusBar = ({ patient, activeTreatment }) => {
         <div className="mt-4 flex items-center justify-between sm:justify-start h-full">
           <span className="md:inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium align-middle bg-purple-100 text-purple-800 hidden">
             {activeTreatment.id
-              ? `Cycle ${activeTreatment.index + 1}`
+              ? `Cycle ${activeTreatment.number}`
               : 'No cycle selected'}
           </span>
         </div>
