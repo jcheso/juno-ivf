@@ -1,8 +1,9 @@
+import { mockTreatments } from '../TreatmentsCell/TreatmentsCell.mock'
+
 import Treatments from './Treatments'
-import { treatments } from '../TreatmentsCell/TreatmentsCell.mock'
 
 export const generated = () => {
-  return <Treatments treatments={treatments} />
+  return <Treatments treatments={mockTreatments} />
 }
 
 export default { title: 'Components/Treatments' }

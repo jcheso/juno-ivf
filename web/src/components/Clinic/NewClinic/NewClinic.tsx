@@ -1,6 +1,7 @@
+import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import ClinicForm from 'src/components/Clinic/ClinicForm'
 
 const CREATE_CLINIC_MUTATION = gql`
@@ -12,15 +13,18 @@ const CREATE_CLINIC_MUTATION = gql`
 `
 
 const NewClinic = () => {
-  const [createClinic, { loading, error }] = useMutation(CREATE_CLINIC_MUTATION, {
-    onCompleted: () => {
-      toast.success('Clinic created')
-      navigate(routes.clinics())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [createClinic, { loading, error }] = useMutation(
+    CREATE_CLINIC_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Clinic created')
+        navigate(routes.clinics())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
   const onSave = (input) => {
     createClinic({ variables: { input } })

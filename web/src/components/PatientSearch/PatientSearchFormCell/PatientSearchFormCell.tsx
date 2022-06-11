@@ -1,4 +1,5 @@
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+
 import PatientSearchForm from 'src/components/PatientSearch/PatientSearchForm/PatientSearchForm'
 
 export const QUERY = gql`

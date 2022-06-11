@@ -1,4 +1,5 @@
 import { render } from '@redwoodjs/testing/web'
+
 import { clinics, users } from '../AddPatientCell/AddPatientCell.mock'
 
 import AddPatient from './AddPatient'

@@ -1,5 +1,6 @@
-import PatientSearchResults from './PatientSearchResults'
 import { PatientContext } from 'src/providers/context/PatientContext'
+
+import PatientSearchResults from './PatientSearchResults'
 
 const patients = [
   {

@@ -7,15 +7,8 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
-
-
 const ClinicForm = (props) => {
   const onSubmit = (data) => {
-
-  
-    
-    
-  
     props.onSave(data, props?.clinic?.id)
   }
 
@@ -28,7 +21,7 @@ const ClinicForm = (props) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-      
+
         <Label
           name="name"
           className="rw-label"
@@ -36,23 +29,19 @@ const ClinicForm = (props) => {
         >
           Name
         </Label>
-        
-          <TextField
-            name="name"
-            defaultValue={props.clinic?.name}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="name"
+          defaultValue={props.clinic?.name}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="name" className="rw-field-error" />
 
         <div className="rw-button-group">
-          <Submit
-            disabled={props.loading}
-            className="rw-button rw-button-blue"
-          >
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
             Save
           </Submit>
         </div>

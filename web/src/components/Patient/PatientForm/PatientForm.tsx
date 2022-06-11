@@ -7,27 +7,8 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
-
-
 const PatientForm = (props) => {
   const onSubmit = (data) => {
-
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
     props.onSave(data, props?.patient?.id)
   }
 
@@ -40,7 +21,7 @@ const PatientForm = (props) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-      
+
         <Label
           name="firstName"
           className="rw-label"
@@ -48,15 +29,14 @@ const PatientForm = (props) => {
         >
           First name
         </Label>
-        
-          <TextField
-            name="firstName"
-            defaultValue={props.patient?.firstName}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="firstName"
+          defaultValue={props.patient?.firstName}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="firstName" className="rw-field-error" />
 
@@ -67,15 +47,14 @@ const PatientForm = (props) => {
         >
           Last name
         </Label>
-        
-          <TextField
-            name="lastName"
-            defaultValue={props.patient?.lastName}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="lastName"
+          defaultValue={props.patient?.lastName}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="lastName" className="rw-field-error" />
 
@@ -86,15 +65,14 @@ const PatientForm = (props) => {
         >
           Email
         </Label>
-        
-          <TextField
-            name="email"
-            defaultValue={props.patient?.email}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="email"
+          defaultValue={props.patient?.email}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="email" className="rw-field-error" />
 
@@ -105,15 +83,14 @@ const PatientForm = (props) => {
         >
           Clinic id
         </Label>
-        
-          <TextField
-            name="clinicId"
-            defaultValue={props.patient?.clinicId}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="clinicId"
+          defaultValue={props.patient?.clinicId}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="clinicId" className="rw-field-error" />
 
@@ -124,23 +101,19 @@ const PatientForm = (props) => {
         >
           Clinician id
         </Label>
-        
-          <TextField
-            name="clinicianId"
-            defaultValue={props.patient?.clinicianId}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="clinicianId"
+          defaultValue={props.patient?.clinicianId}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="clinicianId" className="rw-field-error" />
 
         <div className="rw-button-group">
-          <Submit
-            disabled={props.loading}
-            className="rw-button rw-button-blue"
-          >
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
             Save
           </Submit>
         </div>

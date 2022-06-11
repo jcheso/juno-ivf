@@ -1,5 +1,6 @@
-import PatientSummaryPage from './PatientSummaryPage'
 import { PatientContext } from 'src/providers/context/PatientContext'
+
+import PatientSummaryPage from './PatientSummaryPage'
 
 export const generated = () => {
   return (

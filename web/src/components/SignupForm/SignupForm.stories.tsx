@@ -1,5 +1,6 @@
-import SignupForm from './SignupForm'
 import { clinics } from '../SignupCell/SignupCell.mock'
+
+import SignupForm from './SignupForm'
 
 export const generated = () => {
   return <SignupForm clinics={clinics} />

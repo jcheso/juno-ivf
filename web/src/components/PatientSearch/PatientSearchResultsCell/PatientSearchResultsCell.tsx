@@ -1,7 +1,9 @@
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
-import { SearchPatients } from 'types/graphql'
-import PatientSearchResults from 'src/components/PatientSearch/PatientSearchResults/PatientSearchResults'
 import CircleLoader from 'react-spinners/CircleLoader'
+import { SearchPatients } from 'types/graphql'
+
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+
+import PatientSearchResults from 'src/components/PatientSearch/PatientSearchResults/PatientSearchResults'
 
 export const QUERY = gql`
   query SearchPatients($input: SearchPatientsInput!) {

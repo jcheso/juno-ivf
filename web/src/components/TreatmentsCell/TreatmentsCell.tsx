@@ -1,5 +1,7 @@
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import CircleLoader from 'react-spinners/CircleLoader'
+
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+
 import Treatments from '../Treatments/Treatments'
 
 export const QUERY = gql`
@@ -19,6 +21,7 @@ export const QUERY = gql`
           name
         }
       }
+      number
     }
   }
 `
@@ -29,13 +32,12 @@ export const Loading = () => (
   </div>
 )
 
-export const Empty = (treatments) => <Treatments treatments={null} />
+export const Empty = () => <Treatments treatments={null} />
 
 export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
 export const Success = ({ treatments }: CellSuccessProps) => {
-  console.log(treatments)
   return <Treatments treatments={treatments} />
 }

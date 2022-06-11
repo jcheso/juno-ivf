@@ -1,7 +1,9 @@
-import type { FindClinics } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
-import SignupForm from '../SignupForm/SignupForm'
 import CircleLoader from 'react-spinners/CircleLoader'
+import type { FindClinics } from 'types/graphql'
+
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+
+import SignupForm from '../SignupForm/SignupForm'
 
 export const QUERY = gql`
   query FindClinics {

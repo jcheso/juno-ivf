@@ -1,4 +1,5 @@
 import type { Prisma } from '@prisma/client'
+
 import type { ResolverArgs } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
@@ -18,7 +19,6 @@ interface CreateUserArgs {
 }
 
 export const createUser = ({ input }: CreateUserArgs) => {
-  console.log(input)
   return db.user.create({
     data: input,
   })

@@ -1,7 +1,7 @@
 import type { FindClinics } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import { Link, routes } from '@redwoodjs/router'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Clinics from 'src/components/Clinic/Clinics'
 

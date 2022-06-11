@@ -1,7 +1,7 @@
 import type { FindPatients } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import { Link, routes } from '@redwoodjs/router'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Patients from 'src/components/Patient/Patients'
 
@@ -25,10 +25,7 @@ export const Empty = () => {
   return (
     <div className="rw-text-center">
       {'No patients yet. '}
-      <Link
-        to={routes.newPatient()}
-        className="rw-link"
-      >
+      <Link to={routes.newPatient()} className="rw-link">
         {'Create one?'}
       </Link>
     </div>

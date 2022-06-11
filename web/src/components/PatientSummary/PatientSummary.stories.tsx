@@ -1,5 +1,6 @@
-import PatientSummary from './PatientSummary'
 import { patient } from '../PatientSummaryCell/PatientSummaryCell.mock'
+
+import PatientSummary from './PatientSummary'
 
 export const generated = () => {
   const patientSummary = { patient: patient }

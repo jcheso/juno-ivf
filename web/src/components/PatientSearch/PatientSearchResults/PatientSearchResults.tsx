@@ -1,5 +1,7 @@
-import { navigate, Link, routes } from '@redwoodjs/router'
 import React from 'react'
+
+import { navigate, Link, routes } from '@redwoodjs/router'
+
 import { PatientContext } from 'src/providers/context/PatientContext'
 
 const PatientSearchResults = ({ patients }) => {

@@ -1,7 +1,8 @@
 import { Form, Submit, Label, TextField } from '@redwoodjs/forms'
 import { MetaTags, useMutation } from '@redwoodjs/web'
-import familyIcon from './pablita-family-1.png'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import familyIcon from './pablita-family-1.png'
 
 const HomePage = () => {
   const ADD_TO_WAITLIST = gql`
