@@ -1,9 +1,11 @@
-import { navigate, routes } from '@redwoodjs/router'
-import { useAuth } from '@redwoodjs/auth'
-import { MetaTags } from '@redwoodjs/web'
 import { useEffect } from 'react'
-import SignupCell from 'src/components/SignupCell'
+
+import { useAuth } from '@redwoodjs/auth'
+import { navigate, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 import { Toaster } from '@redwoodjs/web/toast'
+
+import SignupCell from 'src/components/SignupCell'
 
 const SignupPage = () => {
   const { isAuthenticated } = useAuth()

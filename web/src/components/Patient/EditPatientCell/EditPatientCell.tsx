@@ -1,9 +1,9 @@
 import type { EditPatientById } from 'types/graphql'
 
+import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
 
 import PatientForm from 'src/components/Patient/PatientForm'
 
@@ -41,15 +41,18 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 export const Success = ({ patient }: CellSuccessProps<EditPatientById>) => {
-  const [updatePatient, { loading, error }] = useMutation(UPDATE_PATIENT_MUTATION, {
-    onCompleted: () => {
-      toast.success('Patient updated')
-      navigate(routes.patients())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [updatePatient, { loading, error }] = useMutation(
+    UPDATE_PATIENT_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Patient updated')
+        navigate(routes.patients())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
   const onSave = (input, id) => {
     updatePatient({ variables: { id, input } })
@@ -58,10 +61,17 @@ export const Success = ({ patient }: CellSuccessProps<EditPatientById>) => {
   return (
     <div className="rw-segment">
       <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">Edit Patient {patient.id}</h2>
+        <h2 className="rw-heading rw-heading-secondary">
+          Edit Patient {patient.id}
+        </h2>
       </header>
       <div className="rw-segment-main">
-        <PatientForm patient={patient} onSave={onSave} error={error} loading={loading} />
+        <PatientForm
+          patient={patient}
+          onSave={onSave}
+          error={error}
+          loading={loading}
+        />
       </div>
     </div>
   )

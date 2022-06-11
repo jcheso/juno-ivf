@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Link, routes } from '@redwoodjs/router'
 
 const PatientSearchForm = ({ clinics, input, updateInput }) => {

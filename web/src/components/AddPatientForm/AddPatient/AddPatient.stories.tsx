@@ -1,6 +1,8 @@
-import AddPatient from './AddPatient'
-import { clinics, users } from '../AddPatientCell/AddPatientCell.mock'
 import { PatientContext } from 'src/providers/context/PatientContext'
+
+import { clinics, users } from '../AddPatientCell/AddPatientCell.mock'
+
+import AddPatient from './AddPatient'
 
 const patient = {
   id: '55ba30bb-717b-4002-bebc-6b463050b4d7',

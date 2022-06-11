@@ -1,4 +1,5 @@
 import { Fragment, useContext, useState } from 'react'
+
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   CalendarIcon,
@@ -12,11 +13,15 @@ import {
   ClipboardListIcon,
   PhotographIcon,
 } from '@heroicons/react/outline'
-import { Link, navigate, NavLink, routes } from '@redwoodjs/router'
+
 import { useAuth } from '@redwoodjs/auth'
+import { Link, navigate, NavLink, routes } from '@redwoodjs/router'
+
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
+import { treatment } from '../../../../api/src/services/treatments/treatments'
+import StatusBar from '../../components/StatusBar/StatusBar'
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -231,67 +236,10 @@ const AppLayout = ({ children }: AppLayoutProps) => {
               <MenuAlt2Icon className="h-6 w-6" aria-hidden="true" />
             </button>
             <div className="flex-1 px-4 flex justify-between">
-              <div className="flex-1 flex align-middle pt-3">
-                {patient.id !== undefined ? (
-                  <div className="flex-1 flex justify-between">
-                    <div className="flex-1">
-                      <h2 className="text-2xl font-bold leading-tight text-gray-900">
-                        {patient.firstName} {patient.lastName}
-                      </h2>
-                      <div className="flex flex-row justify-start space-x-2">
-                        <p className="text-sm leading-tight">
-                          <span className="text-gray-600 font-medium">
-                            Clinician:{' '}
-                          </span>
-                          {patient.clinician.firstName}{' '}
-                          {patient.clinician.lastName}
-                        </p>
-                        <p className="text-sm leading-tight">
-                          <span className="text-gray-600 font-medium">
-                            Clinic:{' '}
-                          </span>
-                          {patient.clinic.name}{' '}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold leading-tight pt-1 text-gray-900">
-                      No patient selected
-                    </h3>
-                  </div>
-                )}
-                {activeTreatment.id !== undefined ? (
-                  <div className="flex-1 flex justify-between">
-                    <div className="flex-1">
-                      <h2 className="text-2xl font-bold leading-tight text-gray-900">
-                        Cycle Details
-                      </h2>
-                      <div className="flex flex-row justify-start space-x-2">
-                        <p className="text-sm leading-tight">
-                          <span className="text-gray-600 font-medium">
-                            Start Date:{' '}
-                          </span>
-                          {activeTreatment.startDate.slice(0, 10)}
-                        </p>
-                        <p className="text-sm leading-tight">
-                          <span className="text-gray-600 font-medium">
-                            Current Stage:{' '}
-                          </span>
-                          Oocyte Activation
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold leading-tight pt-1 text-gray-900">
-                      No treatment cycle selected
-                    </h3>
-                  </div>
-                )}
-              </div>
+              <StatusBar
+                patient={patient}
+                activeTreatment={activeTreatment}
+              ></StatusBar>
               <div className="ml-4 flex items-center md:ml-6">
                 {patient.id !== undefined && (
                   <button
@@ -299,6 +247,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                     onClick={() => {
                       navigate(routes.dashboard())
                       setPatient('')
+                      setActiveTreatment('')
                     }}
                     className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >

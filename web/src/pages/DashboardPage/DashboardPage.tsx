@@ -1,7 +1,9 @@
-import { MetaTags } from '@redwoodjs/web'
 import { useState } from 'react'
-import PatientSearchResultsCell from 'src/components/PatientSearch/PatientSearchResultsCell'
+
+import { MetaTags } from '@redwoodjs/web'
+
 import PatientSearchFormCell from 'src/components/PatientSearch/PatientSearchFormCell'
+import PatientSearchResultsCell from 'src/components/PatientSearch/PatientSearchResultsCell'
 
 const DashboardPage = () => {
   const [searchInput, updateSearchInput] = useState({

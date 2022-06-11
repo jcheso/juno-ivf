@@ -1,5 +1,6 @@
-import { db } from 'src/lib/db'
 import { DbAuthHandler } from '@redwoodjs/api'
+
+import { db } from 'src/lib/db'
 import { sendEmail } from 'src/lib/email'
 
 function sendForgotPasswordEmail(emailAddress: string, resetToken: string) {

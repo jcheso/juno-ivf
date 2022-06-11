@@ -1,8 +1,8 @@
 import humanize from 'humanize-string'
 
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
 
 const DELETE_CLINIC_MUTATION = gql`
   mutation DeleteClinicMutation($id: String!) {
@@ -66,14 +66,17 @@ const Clinic = ({ clinic }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">Clinic {clinic.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            Clinic {clinic.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
               <td>{clinic.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Name</th>
               <td>{clinic.name}</td>
             </tr>

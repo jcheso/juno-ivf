@@ -1,8 +1,9 @@
+import { useContext } from 'react'
+
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import TreatmentsCell from 'src/components/TreatmentsCell/'
 
-import { useContext } from 'react'
+import TreatmentsCell from 'src/components/TreatmentsCell/'
 import { PatientContext } from 'src/providers/context/PatientContext'
 
 const TreatmentsPage = () => {

@@ -1,5 +1,7 @@
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import CircleLoader from 'react-spinners/CircleLoader'
+
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+
 import PatientSummary from '../PatientSummary/PatientSummary'
 
 export const QUERY = gql`

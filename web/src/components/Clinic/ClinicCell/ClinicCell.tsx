@@ -1,4 +1,5 @@
 import type { FindClinicById } from 'types/graphql'
+
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Clinic from 'src/components/Clinic/Clinic'

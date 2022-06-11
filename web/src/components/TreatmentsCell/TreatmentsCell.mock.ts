@@ -1,6 +1,5 @@
 // Define your own mock data here:
-
-export const treatments = [
+export const mockTreatments = [
   {
     id: '91510aba-b38a-4de7-985b-d6c2456e7729',
     startDate: '2021-01-08T00:00:00.000Z',
@@ -9,8 +8,6 @@ export const treatments = [
     isActive: false,
     clinician: { firstName: 'Mengqi', lastName: 'Zhou' },
     patient: {
-      firstName: 'Tia',
-      lastName: 'Campbell',
       clinic: {
         name: 'Imperial College London',
       },
@@ -24,8 +21,6 @@ export const treatments = [
     isActive: false,
     clinician: { firstName: 'Mengqi', lastName: 'Zhou' },
     patient: {
-      firstName: 'Tia',
-      lastName: 'Campbell',
       clinic: {
         name: 'Imperial College London',
       },
@@ -39,8 +34,6 @@ export const treatments = [
     isActive: true,
     clinician: { firstName: 'Mengqi', lastName: 'Zhou' },
     patient: {
-      firstName: 'Tia',
-      lastName: 'Campbell',
       clinic: {
         name: 'Imperial College London',
       },
@@ -49,5 +42,5 @@ export const treatments = [
 ]
 
 export const standard = (/* vars, { ctx, req } */) => ({
-  treatments,
+  treatments: mockTreatments,
 })

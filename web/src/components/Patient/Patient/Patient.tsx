@@ -1,8 +1,8 @@
 import humanize from 'humanize-string'
 
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
 
 const DELETE_PATIENT_MUTATION = gql`
   mutation DeletePatientMutation($id: String!) {
@@ -66,29 +66,37 @@ const Patient = ({ patient }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">Patient {patient.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            Patient {patient.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
               <td>{patient.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>First name</th>
               <td>{patient.firstName}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Last name</th>
               <td>{patient.lastName}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Email</th>
               <td>{patient.email}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Clinic id</th>
               <td>{patient.clinicId}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Clinician id</th>
               <td>{patient.clinicianId}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(patient.createdAt)}</td>
             </tr>

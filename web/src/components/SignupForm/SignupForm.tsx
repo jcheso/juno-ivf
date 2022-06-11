@@ -1,3 +1,7 @@
+import { useEffect, useRef } from 'react'
+
+import CircleLoader from 'react-spinners/CircleLoader'
+
 import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
@@ -10,8 +14,6 @@ import {
 } from '@redwoodjs/forms'
 import { Link, routes } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/toast'
-import { useEffect, useRef } from 'react'
-import CircleLoader from 'react-spinners/CircleLoader'
 const SignupForm = ({ clinics }) => {
   const { signUp, loading } = useAuth()
 

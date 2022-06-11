@@ -1,4 +1,5 @@
 import { PaperClipIcon } from '@heroicons/react/solid'
+
 import { Patient } from '../../../types/graphql'
 
 const PatientSummary = ({ patientSummary }) => {

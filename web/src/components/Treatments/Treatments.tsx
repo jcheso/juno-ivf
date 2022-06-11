@@ -1,17 +1,19 @@
-import { Treatment } from '../../../types/graphql'
 import {
   CalendarIcon,
   LocationMarkerIcon,
   UsersIcon,
   CheckCircleIcon,
 } from '@heroicons/react/solid'
+
 import { Link, navigate, routes } from '@redwoodjs/router'
+
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
+
+import { Treatment } from '../../../types/graphql'
 
 const Treatments = ({ treatments }) => {
   const [activeTreatment, setTreatment] = React.useContext(TreatmentContext)
 
-  console.log(treatments)
   return (
     <>
       <div className="bg-white shadow overflow-hidden sm:rounded-md">

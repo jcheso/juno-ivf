@@ -1,3 +1,7 @@
+import { useContext } from 'react'
+
+import CircleLoader from 'react-spinners/CircleLoader'
+
 import {
   DateField,
   FieldError,
@@ -12,8 +16,7 @@ import {
 import { navigate, Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
-import CircleLoader from 'react-spinners/CircleLoader'
-import { useContext } from 'react'
+
 import { PatientContext } from 'src/providers/context/PatientContext'
 
 const AddPatient = ({ clinics, clinicians }) => {

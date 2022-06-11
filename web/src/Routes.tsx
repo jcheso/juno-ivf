@@ -1,9 +1,10 @@
 import { Router, Route, Set, Private } from '@redwoodjs/router'
-import UsersLayout from 'src/layouts/UsersLayout'
-import PatientsLayout from 'src/layouts/PatientsLayout'
-import ClinicsLayout from 'src/layouts/ClinicsLayout'
-import WebLayout from 'src/layouts/WebLayout/WebLayout'
+
 import AppLayout from 'src/layouts/AppLayout/AppLayout'
+import ClinicsLayout from 'src/layouts/ClinicsLayout'
+import PatientsLayout from 'src/layouts/PatientsLayout'
+import UsersLayout from 'src/layouts/UsersLayout'
+import WebLayout from 'src/layouts/WebLayout/WebLayout'
 
 const Routes = () => {
   return (

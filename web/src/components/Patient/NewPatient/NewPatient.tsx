@@ -1,6 +1,7 @@
+import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import PatientForm from 'src/components/Patient/PatientForm'
 
 const CREATE_PATIENT_MUTATION = gql`
@@ -12,15 +13,18 @@ const CREATE_PATIENT_MUTATION = gql`
 `
 
 const NewPatient = () => {
-  const [createPatient, { loading, error }] = useMutation(CREATE_PATIENT_MUTATION, {
-    onCompleted: () => {
-      toast.success('Patient created')
-      navigate(routes.patients())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [createPatient, { loading, error }] = useMutation(
+    CREATE_PATIENT_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Patient created')
+        navigate(routes.patients())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
   const onSave = (input) => {
     createPatient({ variables: { input } })
