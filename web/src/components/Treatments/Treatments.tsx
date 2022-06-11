@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import {
   CalendarIcon,
   LocationMarkerIcon,
@@ -5,14 +7,18 @@ import {
   CheckCircleIcon,
 } from '@heroicons/react/solid'
 
-import { Link, navigate, routes } from '@redwoodjs/router'
+import { navigate, routes } from '@redwoodjs/router'
 
+import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 import { Treatment } from '../../../types/graphql'
+import NewTreatmentCell from '../NewTreatmentCell/'
 
 const Treatments = ({ treatments }) => {
   const [activeTreatment, setTreatment] = React.useContext(TreatmentContext)
+  const [patient, setPatient] = React.useContext(PatientContext)
+  const [isFormOpen, setFormOpen] = useState(false)
 
   return (
     <>
@@ -26,6 +32,7 @@ const Treatments = ({ treatments }) => {
             </div>
             <div className="ml-4 mt-2 flex-shrink-0">
               <button
+                onClick={() => setFormOpen((isFormOpen) => !isFormOpen)}
                 type="button"
                 className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
@@ -34,14 +41,13 @@ const Treatments = ({ treatments }) => {
             </div>
           </div>
         </div>
-        {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
         {treatments && (
           <ul role="list" className="divide-y divide-gray-200">
             {treatments.map((treatment: Treatment, index) => (
               <li key={treatment.id}>
                 <button
                   onClick={() => {
-                    setTreatment({ ...treatment, index })
+                    setTreatment(treatment)
                     navigate(routes.cycleSummary())
                   }}
                   className={
@@ -54,7 +60,7 @@ const Treatments = ({ treatments }) => {
                   <div className="px-4 py-4 sm:px-6">
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-medium text-indigo-600 truncate">
-                        {`Cycle  ${treatments.length - index}`}
+                        {`Cycle  ${treatment.number}`}
                       </p>
                       <div className="ml-2 flex-shrink-0 flex">
                         <p
@@ -98,8 +104,8 @@ const Treatments = ({ treatments }) => {
                           />
                           <p>
                             Started on{' '}
-                            <time dateTime={treatment.endDate}>
-                              {treatment.endDate.slice(0, 10)}
+                            <time dateTime={treatment.startDate}>
+                              {treatment.startDate.slice(0, 10)}
                             </time>
                           </p>
                         </div>
@@ -108,12 +114,16 @@ const Treatments = ({ treatments }) => {
                             className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                             aria-hidden="true"
                           />
-                          <p>
-                            Completed on{' '}
-                            <time dateTime={treatment.endDate}>
-                              {treatment.endDate.slice(0, 10)}
-                            </time>
-                          </p>
+                          {treatment.endDate ? (
+                            <p>
+                              Completed on{' '}
+                              <time dateTime={treatment.endDate}>
+                                {treatment.endDate.slice(0, 10)}
+                              </time>
+                            </p>
+                          ) : (
+                            <p>In progress</p>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -124,6 +134,12 @@ const Treatments = ({ treatments }) => {
           </ul>
         )}
       </div>
+      <NewTreatmentCell
+        open={isFormOpen}
+        setOpen={setFormOpen}
+        setTreatment={setTreatment}
+        patient={patient}
+      />
     </>
   )
 }

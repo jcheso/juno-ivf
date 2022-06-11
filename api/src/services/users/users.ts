@@ -19,7 +19,6 @@ interface CreateUserArgs {
 }
 
 export const createUser = ({ input }: CreateUserArgs) => {
-  console.log(input)
   return db.user.create({
     data: input,
   })

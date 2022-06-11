@@ -3,7 +3,7 @@ import { Link, routes } from '@redwoodjs/router'
 
 const StatusBar = ({ patient, activeTreatment }) => {
   return (
-    <div className="pb-5 border-b border-gray-200 pt-0.5">
+    <div className="pb-5 border-b border-gray-200 pt-0.5 w-full">
       <div className="sm:flex sm:justify-between">
         <div className="sm:w-0 sm:flex-1">
           <h1
@@ -18,7 +18,7 @@ const StatusBar = ({ patient, activeTreatment }) => {
             {patient.id ? (
               patient.dob.slice(0, 10)
             ) : (
-              <Link to={routes.dashboard()}>Select a patient</Link>
+              <Link to={routes.dashboard()}>Select a patient to view</Link>
             )}
           </p>
         </div>

@@ -10,6 +10,7 @@ export const schema = gql`
     wasSuccessful: Boolean!
     isActive: Boolean!
     createdAt: DateTime!
+    number: Int
   }
 
   type Query {

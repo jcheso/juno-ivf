@@ -275,7 +275,7 @@ const AddPatient = ({ clinics, clinicians }) => {
                   }}
                 />
                 <FieldError
-                  name="address"
+                  name="city"
                   className="block text-xs font-medium text-red-500 pt-1"
                 />
               </div>

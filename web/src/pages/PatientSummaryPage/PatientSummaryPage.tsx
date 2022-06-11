@@ -7,7 +7,6 @@ import { PatientContext } from 'src/providers/context/PatientContext'
 
 const PatientSummaryPage = () => {
   const [patient, setPatient] = useContext(PatientContext)
-  console.log(patient)
   return (
     <>
       <MetaTags
