@@ -1,59 +1,36 @@
+/* This example requires Tailwind CSS v2.0+ */
+import { Link, routes } from '@redwoodjs/router'
+
 const StatusBar = ({ patient, activeTreatment }) => {
-  console.log('StatusBar', patient, activeTreatment)
   return (
-    <div className="flex-1 flex align-middle pt-3">
-      {patient.id !== undefined ? (
-        <div className="flex-1 flex justify-between">
-          <div className="flex-1">
-            <h2 className="text-2xl font-bold leading-tight text-gray-900">
-              {patient.firstName} {patient.lastName}
-            </h2>
-            <div className="flex flex-row justify-start space-x-2">
-              <p className="text-sm leading-tight">
-                <span className="text-gray-600 font-medium">Clinician: </span>
-                {patient.clinician.firstName} {patient.clinician.lastName}
-              </p>
-              <p className="text-sm leading-tight">
-                <span className="text-gray-600 font-medium">Clinic: </span>
-                {patient.clinic.name}{' '}
-              </p>
-            </div>
-          </div>
+    <div className="pb-5 border-b border-gray-200 pt-0.5">
+      <div className="sm:flex sm:justify-between">
+        <div className="sm:w-0 sm:flex-1">
+          <h1
+            id="message-heading"
+            className="text-lg font-medium text-gray-900"
+          >
+            {patient.id
+              ? `${patient.firstName} ${patient.lastName}`
+              : 'No patient selected'}
+          </h1>
+          <p className="mt-1 text-sm text-gray-500 truncate">
+            {patient.id ? (
+              patient.dob.slice(0, 10)
+            ) : (
+              <Link to={routes.dashboard()}>Select a patient</Link>
+            )}
+          </p>
         </div>
-      ) : (
-        <div className="flex-1">
-          <h3 className="text-2xl font-bold leading-tight pt-1 text-gray-900">
-            No patient selected
-          </h3>
+
+        <div className="mt-4 flex items-center justify-between sm:justify-start h-full">
+          <span className="md:inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium align-middle bg-purple-100 text-purple-800 hidden">
+            {activeTreatment.id
+              ? `Cycle ${activeTreatment.index + 1}`
+              : 'No cycle selected'}
+          </span>
         </div>
-      )}
-      {activeTreatment.id !== undefined ? (
-        <div className="flex-1 flex justify-between">
-          <div className="flex-1">
-            <h2 className="text-2xl font-bold leading-tight text-gray-900">
-              Cycle Details
-            </h2>
-            <div className="flex flex-row justify-start space-x-2">
-              <p className="text-sm leading-tight">
-                <span className="text-gray-600 font-medium">Start Date: </span>
-                {activeTreatment.startDate.slice(0, 10)}
-              </p>
-              <p className="text-sm leading-tight">
-                <span className="text-gray-600 font-medium">
-                  Current Stage:{' '}
-                </span>
-                Oocyte Activation
-              </p>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="flex-1">
-          <h3 className="text-2xl font-bold leading-tight pt-1 text-gray-900">
-            No treatment cycle selected
-          </h3>
-        </div>
-      )}
+      </div>
     </div>
   )
 }

@@ -41,7 +41,7 @@ const Treatments = ({ treatments }) => {
               <li key={treatment.id}>
                 <button
                   onClick={() => {
-                    setTreatment(treatment)
+                    setTreatment({ ...treatment, index })
                     navigate(routes.cycleSummary())
                   }}
                   className={

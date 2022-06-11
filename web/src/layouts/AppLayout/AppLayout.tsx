@@ -20,7 +20,6 @@ import { Link, navigate, NavLink, routes } from '@redwoodjs/router'
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-import { treatment } from '../../../../api/src/services/treatments/treatments'
 import StatusBar from '../../components/StatusBar/StatusBar'
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')

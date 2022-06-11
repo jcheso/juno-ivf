@@ -1,5 +1,6 @@
 import StatusBar from './StatusBar'
-export const patient = {
+
+const mockPatient = {
   id: '2aff0719-a249-4b05-a353-cfa7b8e02025',
   firstName: 'Jane',
   lastName: 'Deer',
@@ -20,7 +21,7 @@ export const patient = {
   city: 'Town 1',
   postcode: 'Postcode 1',
 }
-export const mockTreatment = {
+const mockTreatment = {
   id: '1473b1ad-4f31-4a92-9a04-76bf23d0494b',
   startDate: '2023-01-08T00:00:00.000Z',
   endDate: '2023-02-08T00:00:00.000Z',
@@ -34,8 +35,32 @@ export const mockTreatment = {
   },
 }
 
-export const generated = ({ patient, mockTreatment }) => {
-  return <StatusBar patient={patient} activeTreatment={mockTreatment} />
+const mockTreatmentInactive = {
+  id: '1473b1ad-4f31-4a92-9a04-76bf23d0494b',
+  startDate: '2023-01-08T00:00:00.000Z',
+  endDate: '2023-02-08T00:00:00.000Z',
+  wasSuccessful: null,
+  isActive: false,
+  clinician: { firstName: 'Mengqi', lastName: 'Zhou' },
+  patient: {
+    clinic: {
+      name: 'Imperial College London',
+    },
+  },
+}
+
+export const active = () => {
+  return <StatusBar patient={mockPatient} activeTreatment={mockTreatment} />
+}
+
+export const notActive = () => {
+  return (
+    <StatusBar patient={mockPatient} activeTreatment={mockTreatmentInactive} />
+  )
+}
+
+export const notSelected = () => {
+  return <StatusBar patient={''} activeTreatment={''} />
 }
 
 export default { title: 'Components/StatusBar' }
