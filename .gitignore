@@ -17,4 +17,4 @@ api/types/graphql.d.ts
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
-!.yarn/versions
+juno_backup
