@@ -49,14 +49,14 @@ export default function NewTreatment({ open, setOpen, clinics, clinicians }) {
   `
 
   const [addTreatment, { loading }] = useMutation(CREATE_TREATMENT, {
+    refetchQueries: [{ query: QUERY, variables: { patientId: patient.id } }],
+    awaitRefetchQueries: true,
     onError: () => {
       toast.error('Something went wrong, try again.')
     },
     onCompleted: () => {
       toast.success('Patient registered successfully!')
     },
-    refetchQueries: [{ query: QUERY, variables: { patientId: patient.id } }],
-    awaitRefetchQueries: true,
   })
 
   const onSubmit = async (data) => {

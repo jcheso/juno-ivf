@@ -16,6 +16,7 @@ import {
 
 import { useAuth } from '@redwoodjs/auth'
 import { Link, navigate, NavLink, routes } from '@redwoodjs/router'
+import { Toaster } from '@redwoodjs/web/toast'
 
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
@@ -102,6 +103,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   return (
     <>
       <div>
+        <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
+
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"
