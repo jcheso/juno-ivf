@@ -1,9 +1,10 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useRef } from 'react'
+import { Fragment, useContext, useRef } from 'react'
 
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/outline'
 import CircleLoader from 'react-spinners/CircleLoader'
+import { CreateTreatmentInput } from 'types/graphql'
 
 import {
   Form,
@@ -17,17 +18,16 @@ import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-import { CreateTreatmentInput } from '../../../../api/types/graphql'
+import { PatientContext } from 'src/providers/context/PatientContext'
+import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-export default function NewTreatment({
-  open,
-  setOpen,
-  clinics,
-  clinicians,
-  setTreatment,
-  patient,
-}) {
+import { QUERY } from '../TreatmentsCell'
+
+export default function NewTreatment({ open, setOpen, clinics, clinicians }) {
+  const [patient, setPatient] = useContext(PatientContext)
+  const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
+
   const CREATE_TREATMENT = gql`
     mutation CreateTreatment($input: CreateTreatmentInput!) {
       createTreatment(input: $input) {
@@ -55,6 +55,8 @@ export default function NewTreatment({
     onCompleted: () => {
       toast.success('Patient registered successfully!')
     },
+    refetchQueries: [{ query: QUERY, variables: { patientId: patient.id } }],
+    awaitRefetchQueries: true,
   })
 
   const onSubmit = async (data) => {
@@ -67,9 +69,9 @@ export default function NewTreatment({
       wasSuccessful: false,
     }
     const response = await addTreatment({ variables: { input } })
-    setTreatment(response.data)
+    console.log(response)
+    setTreatment(response.data.createTreatment)
     setOpen(false)
-    navigate(routes.cycleSummary())
   }
 
   return (

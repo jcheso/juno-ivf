@@ -5,7 +5,7 @@ import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import NewTreatment from '../NewTreatment/NewTreatment'
 
 export const QUERY = gql`
-  query FindClinics {
+  query {
     clinics {
       id
       name
@@ -35,8 +35,6 @@ export const Success = ({
   setOpen,
   clinics,
   users,
-  setTreatment,
-  patient,
 }: CellSuccessProps) => {
   return (
     <NewTreatment
@@ -44,8 +42,6 @@ export const Success = ({
       clinicians={users}
       open={open}
       setOpen={setOpen}
-      setTreatment={setTreatment}
-      patient={patient}
     />
   )
 }

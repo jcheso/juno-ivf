@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 
-import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
 import TreatmentsCell from 'src/components/TreatmentsCell/'
