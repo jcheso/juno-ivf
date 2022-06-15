@@ -20,10 +20,10 @@ const StatusBar = () => {
   function clearContext() {
     navigate(routes.dashboard())
     setTimeout(() => {
+      localStorage.removeItem('patientCache')
+      localStorage.removeItem('treatmentCache')
       setPatient(null)
       setActiveTreatment(null)
-      localStorage.setItem('patient', '')
-      localStorage.setItem('activeTreatment', '')
     }, 50)
   }
 
