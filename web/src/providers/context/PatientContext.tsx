@@ -11,6 +11,7 @@ const PatientContextProvider = ({ children }) => {
 
     if (
       state == null &&
+      state === '' &&
       patientCache &&
       new Date(patientCache.expires) > new Date()
     ) {

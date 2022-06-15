@@ -9,10 +9,7 @@ const PatientSummaryPage = () => {
   const [patient, setPatient] = useContext(PatientContext)
   return (
     <>
-      <MetaTags
-        title={`Patient Summary - ${patient.firstName} ${patient.lastName}`}
-        description="PatientSummary page"
-      />
+      <MetaTags title={`Patient Summary`} description="Patient Summary page" />
 
       <PatientSummaryCell id={patient.id} />
     </>

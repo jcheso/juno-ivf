@@ -6,9 +6,9 @@ const TreatmentContextProvider = ({ children }) => {
   const [state, setState] = React.useState(null)
   if (typeof window !== 'undefined') {
     const treatmentCache = JSON.parse(localStorage.getItem('treatmentCache'))
-
     if (
       state == null &&
+      state === '' &&
       treatmentCache &&
       new Date(treatmentCache.expires) > new Date()
     ) {

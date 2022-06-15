@@ -35,8 +35,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const { logOut } = useAuth()
   const [patient, setPatient] = React.useContext(PatientContext)
   const [activeTreatment, setActiveTreatment] = useContext(TreatmentContext)
-  const patientHidden = patient.id == undefined ? true : false
-  const treatmentHidden = activeTreatment.id == undefined ? true : false
+  const patientHidden = patient == null ? true : false
+  const treatmentHidden = activeTreatment == null ? true : false
   const navigation = [
     {
       name: 'Dashboard',
@@ -244,13 +244,17 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                 activeTreatment={activeTreatment}
               ></StatusBar>
               <div className="ml-4 flex items-center md:ml-6">
-                {patient.id !== undefined && (
+                {patient !== null && (
                   <button
                     type="button"
                     onClick={() => {
                       navigate(routes.dashboard())
-                      setPatient('')
-                      setActiveTreatment('')
+                      setTimeout(() => {
+                        setPatient(null)
+                        setActiveTreatment(null)
+                        localStorage.setItem('patient', '')
+                        localStorage.setItem('activeTreatment', '')
+                      }, 50)
                     }}
                     className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >

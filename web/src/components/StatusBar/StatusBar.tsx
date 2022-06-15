@@ -10,12 +10,12 @@ const StatusBar = ({ patient, activeTreatment }) => {
             id="message-heading"
             className="text-lg font-medium text-gray-900"
           >
-            {patient.id
+            {patient !== null
               ? `${patient.firstName} ${patient.lastName}`
               : 'No patient selected'}
           </h1>
           <p className="mt-1 text-sm text-gray-500 truncate">
-            {patient.id ? (
+            {patient !== null ? (
               patient.dob.slice(0, 10)
             ) : (
               <Link to={routes.dashboard()}>Select a patient to view</Link>
@@ -25,7 +25,7 @@ const StatusBar = ({ patient, activeTreatment }) => {
 
         <div className="mt-4 flex items-center justify-between sm:justify-start h-full">
           <span className="md:inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium align-middle bg-purple-100 text-purple-800 hidden">
-            {activeTreatment.id
+            {activeTreatment !== null
               ? `Cycle ${activeTreatment.count}`
               : 'No cycle selected'}
           </span>
