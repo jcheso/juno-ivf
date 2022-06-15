@@ -7,8 +7,6 @@ import {
   CheckCircleIcon,
 } from '@heroicons/react/solid'
 
-import { navigate, routes } from '@redwoodjs/router'
-
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
@@ -18,7 +16,8 @@ import NewTreatmentCell from '../NewTreatmentCell/'
 const Treatments = ({ treatments }) => {
   const [activeTreatment, setTreatment] = React.useContext(TreatmentContext)
   const [patient, setPatient] = React.useContext(PatientContext)
-  const [isFormOpen, setFormOpen] = useState(false)
+  const [openNewTreatment, setNewTreatmentForm] = useState(false)
+  const [openUpdateTreatment, setUpdateTreatmentForm] = useState(false)
 
   return (
     <>
@@ -30,18 +29,38 @@ const Treatments = ({ treatments }) => {
                 Treatments
               </h3>
             </div>
-            <div className="ml-4 mt-2 flex-shrink-0">
-              <button
-                onClick={() => setFormOpen((isFormOpen) => !isFormOpen)}
-                type="button"
-                className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Create new treatment
-              </button>
+            <div className="flex flex-row">
+              {activeTreatment !== null && (
+                <div className="ml-4 mt-2 flex-shrink-0">
+                  <button
+                    onClick={() =>
+                      setUpdateTreatmentForm(
+                        (openUpdateTreatment) => !openUpdateTreatment
+                      )
+                    }
+                    type="button"
+                    className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    Update treatment
+                  </button>
+                </div>
+              )}
+              <div className="ml-4 mt-2 flex-shrink-0">
+                <button
+                  onClick={() =>
+                    setNewTreatmentForm((openNewTreatment) => !openNewTreatment)
+                  }
+                  type="button"
+                  className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Create new treatment
+                </button>
+              </div>
             </div>
           </div>
         </div>
         {treatments && (
+          // eslint-disable-next-line jsx-a11y/no-redundant-roles
           <ul role="list" className="divide-y divide-gray-200">
             {treatments.map((treatment: Treatment, index) => (
               <li key={treatment.id}>
@@ -57,7 +76,6 @@ const Treatments = ({ treatments }) => {
                         ),
                       })
                     )
-                    navigate(routes.cycleSummary())
                   }}
                   className={
                     `block w-full hover:bg-gray-50 cursor-pointer ` +
@@ -147,10 +165,18 @@ const Treatments = ({ treatments }) => {
         )}
       </div>
       <NewTreatmentCell
-        open={isFormOpen}
-        setOpen={setFormOpen}
+        open={openNewTreatment}
+        setOpen={setNewTreatmentForm}
         setTreatment={setTreatment}
         patient={patient}
+        type="create"
+      />
+      <NewTreatmentCell
+        open={openUpdateTreatment}
+        setOpen={setUpdateTreatmentForm}
+        setTreatment={setTreatment}
+        patient={patient}
+        type="update"
       />
     </>
   )

@@ -35,7 +35,6 @@ type AppLayoutProps = {
 const AppLayout = ({ children }: AppLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { logOut, currentUser } = useAuth()
-  console.log(currentUser)
   const [patient, setPatient] = React.useContext(PatientContext)
   const [activeTreatment, setActiveTreatment] = useContext(TreatmentContext)
   const patientHidden = patient == null ? true : false

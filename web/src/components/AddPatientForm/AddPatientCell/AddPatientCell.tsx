@@ -30,9 +30,5 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 export const Success = ({ clinics, users }: CellSuccessProps) => {
-  return (
-    <>
-      <AddPatient clinics={clinics} clinicians={users} />
-    </>
-  )
+  return <AddPatient clinics={clinics} clinicians={users} />
 }

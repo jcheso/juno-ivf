@@ -1,6 +1,7 @@
 import { MetaTags } from '@redwoodjs/web'
 
 import AddPatientCell from 'src/components/AddPatientForm/AddPatientCell'
+
 const AddPatientPage = () => {
   return (
     <>

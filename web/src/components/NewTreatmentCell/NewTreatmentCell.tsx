@@ -2,7 +2,9 @@ import CircleLoader from 'react-spinners/CircleLoader'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
+import { treatment } from '../../../../api/src/services/treatments/treatments'
 import NewTreatment from '../NewTreatment/NewTreatment'
+import UpdateTreatment from '../UpdateTreatment/UpdateTreatment'
 
 export const QUERY = gql`
   query {
@@ -31,17 +33,32 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 export const Success = ({
+  type,
   open,
   setOpen,
   clinics,
   users,
+  treatment,
 }: CellSuccessProps) => {
-  return (
-    <NewTreatment
-      clinics={clinics}
-      clinicians={users}
-      open={open}
-      setOpen={setOpen}
-    />
-  )
+  if (type === 'create') {
+    return (
+      <NewTreatment
+        clinics={clinics}
+        clinicians={users}
+        open={open}
+        setOpen={setOpen}
+      />
+    )
+  }
+  if (type === 'update') {
+    return (
+      <UpdateTreatment
+        clinics={clinics}
+        clinicians={users}
+        open={open}
+        setOpen={setOpen}
+        treatment={treatment}
+      />
+    )
+  }
 }
