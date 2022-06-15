@@ -84,6 +84,13 @@ export default function NewTreatment({ open, setOpen, clinics, clinicians }) {
     }
     const response = await addTreatment({ variables: { input } })
     setTreatment(response.data.createTreatment)
+    localStorage.setItem(
+      'treatmentCache',
+      JSON.stringify({
+        value: treatment,
+        expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
+      })
+    )
     setOpen(false)
   }
 

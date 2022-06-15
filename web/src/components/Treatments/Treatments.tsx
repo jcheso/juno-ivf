@@ -48,6 +48,15 @@ const Treatments = ({ treatments }) => {
                 <button
                   onClick={() => {
                     setTreatment(treatment)
+                    localStorage.setItem(
+                      'treatmentCache',
+                      JSON.stringify({
+                        value: treatment,
+                        expires: new Date(
+                          new Date().getTime() + 12 * 60 * 60 * 1000
+                        ),
+                      })
+                    )
                     navigate(routes.cycleSummary())
                   }}
                   className={

@@ -76,6 +76,15 @@ const PatientSearchResults = ({ patients }) => {
                     <button
                       onClick={() => {
                         setPatient(person)
+                        localStorage.setItem(
+                          'patientCache',
+                          JSON.stringify({
+                            value: person,
+                            expires: new Date(
+                              new Date().getTime() + 12 * 60 * 60 * 1000
+                            ),
+                          })
+                        )
                         navigate(routes.patientSummary())
                       }}
                       className="text-indigo-600 hover:text-indigo-900"
