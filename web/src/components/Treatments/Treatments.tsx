@@ -61,7 +61,8 @@ const Treatments = ({ treatments }) => {
                   }}
                   className={
                     `block w-full hover:bg-gray-50 cursor-pointer ` +
-                    (activeTreatment.id === treatment.id
+                    (activeTreatment != null &&
+                    activeTreatment.id === treatment.id
                       ? 'bg-gray-50'
                       : 'bg-white')
                   }
@@ -72,18 +73,20 @@ const Treatments = ({ treatments }) => {
                         {`Cycle  ${treatment.count}`}
                       </p>
                       <div className="ml-2 flex-shrink-0 flex">
-                        <p
-                          className={
-                            `px-2 inline-flex text-xs leading-5 font-semibold rounded-full ` +
-                            (treatment.wasSuccessful
-                              ? `bg-green-100 text-green-800`
-                              : ` bg-red-100 text-red-800`)
-                          }
-                        >
-                          {treatment.wasSuccessful && !treatment.isActive
-                            ? 'Successful'
-                            : 'Unsuccessful'}
-                        </p>
+                        {!treatment.isActive && (
+                          <p
+                            className={
+                              `px-2 inline-flex text-xs leading-5 font-semibold rounded-full ` +
+                              (treatment.wasSuccessful
+                                ? `bg-green-100 text-green-800`
+                                : ` bg-red-100 text-red-800`)
+                            }
+                          >
+                            {treatment.wasSuccessful
+                              ? 'Successful'
+                              : 'Unsuccessful'}
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="mt-2 sm:flex sm:justify-between">
