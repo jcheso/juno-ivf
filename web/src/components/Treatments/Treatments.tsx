@@ -60,7 +60,7 @@ const Treatments = ({ treatments }) => {
                   <div className="px-4 py-4 sm:px-6">
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-medium text-indigo-600 truncate">
-                        {`Cycle  ${treatment.number}`}
+                        {`Cycle  ${treatment.count}`}
                       </p>
                       <div className="ml-2 flex-shrink-0 flex">
                         <p

@@ -1,6 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useContext, useRef } from 'react'
 
+import { useLazyQuery } from '@apollo/client'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/outline'
 import CircleLoader from 'react-spinners/CircleLoader'
@@ -15,7 +16,7 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
-import { useMutation } from '@redwoodjs/web'
+import { useMutation, useQuery } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { PatientContext } from 'src/providers/context/PatientContext'
@@ -27,7 +28,6 @@ export default function NewTreatment({ open, setOpen, clinics, clinicians }) {
   const [patient, setPatient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
-
   const CREATE_TREATMENT = gql`
     mutation CreateTreatment($input: CreateTreatmentInput!) {
       createTreatment(input: $input) {
@@ -43,23 +43,34 @@ export default function NewTreatment({ open, setOpen, clinics, clinicians }) {
             name
           }
         }
-        number
+        count
       }
     }
   `
-
-  const [addTreatment, { loading }] = useMutation(CREATE_TREATMENT, {
-    refetchQueries: [{ query: QUERY, variables: { patientId: patient.id } }],
-    awaitRefetchQueries: true,
-    onError: () => {
-      toast.error('Something went wrong, try again.')
-    },
-    onCompleted: () => {
-      toast.success('Patient registered successfully!')
+  const [treatments, { loading: queryLoading }] = useLazyQuery(QUERY, {
+    variables: {
+      patientId: patient.id,
     },
   })
 
+  const [addTreatment, { loading: mutationLoading }] = useMutation(
+    CREATE_TREATMENT,
+    {
+      refetchQueries: [{ query: QUERY, variables: { patientId: patient.id } }],
+      awaitRefetchQueries: true,
+      onError: () => {
+        toast.error('Something went wrong, try again.')
+      },
+      onCompleted: () => {
+        toast.success('Treatment added successfully!')
+      },
+    }
+  )
+
+  const loading = queryLoading || mutationLoading
+
   const onSubmit = async (data) => {
+    const treatmentsResponse = await treatments()
     const input: CreateTreatmentInput = {
       startDate: data.startDate,
       endDate: null,
@@ -67,9 +78,11 @@ export default function NewTreatment({ open, setOpen, clinics, clinicians }) {
       clinicianId: data.clinician,
       isActive: true,
       wasSuccessful: false,
+      count: treatmentsResponse.data.treatments
+        ? treatmentsResponse.data.treatments.length + 1
+        : 1,
     }
     const response = await addTreatment({ variables: { input } })
-    console.log(response)
     setTreatment(response.data.createTreatment)
     setOpen(false)
   }

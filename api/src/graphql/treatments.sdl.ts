@@ -10,7 +10,7 @@ export const schema = gql`
     wasSuccessful: Boolean!
     isActive: Boolean!
     createdAt: DateTime!
-    number: Int
+    count: Int
   }
 
   type Query {
@@ -26,6 +26,7 @@ export const schema = gql`
     endDate: DateTime
     wasSuccessful: Boolean
     isActive: Boolean!
+    count: Int
   }
 
   input UpdateTreatmentInput {
@@ -35,6 +36,7 @@ export const schema = gql`
     endDate: DateTime
     wasSuccessful: Boolean
     isActive: Boolean
+    count: Int
   }
 
   type Mutation {
