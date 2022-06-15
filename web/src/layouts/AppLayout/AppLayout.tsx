@@ -35,7 +35,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const { logOut } = useAuth()
   const [patient, setPatient] = React.useContext(PatientContext)
   const [activeTreatment, setActiveTreatment] = useContext(TreatmentContext)
-  const hidden = patient.id == undefined ? true : false
+  const patientHidden = patient.id == undefined ? true : false
+  const treatmentHidden = activeTreatment.id == undefined ? true : false
   const navigation = [
     {
       name: 'Dashboard',
@@ -48,49 +49,49 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       to: routes.patientSummary(),
       icon: UsersIcon,
       current: false,
-      hidden: hidden,
+      hidden: patientHidden,
     },
     {
       name: 'Treatments',
       to: routes.treatments(),
       icon: ChartBarIcon,
       current: false,
-      hidden: hidden,
+      hidden: patientHidden,
     },
     {
       name: 'Cycle Summary',
       to: routes.cycleSummary(),
       icon: CalendarIcon,
       current: false,
-      hidden: hidden,
+      hidden: treatmentHidden,
     },
     {
       name: 'Medicine',
       to: '#',
       icon: FolderIcon,
       current: false,
-      hidden: hidden,
+      hidden: treatmentHidden,
     },
     {
       name: 'Test Results',
       to: '#',
       icon: BeakerIcon,
       current: false,
-      hidden: hidden,
+      hidden: treatmentHidden,
     },
     {
       name: 'Ultrasounds',
       to: '#',
       icon: PhotographIcon,
       current: false,
-      hidden: hidden,
+      hidden: treatmentHidden,
     },
     {
       name: 'Lab Status',
       to: '#',
       icon: ClipboardListIcon,
       current: false,
-      hidden: hidden,
+      hidden: treatmentHidden,
     },
   ]
 
