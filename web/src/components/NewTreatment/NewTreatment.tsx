@@ -1,9 +1,11 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useRef } from 'react'
+import { Fragment, useContext, useRef } from 'react'
 
+import { useLazyQuery } from '@apollo/client'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/outline'
 import CircleLoader from 'react-spinners/CircleLoader'
+import { CreateTreatmentInput } from 'types/graphql'
 
 import {
   Form,
@@ -14,19 +16,17 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
-import { useMutation } from '@redwoodjs/web'
+import { useMutation, useQuery } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-import { CreateTreatmentInput } from '../../../../api/types/graphql'
+import { PatientContext } from 'src/providers/context/PatientContext'
+import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-export default function NewTreatment({
-  open,
-  setOpen,
-  clinics,
-  clinicians,
-  setTreatment,
-  patient,
-}) {
+import { QUERY } from '../TreatmentsCell'
+
+export default function NewTreatment({ open, setOpen, clinics, clinicians }) {
+  const [patient, setPatient] = useContext(PatientContext)
+  const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
   const CREATE_TREATMENT = gql`
     mutation CreateTreatment($input: CreateTreatmentInput!) {
@@ -43,21 +43,34 @@ export default function NewTreatment({
             name
           }
         }
-        number
+        count
       }
     }
   `
-
-  const [addTreatment, { loading }] = useMutation(CREATE_TREATMENT, {
-    onError: () => {
-      toast.error('Something went wrong, try again.')
-    },
-    onCompleted: () => {
-      toast.success('Patient registered successfully!')
+  const [treatments, { loading: queryLoading }] = useLazyQuery(QUERY, {
+    variables: {
+      patientId: patient.id,
     },
   })
 
+  const [addTreatment, { loading: mutationLoading }] = useMutation(
+    CREATE_TREATMENT,
+    {
+      refetchQueries: [{ query: QUERY, variables: { patientId: patient.id } }],
+      awaitRefetchQueries: true,
+      onError: () => {
+        toast.error('Something went wrong, try again.')
+      },
+      onCompleted: () => {
+        toast.success('Treatment added successfully!')
+      },
+    }
+  )
+
+  const loading = queryLoading || mutationLoading
+
   const onSubmit = async (data) => {
+    const treatmentsResponse = await treatments()
     const input: CreateTreatmentInput = {
       startDate: data.startDate,
       endDate: null,
@@ -65,11 +78,20 @@ export default function NewTreatment({
       clinicianId: data.clinician,
       isActive: true,
       wasSuccessful: false,
+      count: treatmentsResponse.data.treatments
+        ? treatmentsResponse.data.treatments.length + 1
+        : 1,
     }
     const response = await addTreatment({ variables: { input } })
-    setTreatment(response.data)
+    setTreatment(response.data.createTreatment)
+    localStorage.setItem(
+      'treatmentCache',
+      JSON.stringify({
+        value: treatment,
+        expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
+      })
+    )
     setOpen(false)
-    navigate(routes.cycleSummary())
   }
 
   return (

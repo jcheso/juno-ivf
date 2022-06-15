@@ -73,5 +73,5 @@ model Treatment {
   wasSuccessful Boolean?
   isActive      Boolean   @default(true)
   createdAt     DateTime  @default(now())
-  number        Int       @default(autoincrement())
+  count         Int       @default(0)
 }
