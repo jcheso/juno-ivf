@@ -1,10 +1,9 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useContext, useRef } from 'react'
+import { Fragment, useContext, useRef, useState, useEffect } from 'react'
 
-import { useLazyQuery } from '@apollo/client'
 import { Dialog, Transition } from '@headlessui/react'
 import CircleLoader from 'react-spinners/CircleLoader'
-import { CreateTreatmentInput, UpdateTreatmentInput } from 'types/graphql'
+import { UpdateTreatmentInput } from 'types/graphql'
 
 import {
   Form,
@@ -13,29 +12,26 @@ import {
   DateField,
   SelectField,
   Submit,
+  CheckboxField,
 } from '@redwoodjs/forms'
-import { navigate, routes } from '@redwoodjs/router'
-import { useMutation, useQuery } from '@redwoodjs/web'
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-import { clinics } from '../AddPatientForm/AddPatientCell/AddPatientCell.mock'
 import { QUERY } from '../TreatmentsCell'
 
-export default function NewTreatment({
-  open,
-  setOpen,
-  treatment,
-  clinics,
-  clinicians,
-}) {
+export default function NewTreatment({ open, setOpen, clinicians }) {
   const [patient, setPatient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
+  const [isActive, setActive] = useState(activeTreatment.isActive)
+  useEffect(() => {
+    setActive(activeTreatment.isActive)
+  }, [activeTreatment])
   const cancelButtonRef = useRef(null)
   const UPDATE_TREATMENT = gql`
-    mutation UpdateTreatment($input: UpdateTreatmentInput!, $id: String!) {
+    mutation UpdateTreatment($id: String!, $input: UpdateTreatmentInput!) {
       updateTreatment(id: $id, input: $input) {
         id
         startDate
@@ -67,17 +63,19 @@ export default function NewTreatment({
   const onSubmit = async (data) => {
     const input: UpdateTreatmentInput = {
       startDate: data.startDate,
-      endDate: null,
+      endDate: data.isActive ? null : data.endDate,
       clinicianId: data.clinicianId,
-      isActive: true,
-      wasSuccessful: false,
+      isActive: data.isActive,
+      wasSuccessful: data.wasSuccessful,
     }
-    const response = await updateTreatment({ variables: { input } })
+    const response = await updateTreatment({
+      variables: { id: activeTreatment.id, input },
+    })
     setTreatment(response.data.createTreatment)
     localStorage.setItem(
       'treatmentCache',
       JSON.stringify({
-        value: treatment,
+        value: response.data.createTreatment,
         expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
       })
     )
@@ -134,6 +132,10 @@ export default function NewTreatment({
                             </Label>
                             <DateField
                               name="startDate"
+                              defaultValue={activeTreatment.startDate.slice(
+                                0,
+                                10
+                              )}
                               className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               validation={{
@@ -145,6 +147,36 @@ export default function NewTreatment({
                             />
                             <FieldError
                               name="startDate"
+                              className="block text-xs font-medium text-red-500 pt-1"
+                            />
+                          </div>
+                          <div className="col-span-6 sm:col-span-3">
+                            <Label
+                              name="endDate"
+                              className="block text-sm font-medium text-gray-700"
+                              errorClassName="block text-sm font-medium text-red-500"
+                            >
+                              End Date
+                            </Label>
+                            <DateField
+                              name="endDate"
+                              defaultValue={
+                                activeTreatment.endDate
+                                  ? activeTreatment.endDate.slice(0, 10)
+                                  : null
+                              }
+                              validation={{
+                                required: {
+                                  value: !isActive,
+                                  message:
+                                    'An end date is required if the treatment is no longer active',
+                                },
+                              }}
+                              className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                              errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            />
+                            <FieldError
+                              name="endDate"
                               className="block text-xs font-medium text-red-500 pt-1"
                             />
                           </div>
@@ -170,25 +202,43 @@ export default function NewTreatment({
                               ))}
                             </SelectField>
                           </div>
-                          <div className="col-span-6 sm:col-span-3">
-                            <Label
-                              name="clinic"
-                              className="block text-sm font-medium text-gray-700"
-                              errorClassName="block text-sm font-medium text-red-500"
-                            >
-                              Clinic*
-                            </Label>
-                            <SelectField
-                              name="clinic"
-                              className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                              errorClassName="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                            >
-                              {clinics.map((clinic) => (
-                                <option key={clinic.id} value={clinic.id}>
-                                  {clinic.name}
-                                </option>
-                              ))}
-                            </SelectField>
+                          <div className="relative flex items-start ">
+                            <div className="flex items-center h-5">
+                              <CheckboxField
+                                name="wasSuccessful"
+                                defaultChecked={activeTreatment.wasSuccessful}
+                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                errorClassName="focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded"
+                              />
+                            </div>
+                            <div className="ml-3 text-sm">
+                              <Label
+                                name="wasSuccessful"
+                                className="font-medium text-gray-700"
+                              >
+                                Successful
+                              </Label>
+                            </div>
+                          </div>
+                          <div className="relative flex items-start ">
+                            <div className="flex items-center h-5">
+                              <CheckboxField
+                                name="isActive"
+                                defaultChecked={activeTreatment.isActive}
+                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                onClick={() => {
+                                  setActive(!isActive)
+                                }}
+                              />
+                            </div>
+                            <div className="ml-3 text-sm">
+                              <Label
+                                name="isActive"
+                                className="font-medium text-gray-700"
+                              >
+                                Active
+                              </Label>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -200,7 +250,7 @@ export default function NewTreatment({
                         disabled={loading}
                         className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
                       >
-                        Add treatment
+                        Update treatment
                       </Submit>
                     ) : (
                       <div className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">

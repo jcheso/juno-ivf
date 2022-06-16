@@ -3,7 +3,6 @@ import { Fragment, useContext, useRef } from 'react'
 
 import { useLazyQuery } from '@apollo/client'
 import { Dialog, Transition } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/outline'
 import CircleLoader from 'react-spinners/CircleLoader'
 import { CreateTreatmentInput } from 'types/graphql'
 
@@ -15,8 +14,7 @@ import {
   SelectField,
   Submit,
 } from '@redwoodjs/forms'
-import { navigate, routes } from '@redwoodjs/router'
-import { useMutation, useQuery } from '@redwoodjs/web'
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { PatientContext } from 'src/providers/context/PatientContext'
@@ -24,10 +22,11 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 import { QUERY } from '../TreatmentsCell'
 
-export default function NewTreatment({ open, setOpen, clinics, clinicians }) {
+export default function NewTreatment({ open, setOpen, clinicians }) {
   const [patient, setPatient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
+
   const CREATE_TREATMENT = gql`
     mutation CreateTreatment($input: CreateTreatmentInput!) {
       createTreatment(input: $input) {
@@ -87,7 +86,7 @@ export default function NewTreatment({ open, setOpen, clinics, clinicians }) {
     localStorage.setItem(
       'treatmentCache',
       JSON.stringify({
-        value: treatment,
+        value: response.data.createTreatment,
         expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
       })
     )
@@ -174,26 +173,6 @@ export default function NewTreatment({ open, setOpen, clinics, clinicians }) {
                               {clinicians.map((clinician) => (
                                 <option key={clinician.id} value={clinician.id}>
                                   {clinician.firstName} {clinician.lastName}
-                                </option>
-                              ))}
-                            </SelectField>
-                          </div>
-                          <div className="col-span-6 sm:col-span-3">
-                            <Label
-                              name="clinic"
-                              className="block text-sm font-medium text-gray-700"
-                              errorClassName="block text-sm font-medium text-red-500"
-                            >
-                              Clinic*
-                            </Label>
-                            <SelectField
-                              name="clinic"
-                              className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                              errorClassName="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                            >
-                              {clinics.map((clinic) => (
-                                <option key={clinic.id} value={clinic.id}>
-                                  {clinic.name}
                                 </option>
                               ))}
                             </SelectField>

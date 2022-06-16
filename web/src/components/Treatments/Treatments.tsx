@@ -5,6 +5,7 @@ import {
   LocationMarkerIcon,
   UsersIcon,
   CheckCircleIcon,
+  ClockIcon,
 } from '@heroicons/react/solid'
 
 import { PatientContext } from 'src/providers/context/PatientContext'
@@ -62,7 +63,7 @@ const Treatments = ({ treatments }) => {
         {treatments && (
           // eslint-disable-next-line jsx-a11y/no-redundant-roles
           <ul role="list" className="divide-y divide-gray-200">
-            {treatments.map((treatment: Treatment, index) => (
+            {treatments.map((treatment: Treatment) => (
               <li key={treatment.id}>
                 <button
                   onClick={() => {
@@ -140,19 +141,27 @@ const Treatments = ({ treatments }) => {
                           </p>
                         </div>
                         <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                          <CheckCircleIcon
-                            className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                          />
                           {treatment.endDate ? (
-                            <p>
-                              Completed on{' '}
-                              <time dateTime={treatment.endDate}>
-                                {treatment.endDate.slice(0, 10)}
-                              </time>
-                            </p>
+                            <>
+                              <CheckCircleIcon
+                                className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                              <p>
+                                Completed on{' '}
+                                <time dateTime={treatment.endDate}>
+                                  {treatment.endDate.slice(0, 10)}
+                                </time>
+                              </p>
+                            </>
                           ) : (
-                            <p>In progress</p>
+                            <>
+                              <ClockIcon
+                                className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                              <p>In progress</p>
+                            </>
                           )}
                         </div>
                       </div>
@@ -171,13 +180,15 @@ const Treatments = ({ treatments }) => {
         patient={patient}
         type="create"
       />
-      <NewTreatmentCell
-        open={openUpdateTreatment}
-        setOpen={setUpdateTreatmentForm}
-        setTreatment={setTreatment}
-        patient={patient}
-        type="update"
-      />
+      {activeTreatment && (
+        <NewTreatmentCell
+          open={openUpdateTreatment}
+          setOpen={setUpdateTreatmentForm}
+          setTreatment={setTreatment}
+          patient={patient}
+          type="update"
+        />
+      )}
     </>
   )
 }
