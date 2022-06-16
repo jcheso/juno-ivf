@@ -29,7 +29,7 @@ const StatusBar = () => {
 
   return (
     <div className="w-full">
-      <div className="sm:flex sm:justify-between">
+      <div className="flex sm:justify-between flex-row justify-between">
         <div className="sm:w-0 sm:flex-1 content-center align-middle">
           <h1
             id="message-heading"
@@ -39,7 +39,7 @@ const StatusBar = () => {
               ? `${patient.firstName} ${patient.lastName}`
               : 'No patient selected'}
           </h1>
-          <p className="text-sm text-gray-500 truncate">
+          <p className="mt-1 text-sm text-gray-500 truncate">
             {patient !== null ? (
               `Date of Birth: ${patient.dob.slice(0, 10)}`
             ) : (
@@ -77,12 +77,12 @@ const StatusBar = () => {
                     <Menu.Item>
                       {({ active }) => (
                         <button
-                          onClick={() => showModel()}
+                          onClick={() => navigate(routes.treatments())}
                           className={classNames(
                             active
                               ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700',
-                            'flex justify-between px-4 py-2 text-sm w-full'
+                            'flex justify-between px-4 py-2 text-sm'
                           )}
                         >
                           <span>Update Treatment</span>
@@ -99,7 +99,7 @@ const StatusBar = () => {
                             active
                               ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700',
-                            'flex justify-between px-4 py-2 text-sm w-full'
+                            'flex justify-between px-4 py-2 text-sm'
                           )}
                         >
                           <span>Deselect Patient</span>
@@ -118,6 +118,3 @@ const StatusBar = () => {
 }
 
 export default StatusBar
-function showModel(): void {
-  throw new Error('Function not implemented.')
-}
