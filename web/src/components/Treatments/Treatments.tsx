@@ -128,7 +128,7 @@ const Treatments = ({ treatments }) => {
                         </p>
                       </div>
                       <div className="flex flex-row space-x-4">
-                        <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                        <div className="mt-2 flex items-center sm:text-sm text-gray-500 sm:mt-0 text-left text-xs">
                           <CalendarIcon
                             className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                             aria-hidden="true"
@@ -140,7 +140,7 @@ const Treatments = ({ treatments }) => {
                             </time>
                           </p>
                         </div>
-                        <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                        <div className="mt-2 flex items-center sm:text-sm text-gray-500 sm:mt-0 text-left text-xs">
                           {treatment.endDate ? (
                             <>
                               <CheckCircleIcon
