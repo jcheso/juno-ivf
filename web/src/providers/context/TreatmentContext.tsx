@@ -8,10 +8,10 @@ const TreatmentContextProvider = ({ children }) => {
     const treatmentCache = JSON.parse(localStorage.getItem('treatmentCache'))
     if (
       state == null &&
-      state === '' &&
       treatmentCache &&
       new Date(treatmentCache.expires) > new Date()
     ) {
+      console.log('Setting treatment from cache')
       setState(treatmentCache.value)
     }
   }

@@ -1,4 +1,8 @@
 import { PatientContext } from 'src/providers/context/PatientContext'
+import {
+  TreatmentContext,
+  TreatmentContextProvider,
+} from 'src/providers/context/TreatmentContext'
 
 import { clinics, users } from '../AddPatientCell/AddPatientCell.mock'
 
@@ -23,9 +27,30 @@ const patient = {
 
 export const generated = () => {
   return (
-    <PatientContext.Provider value={[{ ...patient }, () => {}]}>
-      <AddPatient clinics={clinics} clinicians={users} />
-    </PatientContext.Provider>
+    <TreatmentContext.Provider
+      value={[
+        {
+          id: '91510aba-b38a-4de7-985b-d6c2456e7729',
+          startDate: '2021-01-08T00:00:00.000Z',
+          endDate: '2021-02-08T00:00:00.000Z',
+          wasSuccessful: false,
+          isActive: false,
+          clinician: { firstName: 'Mengqi', lastName: 'Zhou' },
+          patient: {
+            firstName: 'Tia',
+            lastName: 'Campbell',
+            clinic: {
+              name: 'Imperial College London',
+            },
+          },
+        },
+        () => {},
+      ]}
+    >
+      <PatientContext.Provider value={[{ ...patient }, () => {}]}>
+        <AddPatient clinics={clinics} clinicians={users} />
+      </PatientContext.Provider>
+    </TreatmentContext.Provider>
   )
 }
 

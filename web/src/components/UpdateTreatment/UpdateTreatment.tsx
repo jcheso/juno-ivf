@@ -1,10 +1,9 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useContext, useRef } from 'react'
+import { Fragment, useContext, useRef, useState, useEffect } from 'react'
 
-import { useLazyQuery } from '@apollo/client'
 import { Dialog, Transition } from '@headlessui/react'
 import CircleLoader from 'react-spinners/CircleLoader'
-import { CreateTreatmentInput } from 'types/graphql'
+import { UpdateTreatmentInput } from 'types/graphql'
 
 import {
   Form,
@@ -13,6 +12,7 @@ import {
   DateField,
   SelectField,
   Submit,
+  CheckboxField,
 } from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
@@ -25,11 +25,14 @@ import { QUERY } from '../TreatmentsCell'
 export default function NewTreatment({ open, setOpen, clinicians }) {
   const [patient, setPatient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
+  const [isActive, setActive] = useState(activeTreatment.isActive)
+  useEffect(() => {
+    setActive(activeTreatment.isActive)
+  }, [activeTreatment])
   const cancelButtonRef = useRef(null)
-
-  const CREATE_TREATMENT = gql`
-    mutation CreateTreatment($input: CreateTreatmentInput!) {
-      createTreatment(input: $input) {
+  const UPDATE_TREATMENT = gql`
+    mutation UpdateTreatment($id: String!, $input: UpdateTreatmentInput!) {
+      updateTreatment(id: $id, input: $input) {
         id
         startDate
         isActive
@@ -46,42 +49,28 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
       }
     }
   `
-  const [treatments, { loading: queryLoading }] = useLazyQuery(QUERY, {
-    variables: {
-      patientId: patient.id,
+  const [updateTreatment, { loading }] = useMutation(UPDATE_TREATMENT, {
+    refetchQueries: [{ query: QUERY, variables: { patientId: patient.id } }],
+    awaitRefetchQueries: true,
+    onError: () => {
+      toast.error('Something went wrong, try again.')
+    },
+    onCompleted: () => {
+      toast.success('Treatment updated successfully!')
     },
   })
 
-  const [addTreatment, { loading: mutationLoading }] = useMutation(
-    CREATE_TREATMENT,
-    {
-      refetchQueries: [{ query: QUERY, variables: { patientId: patient.id } }],
-      awaitRefetchQueries: true,
-      onError: () => {
-        toast.error('Something went wrong, try again.')
-      },
-      onCompleted: () => {
-        toast.success('Treatment added successfully!')
-      },
-    }
-  )
-
-  const loading = queryLoading || mutationLoading
-
   const onSubmit = async (data) => {
-    const treatmentsResponse = await treatments()
-    const input: CreateTreatmentInput = {
+    const input: UpdateTreatmentInput = {
       startDate: data.startDate,
-      endDate: null,
-      patientId: patient.id,
-      clinicianId: data.clinician,
-      isActive: true,
-      wasSuccessful: false,
-      count: treatmentsResponse.data.treatments
-        ? treatmentsResponse.data.treatments.length + 1
-        : 1,
+      endDate: data.isActive ? null : data.endDate,
+      clinicianId: data.clinicianId,
+      isActive: data.isActive,
+      wasSuccessful: data.wasSuccessful,
     }
-    const response = await addTreatment({ variables: { input } })
+    const response = await updateTreatment({
+      variables: { id: activeTreatment.id, input },
+    })
     setTreatment(response.data.createTreatment)
     localStorage.setItem(
       'treatmentCache',
@@ -128,7 +117,7 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                 <Form className="space-y-6" onSubmit={onSubmit}>
                   <div>
                     <h3 className="text-lg font-medium leading-6 text-gray-900  px-4">
-                      New Treatment Cycle
+                      Update Treatment Cycle
                     </h3>
                     <div className="bg-white px-4 py-5 sm:rounded-lg sm:p-6">
                       <div className="md:grid md:gap-6">
@@ -143,6 +132,10 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                             </Label>
                             <DateField
                               name="startDate"
+                              defaultValue={activeTreatment.startDate.slice(
+                                0,
+                                10
+                              )}
                               className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               validation={{
@@ -159,6 +152,36 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                           </div>
                           <div className="col-span-6 sm:col-span-3">
                             <Label
+                              name="endDate"
+                              className="block text-sm font-medium text-gray-700"
+                              errorClassName="block text-sm font-medium text-red-500"
+                            >
+                              End Date
+                            </Label>
+                            <DateField
+                              name="endDate"
+                              defaultValue={
+                                activeTreatment.endDate
+                                  ? activeTreatment.endDate.slice(0, 10)
+                                  : null
+                              }
+                              validation={{
+                                required: {
+                                  value: !isActive,
+                                  message:
+                                    'An end date is required if the treatment is no longer active',
+                                },
+                              }}
+                              className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                              errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            />
+                            <FieldError
+                              name="endDate"
+                              className="block text-xs font-medium text-red-500 pt-1"
+                            />
+                          </div>
+                          <div className="col-span-6 sm:col-span-3">
+                            <Label
                               name="clinician"
                               className="block text-sm font-medium text-gray-700"
                               errorClassName="block text-sm font-medium text-red-500"
@@ -167,6 +190,8 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                             </Label>
                             <SelectField
                               name="clinician"
+                              // set default value of treatment
+                              value={activeTreatment.clinicianId}
                               className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                               errorClassName="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                             >
@@ -176,6 +201,44 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                                 </option>
                               ))}
                             </SelectField>
+                          </div>
+                          <div className="relative flex items-start ">
+                            <div className="flex items-center h-5">
+                              <CheckboxField
+                                name="wasSuccessful"
+                                defaultChecked={activeTreatment.wasSuccessful}
+                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                errorClassName="focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded"
+                              />
+                            </div>
+                            <div className="ml-3 text-sm">
+                              <Label
+                                name="wasSuccessful"
+                                className="font-medium text-gray-700"
+                              >
+                                Successful
+                              </Label>
+                            </div>
+                          </div>
+                          <div className="relative flex items-start ">
+                            <div className="flex items-center h-5">
+                              <CheckboxField
+                                name="isActive"
+                                defaultChecked={activeTreatment.isActive}
+                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                onClick={() => {
+                                  setActive(!isActive)
+                                }}
+                              />
+                            </div>
+                            <div className="ml-3 text-sm">
+                              <Label
+                                name="isActive"
+                                className="font-medium text-gray-700"
+                              >
+                                Active
+                              </Label>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -187,7 +250,7 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                         disabled={loading}
                         className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
                       >
-                        Add treatment
+                        Update treatment
                       </Submit>
                     ) : (
                       <div className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">

@@ -6,16 +6,16 @@ const PatientContextProvider = ({ children }) => {
   const [state, setState] = React.useState(null)
 
   if (typeof window !== 'undefined') {
-    const patientCache = JSON.parse(localStorage.getItem('patientCache'))
-    // if the state is not set
+    const patientCache = localStorage.getItem('patientCache')
+    const patient = JSON.parse(patientCache)
 
     if (
       state == null &&
-      state === '' &&
       patientCache &&
-      new Date(patientCache.expires) > new Date()
+      new Date(patient.expires) > new Date()
     ) {
-      setState(patientCache.value)
+      console.log('Setting patient from cache')
+      setState(patient.value)
     }
   }
 

@@ -5,9 +5,8 @@ import {
   LocationMarkerIcon,
   UsersIcon,
   CheckCircleIcon,
+  ClockIcon,
 } from '@heroicons/react/solid'
-
-import { navigate, routes } from '@redwoodjs/router'
 
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
@@ -18,7 +17,8 @@ import NewTreatmentCell from '../NewTreatmentCell/'
 const Treatments = ({ treatments }) => {
   const [activeTreatment, setTreatment] = React.useContext(TreatmentContext)
   const [patient, setPatient] = React.useContext(PatientContext)
-  const [isFormOpen, setFormOpen] = useState(false)
+  const [openNewTreatment, setNewTreatmentForm] = useState(false)
+  const [openUpdateTreatment, setUpdateTreatmentForm] = useState(false)
 
   return (
     <>
@@ -30,20 +30,40 @@ const Treatments = ({ treatments }) => {
                 Treatments
               </h3>
             </div>
-            <div className="ml-4 mt-2 flex-shrink-0">
-              <button
-                onClick={() => setFormOpen((isFormOpen) => !isFormOpen)}
-                type="button"
-                className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Create new treatment
-              </button>
+            <div className="flex flex-row">
+              {activeTreatment !== null && (
+                <div className="ml-4 mt-2 flex-shrink-0">
+                  <button
+                    onClick={() =>
+                      setUpdateTreatmentForm(
+                        (openUpdateTreatment) => !openUpdateTreatment
+                      )
+                    }
+                    type="button"
+                    className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    Update treatment
+                  </button>
+                </div>
+              )}
+              <div className="ml-4 mt-2 flex-shrink-0">
+                <button
+                  onClick={() =>
+                    setNewTreatmentForm((openNewTreatment) => !openNewTreatment)
+                  }
+                  type="button"
+                  className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Create new treatment
+                </button>
+              </div>
             </div>
           </div>
         </div>
         {treatments && (
+          // eslint-disable-next-line jsx-a11y/no-redundant-roles
           <ul role="list" className="divide-y divide-gray-200">
-            {treatments.map((treatment: Treatment, index) => (
+            {treatments.map((treatment: Treatment) => (
               <li key={treatment.id}>
                 <button
                   onClick={() => {
@@ -57,7 +77,6 @@ const Treatments = ({ treatments }) => {
                         ),
                       })
                     )
-                    navigate(routes.cycleSummary())
                   }}
                   className={
                     `block w-full hover:bg-gray-50 cursor-pointer ` +
@@ -109,7 +128,7 @@ const Treatments = ({ treatments }) => {
                         </p>
                       </div>
                       <div className="flex flex-row space-x-4">
-                        <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                        <div className="mt-2 flex items-center sm:text-sm text-gray-500 sm:mt-0 text-left text-xs">
                           <CalendarIcon
                             className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                             aria-hidden="true"
@@ -121,20 +140,28 @@ const Treatments = ({ treatments }) => {
                             </time>
                           </p>
                         </div>
-                        <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                          <CheckCircleIcon
-                            className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                          />
+                        <div className="mt-2 flex items-center sm:text-sm text-gray-500 sm:mt-0 text-left text-xs">
                           {treatment.endDate ? (
-                            <p>
-                              Completed on{' '}
-                              <time dateTime={treatment.endDate}>
-                                {treatment.endDate.slice(0, 10)}
-                              </time>
-                            </p>
+                            <>
+                              <CheckCircleIcon
+                                className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                              <p>
+                                Completed on{' '}
+                                <time dateTime={treatment.endDate}>
+                                  {treatment.endDate.slice(0, 10)}
+                                </time>
+                              </p>
+                            </>
                           ) : (
-                            <p>In progress</p>
+                            <>
+                              <ClockIcon
+                                className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                              <p>In progress</p>
+                            </>
                           )}
                         </div>
                       </div>
@@ -147,11 +174,21 @@ const Treatments = ({ treatments }) => {
         )}
       </div>
       <NewTreatmentCell
-        open={isFormOpen}
-        setOpen={setFormOpen}
+        open={openNewTreatment}
+        setOpen={setNewTreatmentForm}
         setTreatment={setTreatment}
         patient={patient}
+        type="create"
       />
+      {activeTreatment && (
+        <NewTreatmentCell
+          open={openUpdateTreatment}
+          setOpen={setUpdateTreatmentForm}
+          setTreatment={setTreatment}
+          patient={patient}
+          type="update"
+        />
+      )}
     </>
   )
 }
