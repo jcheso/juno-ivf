@@ -1,4 +1,4 @@
-import AddPatientPage from './AddPatientPage'
+import AddPatientPage from '../AddPatientPage'
 
 export const generated = () => {
   return <AddPatientPage />

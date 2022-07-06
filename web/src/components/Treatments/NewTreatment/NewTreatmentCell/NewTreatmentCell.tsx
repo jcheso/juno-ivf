@@ -2,8 +2,9 @@ import CircleLoader from 'react-spinners/CircleLoader'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-import NewTreatment from '../NewTreatment/NewTreatment'
-import UpdateTreatment from '../UpdateTreatment/UpdateTreatment'
+import UpdateTreatment from 'src/components/Treatments/UpdateTreatment/UpdateTreatment'
+
+import NewTreatment from '../NewTreatment'
 
 export const QUERY = gql`
   query {

@@ -2,7 +2,7 @@ import CircleLoader from 'react-spinners/CircleLoader'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-import Treatments from '../Treatments/Treatments'
+import Treatments from '../Treatments'
 
 export const QUERY = gql`
   query TreatmentsQuery($patientId: String!) {

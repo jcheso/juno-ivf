@@ -23,7 +23,7 @@ import { Toaster } from '@redwoodjs/web/toast'
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-import StatusBar from '../../components/StatusBar/StatusBar'
+import StatusBar from '../../components/StatusBar'
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }

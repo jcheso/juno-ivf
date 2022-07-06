@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { navigate, Link, routes } from '@redwoodjs/router'
+import { navigate, routes } from '@redwoodjs/router'
 
 import { PatientContext } from 'src/providers/context/PatientContext'
 
