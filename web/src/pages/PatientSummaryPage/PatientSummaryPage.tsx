@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import { Redirect, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
-import PatientSummaryCell from 'src/components/PatientSummaryCell'
+import PatientSummaryCell from 'src/components/PatientSummary/PatientSummaryCell'
 import { PatientContext } from 'src/providers/context/PatientContext'
 
 const PatientSummaryPage = () => {

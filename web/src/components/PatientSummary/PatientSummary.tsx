@@ -3,7 +3,9 @@ import { PaperClipIcon } from '@heroicons/react/solid'
 import { Patient } from '../../../types/graphql'
 
 const PatientSummary = ({ patientSummary }) => {
+  console.log(patientSummary)
   const patient: Patient = patientSummary.patient
+  console.log(patient)
 
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-lg">

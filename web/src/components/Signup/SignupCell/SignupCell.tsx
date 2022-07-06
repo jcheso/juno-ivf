@@ -1,18 +1,15 @@
 import CircleLoader from 'react-spinners/CircleLoader'
+import type { FindClinics } from 'types/graphql'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-import AddPatient from 'src/components/AddPatientForm/AddPatient'
+import SignupForm from '../SignupForm'
+
 export const QUERY = gql`
-  query PatientForm {
+  query FindClinics {
     clinics {
       id
       name
-    }
-    users {
-      id
-      firstName
-      lastName
     }
   }
 `
@@ -26,9 +23,9 @@ export const Loading = () => (
 export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ clinics, users }: CellSuccessProps) => {
-  return <AddPatient clinics={clinics} clinicians={users} />
+export const Success = ({ clinics }: CellSuccessProps<FindClinics>) => {
+  return <SignupForm clinics={clinics} />
 }

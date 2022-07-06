@@ -12,7 +12,8 @@ import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 import { Treatment } from '../../../types/graphql'
-import NewTreatmentCell from '../NewTreatmentCell/'
+
+import NewTreatmentCell from './NewTreatment/NewTreatmentCell'
 
 const Treatments = ({ treatments }) => {
   const [activeTreatment, setTreatment] = React.useContext(TreatmentContext)

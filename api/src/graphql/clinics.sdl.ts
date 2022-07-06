@@ -6,9 +6,16 @@ export const schema = gql`
     clinicians: [User]!
   }
 
+  type Statistics {
+    totalPatients: Int
+    totalTreatments: Int
+    successfulTreatmentsRate: Float
+  }
+
   type Query {
     clinics: [Clinic!]! @skipAuth
     clinic(id: String!): Clinic @requireAuth
+    statistics: Statistics @skipAuth
   }
 
   input CreateClinicInput {
