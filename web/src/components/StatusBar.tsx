@@ -82,7 +82,7 @@ const StatusBar = () => {
                             active
                               ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700',
-                            'flex justify-between px-4 py-2 text-sm'
+                            'w-full px-4 py-2 h-full text-left text-sm'
                           )}
                         >
                           <span>Update Treatment</span>
@@ -99,7 +99,7 @@ const StatusBar = () => {
                             active
                               ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700',
-                            'flex justify-between px-4 py-2 text-sm'
+                            'w-full px-4 py-2 h-full text-left text-sm'
                           )}
                         >
                           <span>Deselect Patient</span>
