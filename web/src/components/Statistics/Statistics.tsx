@@ -1,25 +1,25 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { ArrowSmDownIcon, ArrowSmUpIcon } from '@heroicons/react/solid'
 
-export default function Statistics() {
+export default function Statistics({ statistics }) {
   const stats = [
     {
       name: 'Total Patients',
-      stat: '71,897',
+      stat: statistics.totalPatients,
       previousStat: '70,946',
       change: '12%',
       changeType: 'increase',
     },
     {
       name: 'Total Treatment Cycles',
-      stat: '58.16%',
+      stat: statistics.totalTreatments,
       previousStat: '56.14%',
       change: '2.02%',
       changeType: 'increase',
     },
     {
       name: 'Avg. Success Rate',
-      stat: '24.57%',
+      stat: `${statistics.successfulTreatmentsRate}%`,
       previousStat: '28.62%',
       change: '4.05%',
       changeType: 'decrease',
@@ -42,12 +42,12 @@ export default function Statistics() {
             <dd className="mt-1 flex justify-between items-baseline md:block lg:flex">
               <div className="flex items-baseline text-2xl font-semibold text-indigo-600">
                 {item.stat}
-                <span className="ml-2 text-sm font-medium text-gray-500">
+                {/* <span className="ml-2 text-sm font-medium text-gray-500">
                   from {item.previousStat}
-                </span>
+                </span> */}
               </div>
 
-              <div
+              {/* <div
                 className={classNames(
                   item.changeType === 'increase'
                     ? 'bg-green-100 text-green-800'
@@ -72,7 +72,7 @@ export default function Statistics() {
                   by
                 </span>
                 {item.change}
-              </div>
+              </div> */}
             </dd>
           </div>
         ))}

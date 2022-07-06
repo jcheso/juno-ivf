@@ -6,8 +6,10 @@ import Statistics from '../Statistics'
 
 export const QUERY = gql`
   query StatisticsQuery {
-    users {
-      id
+    statistics {
+      totalPatients
+      totalTreatments
+      successfulTreatmentsRate
     }
   }
 `
@@ -27,5 +29,5 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 export const Success = ({ statistics }: CellSuccessProps) => {
-  return <Statistics />
+  return <Statistics statistics={statistics} />
 }
