@@ -4,7 +4,7 @@ import { MetaTags } from '@redwoodjs/web'
 const CycleSummaryPage = () => {
   return (
     <>
-      <MetaTags title="CycleSummary" description="CycleSummary page" />
+      <MetaTags title="Cycle Summary" description="Cycle Summary page" />
 
       <h1>CycleSummaryPage</h1>
       <p>

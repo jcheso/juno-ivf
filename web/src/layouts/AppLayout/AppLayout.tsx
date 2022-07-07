@@ -83,7 +83,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     },
     {
       name: 'Ultrasounds',
-      to: '#',
+      to: routes.ultrasounds(),
       icon: PhotographIcon,
       current: false,
       hidden: treatmentHidden,
