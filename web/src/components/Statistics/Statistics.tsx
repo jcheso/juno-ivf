@@ -3,27 +3,9 @@ import { ArrowSmDownIcon, ArrowSmUpIcon } from '@heroicons/react/solid'
 
 export default function Statistics({ statistics }) {
   const stats = [
-    {
-      name: 'Total Patients',
-      stat: statistics.totalPatients,
-      previousStat: '70,946',
-      change: '12%',
-      changeType: 'increase',
-    },
-    {
-      name: 'Total Treatment Cycles',
-      stat: statistics.totalTreatments,
-      previousStat: '56.14%',
-      change: '2.02%',
-      changeType: 'increase',
-    },
-    {
-      name: 'Avg. Success Rate',
-      stat: `${statistics.successfulTreatmentsRate}%`,
-      previousStat: '28.62%',
-      change: '4.05%',
-      changeType: 'decrease',
-    },
+    statistics.totalPatients,
+    statistics.totalTreatments,
+    statistics.successfulTreatmentsRate,
   ]
 
   function classNames(...classes) {
@@ -32,7 +14,9 @@ export default function Statistics({ statistics }) {
 
   return (
     <div>
-      {/* <h3 className="text-lg leading-6 font-medium text-gray-900">Overview</h3> */}
+      <h3 className="text-lg leading-6 font-medium text-gray-900">
+        Last 30 Days
+      </h3>
       <dl className="mt-5 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow divide-y divide-gray-200 md:grid-cols-3 md:divide-y-0 md:divide-x">
         {stats.map((item) => (
           <div key={item.name} className="px-4 py-5 sm:p-6">
@@ -40,12 +24,12 @@ export default function Statistics({ statistics }) {
             <dd className="mt-1 flex justify-between items-baseline md:block lg:flex">
               <div className="flex items-baseline text-2xl font-semibold text-indigo-600">
                 {item.stat}
-                {/* <span className="ml-2 text-sm font-medium text-gray-500">
+                <span className="ml-2 text-sm font-medium text-gray-500">
                   from {item.previousStat}
-                </span> */}
+                </span>
               </div>
 
-              {/* <div
+              <div
                 className={classNames(
                   item.changeType === 'increase'
                     ? 'bg-green-100 text-green-800'
@@ -64,13 +48,12 @@ export default function Statistics({ statistics }) {
                     aria-hidden="true"
                   />
                 )}
-
                 <span className="sr-only">
                   {item.changeType === 'increase' ? 'Increased' : 'Decreased'}{' '}
                   by
                 </span>
-                {item.change}
-              </div> */}
+                {item.change}%
+              </div>
             </dd>
           </div>
         ))}

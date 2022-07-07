@@ -7,9 +7,24 @@ export const schema = gql`
   }
 
   type Statistics {
-    totalPatients: Int
-    totalTreatments: Int
-    successfulTreatmentsRate: Float
+    totalPatients: StatisticCount
+    totalTreatments: StatisticCount
+    successfulTreatmentsRate: StatisticRate
+  }
+
+  type StatisticCount {
+    name: String
+    stat: Int
+    previousStat: Int
+    change: Float
+    changeType: String
+  }
+  type StatisticRate {
+    name: String
+    stat: String
+    previousStat: String
+    change: Float
+    changeType: String
   }
 
   type Query {

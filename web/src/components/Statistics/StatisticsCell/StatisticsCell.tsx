@@ -7,9 +7,27 @@ import Statistics from '../Statistics'
 export const QUERY = gql`
   query StatisticsQuery {
     statistics {
-      totalPatients
-      totalTreatments
-      successfulTreatmentsRate
+      totalPatients {
+        name
+        stat
+        previousStat
+        change
+        changeType
+      }
+      totalTreatments {
+        name
+        stat
+        previousStat
+        change
+        changeType
+      }
+      successfulTreatmentsRate {
+        name
+        stat
+        previousStat
+        change
+        changeType
+      }
     }
   }
 `
