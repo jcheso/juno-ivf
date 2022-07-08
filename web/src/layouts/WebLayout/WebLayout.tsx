@@ -102,7 +102,7 @@ const WebLayout = ({ children }: WebLayoutProps) => {
                 </Link>
               </div>
               <div className="hidden ml-10 space-x-8 lg:block">
-                {headerNavigation.map((link) => (
+                {/* {headerNavigation.map((link) => (
                   <Link
                     key={link.name}
                     to={link.to}
@@ -110,7 +110,7 @@ const WebLayout = ({ children }: WebLayoutProps) => {
                   >
                     {link.name}
                   </Link>
-                ))}
+                ))} */}
               </div>
             </div>
             {!isAuthenticated && (
