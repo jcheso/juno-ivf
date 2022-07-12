@@ -9,6 +9,7 @@ export const schema = gql`
     Treatment: Treatment!
     left: String!
     right: String!
+    date: DateTime!
   }
 
   input TreatmentFollicleCountsInput {
@@ -30,6 +31,7 @@ export const schema = gql`
     treatmentId: String!
     left: String!
     right: String!
+    date: DateTime!
   }
 
   input UpdateFollicleCountInput {
@@ -38,6 +40,7 @@ export const schema = gql`
     treatmentId: String
     left: String
     right: String
+    date: DateTime!
   }
 
   type Mutation {

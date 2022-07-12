@@ -9,6 +9,7 @@ export const QUERY = gql`
       day
       left
       right
+      date
     }
   }
 `

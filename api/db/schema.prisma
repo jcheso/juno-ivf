@@ -82,6 +82,7 @@ model FollicleCount {
   id          String    @id @default(uuid())
   day         Int
   createdAt   DateTime  @default(now())
+  date        DateTime  @default(now())
   patientId   String
   Patient     Patient   @relation(fields: [patientId], references: [id])
   treatmentId String
