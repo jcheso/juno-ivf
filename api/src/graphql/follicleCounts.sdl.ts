@@ -11,7 +11,7 @@ export const schema = gql`
     right: String!
   }
 
-  input AllFollicleCountsInput {
+  input TreatmentFollicleCountsInput {
     patientId: String
     treatmentId: String
   }
@@ -19,8 +19,9 @@ export const schema = gql`
   type Query {
     follicleCounts: [FollicleCount!]! @requireAuth
     follicleCount(id: String!): FollicleCount @requireAuth
-    allFollicleCounts(input: AllFollicleCountsInput): [FollicleCount!]!
-      @skipAuth
+    treatmentFollicleCounts(
+      input: TreatmentFollicleCountsInput
+    ): [FollicleCount!]! @skipAuth
   }
 
   input CreateFollicleCountInput {

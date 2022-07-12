@@ -6,17 +6,16 @@ import type {
 
 import { db } from 'src/lib/db'
 
-export const allFollicleCounts: QueryResolvers['allFollicleCounts'] = ({
-  input,
-}) => {
-  const { patientId, treatmentId } = input
-  return db.follicleCount.findMany({
-    where: {
-      patientId,
-      treatmentId,
-    },
-  })
-}
+export const treatmentFollicleCounts: QueryResolvers['treatmentFollicleCounts'] =
+  ({ input }) => {
+    const { patientId, treatmentId } = input
+    return db.follicleCount.findMany({
+      where: {
+        patientId,
+        treatmentId,
+      },
+    })
+  }
 
 export const follicleCounts: QueryResolvers['follicleCounts'] = () => {
   return db.follicleCount.findMany()
