@@ -26,14 +26,14 @@ model User {
 }
 
 model Patient {
-  id                   String      @id @default(uuid())
+  id                   String          @id @default(uuid())
   firstName            String
   lastName             String
   phone                String
-  email                String      @unique
-  clinic               Clinic      @relation(fields: [clinicId], references: [id])
+  email                String          @unique
+  clinic               Clinic          @relation(fields: [clinicId], references: [id])
   clinicId             String
-  clinician            User        @relation(fields: [clinicianId], references: [id])
+  clinician            User            @relation(fields: [clinicianId], references: [id])
   clinicianId          String
   dob                  DateTime
   address              String
@@ -45,8 +45,9 @@ model Patient {
   surgicalHistory      String?
   medications          String?
   infertilityDiagnosis String?
-  createdAt            DateTime    @default(now())
+  createdAt            DateTime        @default(now())
   treatments           Treatment[]
+  follicleCount        FollicleCount[]
 }
 
 model Clinic {
@@ -63,15 +64,29 @@ model WaitList {
 }
 
 model Treatment {
-  id            String    @id @default(uuid())
-  clinician     User      @relation(fields: [clinicianId], references: [id])
+  id            String          @id @default(uuid())
+  clinician     User            @relation(fields: [clinicianId], references: [id])
   clinicianId   String
-  patient       Patient   @relation(fields: [patientId], references: [id])
+  patient       Patient         @relation(fields: [patientId], references: [id])
   patientId     String
   startDate     DateTime
   endDate       DateTime?
   wasSuccessful Boolean?
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  count         Int       @default(0)
+  isActive      Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  count         Int             @default(0)
+  FollicleCount FollicleCount[]
+}
+
+model FollicleCount {
+  id          String    @id @default(uuid())
+  day         Int
+  createdAt   DateTime  @default(now())
+  date        DateTime  @default(now())
+  patientId   String
+  Patient     Patient   @relation(fields: [patientId], references: [id])
+  treatmentId String
+  Treatment   Treatment @relation(fields: [treatmentId], references: [id])
+  left        String
+  right       String
 }

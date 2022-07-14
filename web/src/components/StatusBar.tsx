@@ -41,7 +41,7 @@ const StatusBar = () => {
           </h1>
           <p className="mt-1 text-sm text-gray-500 truncate">
             {patient !== null ? (
-              `Date of Birth: ${patient.dob.slice(0, 10)}`
+              `Date of Birth: ${new Date(patient.dob).toLocaleDateString()}`
             ) : (
               <Link to={routes.dashboard()}>Select a patient to view</Link>
             )}
