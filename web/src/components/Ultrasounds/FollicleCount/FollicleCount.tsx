@@ -28,12 +28,12 @@ const FollicleCount = ({ follicleCount }) => {
             <div className="text-sm font-medium text-gray-500 justify-center flex">
               {key}
             </div>
-            <div className="flex flex-row space-x-2 items-center">
+            <div className="flex flex-row space-x-1 items-center">
               {leftFollicleMap.counts[key].map((count, index) => (
                 <div key={index} className="bg-pink-400 rounded-full h-3 w-3" />
               ))}
             </div>
-            <div className="flex flex-row space-x-2 items-center px-2">
+            <div className="flex flex-row space-x-1 items-center px-1">
               {rightFollicleMap.counts[key].map((count, index) => (
                 <div
                   key={index}
@@ -54,13 +54,23 @@ const FollicleCount = ({ follicleCount }) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-center align-middle pb-4">
-        <button
-          type="button"
-          className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Set ACF
-        </button>
+      <div className="flex justify-center align-middle pb-4 flex-row space-x-4">
+        <div>
+          <button
+            type="button"
+            className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Set ACF
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Edit
+          </button>
+        </div>
       </div>
     </div>
   )
