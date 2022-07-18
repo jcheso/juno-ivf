@@ -14,6 +14,9 @@ export const treatmentFollicleCounts: QueryResolvers['treatmentFollicleCounts'] 
         patientId,
         treatmentId,
       },
+      orderBy: {
+        day: 'asc',
+      },
     })
   }
 
