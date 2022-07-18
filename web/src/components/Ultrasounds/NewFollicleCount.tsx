@@ -2,17 +2,21 @@ import { Fragment, useContext, useRef, useState } from 'react'
 
 import { Dialog, Transition } from '@headlessui/react'
 import CircleLoader from 'react-spinners/CircleLoader'
-import { CreateFollicleCountInput } from 'types/graphql'
+import {
+  CreateFollicleCountInput,
+  FollicleCount,
+  UpdateTreatmentInput,
+} from 'types/graphql'
 
 import {
   Form,
   Label,
   FieldError,
   DateField,
-  SelectField,
   Submit,
   NumberField,
   InputField,
+  CheckboxField,
 } from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
@@ -32,11 +36,13 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
   const lengths = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
   ]
+
   const closeModal = () => {
     setOpen(false)
     setLeft([])
     setRight([])
   }
+
   const CREATE_FOLLICLE_COUNT = gql`
     mutation CreateFollicleCount($input: CreateFollicleCountInput!) {
       createFollicleCount(input: $input) {
@@ -51,23 +57,49 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
     }
   `
 
-  const [addFollicleCount, { loading }] = useMutation(CREATE_FOLLICLE_COUNT, {
-    refetchQueries: [
-      {
-        query: QUERY,
-        variables: {
-          input: { patientId: patient.id, treatmentId: activeTreatment.id },
+  const SET_ACF = gql`
+    mutation SetACF($id: String!, $input: UpdateTreatmentInput!) {
+      updateTreatment(id: $id, input: $input) {
+        id
+      }
+    }
+  `
+
+  const [addFollicleCount, { loading: addingFollicleCount }] = useMutation(
+    CREATE_FOLLICLE_COUNT,
+    {
+      refetchQueries: [
+        {
+          query: QUERY,
+          variables: {
+            input: { patientId: patient.id, treatmentId: activeTreatment.id },
+          },
         },
+      ],
+      awaitRefetchQueries: true,
+      onError: () => {
+        toast.error('Something went wrong, try again.')
       },
-    ],
-    awaitRefetchQueries: true,
-    onError: () => {
-      toast.error('Something went wrong, try again.')
-    },
-    onCompleted: () => {
-      toast.success('Follicle Count added successfully!')
-    },
+      onCompleted: () => {
+        toast.success('Follicle Count added successfully!')
+      },
+    }
+  )
+
+  const [setACF, { loading: settingACF }] = useMutation(SET_ACF, {
+    // TODO: Set this to refetch the query for the ACF header
+    // refetchQueries: [
+    //   {
+    //     query: QUERY,
+    //     variables: {
+    //       input: { patientId: patient.id, treatmentId: activeTreatment.id },
+    //     },
+    //   },
+    // ],
+    // awaitRefetchQueries: true,
   })
+
+  const loading = addingFollicleCount || settingACF
 
   const addFollicle = (length) => {
     if (ovary == 'left') {
@@ -77,8 +109,20 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
     }
   }
 
+  const removeFollicle = (index: number, ovary: string) => {
+    if (ovary === 'left') {
+      const newLeft = [...left]
+      newLeft.splice(index, 1)
+      setLeft(newLeft)
+    } else {
+      const newRight = [...right]
+      newRight.splice(index, 1)
+      setRight(newRight)
+    }
+  }
+
   const onSubmit = async (data) => {
-    const input: CreateFollicleCountInput = {
+    const createFollicleInput: CreateFollicleCountInput = {
       day: data.day,
       left: JSON.stringify(left),
       right: JSON.stringify(right),
@@ -86,7 +130,30 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
       patientId: patient.id,
       treatmentId: activeTreatment.id,
     }
-    await addFollicleCount({ variables: { input } })
+
+    const newFollicleCount = await addFollicleCount({
+      variables: { input: createFollicleInput },
+    })
+
+    const updateTreatmentInput: UpdateTreatmentInput = {
+      clinicianId: undefined,
+      patientId: undefined,
+      startDate: undefined,
+      endDate: undefined,
+      wasSuccessful: undefined,
+      isActive: undefined,
+      count: undefined,
+      acfId: newFollicleCount.data.createFollicleCount.id,
+    }
+
+    if (data.isACF) {
+      await setACF({
+        variables: {
+          id: activeTreatment.id,
+          input: updateTreatmentInput,
+        },
+      })
+    }
     closeModal()
   }
 
@@ -134,12 +201,12 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                       </h3>
                       <p className="mt-1 text-sm text-gray-500">
                         Select from the left or right ovary and enter the
-                        follicle lengths with the keypad or manually.
+                        follicle lengths with the number pad.
                       </p>
                     </div>
                     <div className="bg-white y-5 sm:rounded-lg ">
                       <div className="md:grid md:gap-6">
-                        <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-4">
+                        <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                           <div className="sm:col-span-2">
                             <Label
                               name="day"
@@ -186,6 +253,24 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                               className="block text-xs font-medium text-red-500 pt-1"
                             />
                           </div>
+                          <div className="sm:col-span-2 h-full align-bottom items-center mt-3 ml-5 flex">
+                            <div className="flex items-center h-5">
+                              <CheckboxField
+                                id="isACF"
+                                aria-describedby="comments-description"
+                                name="isACF"
+                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                              />
+                            </div>
+                            <div className="ml-3 text-sm">
+                              <Label
+                                name="isACF"
+                                className="font-medium text-gray-700"
+                              >
+                                Set as ACF
+                              </Label>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -220,7 +305,7 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                       </span>
                     </div>
                     <div className="flex md:flex-row flex-col px-4 gap-x-4 py-5">
-                      <div className="w-1/2 grid grid-cols-5">
+                      <div className="md:w-1/2 grid grid-cols-5 w-full">
                         {lengths.map((length, index) => (
                           <>
                             {index % 5 == 0 && (
@@ -253,37 +338,40 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                           </>
                         ))}
                       </div>
-                      <div className="w-1/2 grid-rows-2 grid">
-                        <div className="">
+                      <div className="md:w-1/2 flex flex-col w-full pt-5 md:pt-0">
+                        <div className="flex flex-col">
                           <h1 className="text-gray-900 text-sm font-medium underline">
-                            Left Ovary Results
+                            Left Ovary Measurements
                           </h1>
-                          <div className="flex flex-row space-x-2 pt-2">
+                          <div className="grid grid-cols-6 md:grid-cols-10">
                             {left.map((len, index) => (
-                              <div
-                                className="rounded-full bg-purple-400 h-8 w-8 text-sm text-white text-center inline-flex items-center justify-center"
+                              <button
+                                type="button"
+                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-purple-400 h-8 w-8 text-sm text-white text-center inline-flex items-center justify-center m-1"
                                 key={index}
+                                onClick={() => removeFollicle(index, 'left')}
                               >
                                 {len}
-                              </div>
+                              </button>
                             ))}
                           </div>
                         </div>
-                        <div>
+                        <div className="flex flex-col pt-2">
                           <h1 className="text-gray-900 text-sm font-medium underline">
-                            Right Ovary Results
+                            Right Ovary Measurements
                           </h1>
-                          <div className="flex flex-row space-x-2 pt-2">
+                          <div className="grid grid-cols-6 md:grid-cols-10">
                             {right.map((len, index) => (
-                              <div
-                                className="rounded-full bg-pink-400 h-8 w-8 text-sm text-white text-center inline-flex items-center justify-center"
+                              <button
+                                type="button"
+                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-pink-400 h-8 w-8 text-sm text-white text-center inline-flex items-center justify-center m-1"
                                 key={index}
+                                onClick={() => removeFollicle(index, 'right')}
                               >
                                 {len}
-                              </div>
+                              </button>
                             ))}
                           </div>
-                          {/* <InputField name="right" value={right}></InputField> */}
                         </div>
                       </div>
                     </div>

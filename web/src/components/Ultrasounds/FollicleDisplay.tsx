@@ -7,7 +7,7 @@ import NewFollicleCount from './NewFollicleCount'
 
 export default function FollicleDisplay({ follicleCounts }) {
   const [open, setOpen] = useState(false)
-
+  const reversedFollicleCounts = follicleCounts.slice(0).reverse()
   // Date stuff
   let nextDate: any = new Date(follicleCounts[follicleCounts.length - 1].date)
   nextDate = new Date(nextDate.setDate(nextDate.getDate() + 1))
@@ -20,12 +20,6 @@ export default function FollicleDisplay({ follicleCounts }) {
   return (
     <>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-        {follicleCounts.map((follicleCount) => (
-          <div key={follicleCount.id} className="">
-            <FollicleCount follicleCount={follicleCount} />
-          </div>
-        ))}
-
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
           <div className="flex h-full flex-col">
             <div className="px-4 pt-5 pb-1 sm:px-6">
@@ -47,6 +41,11 @@ export default function FollicleDisplay({ follicleCounts }) {
             </div>
           </div>
         </div>
+        {reversedFollicleCounts.map((follicleCount) => (
+          <div key={follicleCount.id} className="">
+            <FollicleCount follicleCount={follicleCount} />
+          </div>
+        ))}
       </div>
       <NewFollicleCount
         open={open}

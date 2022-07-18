@@ -76,6 +76,7 @@ model Treatment {
   createdAt     DateTime        @default(now())
   count         Int             @default(0)
   FollicleCount FollicleCount[]
+  acfId         String?
 }
 
 model FollicleCount {
