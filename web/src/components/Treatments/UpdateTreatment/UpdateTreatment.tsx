@@ -23,7 +23,7 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 import { QUERY } from '../TreatmentsCell'
 
 export default function NewTreatment({ open, setOpen, clinicians }) {
-  const [patient, setPatient] = useContext(PatientContext)
+  const [patient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const [isActive, setActive] = useState(activeTreatment.isActive)
   useEffect(() => {
@@ -46,6 +46,7 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
           }
         }
         count
+        acfId
       }
     }
   `
@@ -71,11 +72,11 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
     const response = await updateTreatment({
       variables: { id: activeTreatment.id, input },
     })
-    setTreatment(response.data.createTreatment)
+    setTreatment(response.data.updateTreatment)
     localStorage.setItem(
       'treatmentCache',
       JSON.stringify({
-        value: response.data.createTreatment,
+        value: response.data.updateTreatment,
         expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
       })
     )

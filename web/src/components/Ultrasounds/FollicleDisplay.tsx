@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 
 import { PlusSmIcon as PlusSmIconOutline } from '@heroicons/react/outline'
+import { PlusSmIcon } from '@heroicons/react/solid'
 
-import FollicleCount from './FollicleCount/FollicleCount'
+import FollicleCount from './FollicleCount'
+import FollicleSummary from './FollicleSummary'
 import NewFollicleCount from './NewFollicleCount'
 
 export default function FollicleDisplay({ follicleCounts }) {
@@ -19,6 +21,20 @@ export default function FollicleDisplay({ follicleCounts }) {
 
   return (
     <>
+      <div className="">
+        <FollicleSummary follicleCounts={follicleCounts} />
+      </div>
+      <div className="relative py-6">
+        <div className="absolute inset-0 flex items-center" aria-hidden="true">
+          <div className="w-full border-t border-gray-300" />
+        </div>
+        <div className="relative flex justify-center">
+          <span className="px-3 bg-white text-lg font-medium text-gray-900">
+            Follicle Measurements
+          </span>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 lg:grid-cols-5">
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
           <div className="flex h-full flex-col">

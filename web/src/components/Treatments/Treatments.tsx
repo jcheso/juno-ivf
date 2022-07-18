@@ -20,7 +20,7 @@ const Treatments = ({ treatments }) => {
   const [patient, setPatient] = React.useContext(PatientContext)
   const [openNewTreatment, setNewTreatmentForm] = useState(false)
   const [openUpdateTreatment, setUpdateTreatmentForm] = useState(false)
-
+  console.log(activeTreatment)
   return (
     <>
       <div className="bg-white shadow overflow-hidden sm:rounded-md">

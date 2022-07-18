@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { FollicleMap } from 'src/models/FollicleMap'
 
-import EditFollicleCount from '../EditFollicleCount'
+import EditFollicleCount from './EditFollicleCount'
 
 const FollicleCount = ({ follicleCount }) => {
   const leftFollicleMap = new FollicleMap(follicleCount.left)
@@ -79,8 +79,6 @@ const FollicleCount = ({ follicleCount }) => {
         open={open}
         setOpen={setOpen}
         follicleCount={follicleCount}
-        leftFollicleMap={leftFollicleMap.counts}
-        rightFollicleMap={rightFollicleMap.counts}
       />
     </>
   )

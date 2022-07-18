@@ -2,11 +2,7 @@ import { Fragment, useContext, useRef, useState } from 'react'
 
 import { Dialog, Transition } from '@headlessui/react'
 import CircleLoader from 'react-spinners/CircleLoader'
-import {
-  CreateFollicleCountInput,
-  UpdateFollicleCountInput,
-  UpdateTreatmentInput,
-} from 'types/graphql'
+import { UpdateFollicleCountInput, UpdateTreatmentInput } from 'types/graphql'
 
 import {
   Form,
@@ -23,12 +19,10 @@ import { toast } from '@redwoodjs/web/toast'
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-import { deleteFollicleCount } from '../../../../api/src/services/follicleCounts/follicleCounts'
-
 import { QUERY } from './FollicleCountCell'
 
 export default function EditFollicleCount({ open, setOpen, follicleCount }) {
-  const [patient, setPatient] = useContext(PatientContext)
+  const [patient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
   const [left, setLeft] = useState([...follicleCount.left])
@@ -59,6 +53,21 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
     mutation SetACF($id: String!, $input: UpdateTreatmentInput!) {
       updateTreatment(id: $id, input: $input) {
         id
+        startDate
+        endDate
+        wasSuccessful
+        isActive
+        clinician {
+          firstName
+          lastName
+        }
+        patient {
+          clinic {
+            name
+          }
+        }
+        count
+        acfId
       }
     }
   `
@@ -107,24 +116,10 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
       onError: () => {
         toast.error('Something went wrong, try again.')
       },
-      onCompleted: () => {
-        toast.success('Follicle Count updated successfully!')
-      },
     }
   )
 
-  const [setACF, { loading: settingACF }] = useMutation(SET_ACF, {
-    // TODO: Set this to refetch the query for the ACF header
-    // refetchQueries: [
-    //   {
-    //     query: QUERY,
-    //     variables: {
-    //       input: { patientId: patient.id, treatmentId: activeTreatment.id },
-    //     },
-    //   },
-    // ],
-    // awaitRefetchQueries: true,
-  })
+  const [setACF, { loading: settingACF }] = useMutation(SET_ACF)
 
   const loading = updatingFollicleCount || settingACF
 
@@ -183,13 +178,22 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
     }
 
     if (data.isACF) {
-      await setACF({
+      const updatedTreatment = await setACF({
         variables: {
           id: activeTreatment.id,
           input: updateTreatmentInput,
         },
       })
+      setTreatment(updatedTreatment.data.updateTreatment)
+      localStorage.setItem(
+        'treatmentCache',
+        JSON.stringify({
+          value: updatedTreatment.data.updateTreatment,
+          expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
+        })
+      )
     }
+    toast.success('Follicle Count updated successfully!')
     closeModal()
   }
 
@@ -298,6 +302,9 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                                 id="isACF"
                                 aria-describedby="comments-description"
                                 name="isACF"
+                                defaultChecked={
+                                  follicleCount.id === activeTreatment.acfId
+                                }
                                 className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                               />
                             </div>
@@ -305,9 +312,8 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                               <Label
                                 name="isACF"
                                 className="font-medium text-gray-700"
-                                defaultValue={follicleCount.isACF}
                               >
-                                Set as ACF
+                                Set as Antral Follicle Count (AFC)
                               </Label>
                             </div>
                           </div>
