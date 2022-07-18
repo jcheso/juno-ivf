@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 
 import {
   CalendarIcon,
@@ -16,11 +16,10 @@ import { Treatment } from '../../../types/graphql'
 import NewTreatmentCell from './NewTreatment/NewTreatmentCell'
 
 const Treatments = ({ treatments }) => {
-  const [activeTreatment, setTreatment] = React.useContext(TreatmentContext)
-  const [patient, setPatient] = React.useContext(PatientContext)
+  const [activeTreatment, setTreatment] = useContext(TreatmentContext)
+  const [patient] = useContext(PatientContext)
   const [openNewTreatment, setNewTreatmentForm] = useState(false)
   const [openUpdateTreatment, setUpdateTreatmentForm] = useState(false)
-
   return (
     <>
       <div className="bg-white shadow overflow-hidden sm:rounded-md">

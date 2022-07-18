@@ -2,9 +2,9 @@ import { useState } from 'react'
 
 import { FollicleMap } from 'src/models/FollicleMap'
 
-import EditFollicleCount from '../EditFollicleCount'
+import EditFollicleCount from './EditFollicleCount'
 
-const FollicleCount = ({ follicleCount }) => {
+const FollicleCount = ({ follicleCount, isAcf }) => {
   const leftFollicleMap = new FollicleMap(follicleCount.left)
   const rightFollicleMap = new FollicleMap(follicleCount.right)
   const [open, setOpen] = useState(false)
@@ -13,15 +13,24 @@ const FollicleCount = ({ follicleCount }) => {
     <>
       <div className="bg-white shadow overflow-hidden sm:rounded-lg">
         <div className="px-4 pt-5 pb-1 sm:px-6">
-          <h3 className="text-lg leading-6 font-medium text-gray-900">
-            Day {follicleCount.day}
-          </h3>
+          <div className="flex flex-row">
+            <h3 className="text-lg leading-6 font-medium text-gray-900 w-full">
+              Day {follicleCount.day}
+            </h3>
+            {isAcf && (
+              <div className="flex w-full justify-end h-6">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-purple-100 text-purple-800">
+                  AFC
+                </span>
+              </div>
+            )}
+          </div>
           <p className="mt-1 max-w-2xl text-sm text-gray-500">
             {new Date(follicleCount.date).toLocaleDateString()}
           </p>
         </div>
 
-        <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
+        <div className="border-t border-gray-200 px-4 py-5 sm:px-6 bg-gray-2">
           <h3 className="text-sm font-medium text-gray-500 text-left py-2">
             Follicle Lengths (mm)
           </h3>
@@ -79,8 +88,6 @@ const FollicleCount = ({ follicleCount }) => {
         open={open}
         setOpen={setOpen}
         follicleCount={follicleCount}
-        leftFollicleMap={leftFollicleMap.counts}
-        rightFollicleMap={rightFollicleMap.counts}
       />
     </>
   )

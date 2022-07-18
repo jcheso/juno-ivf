@@ -17,21 +17,22 @@ export class FollicleMap {
       '11-13': [],
       '<11': [],
     }
-
-    follicleCount.forEach((follicle) => {
-      if (follicle >= 19) {
-        this.counts['>19'].push(0)
-      } else if (follicle >= 18) {
-        this.counts['18-19'].push(0)
-      } else if (follicle >= 16) {
-        this.counts['16-17'].push(0)
-      } else if (follicle >= 14) {
-        this.counts['14-15'].push(0)
-      } else if (follicle >= 11) {
-        this.counts['11-13'].push(0)
-      } else {
-        this.counts['<11'].push(0)
-      }
-    })
+    if (follicleCount) {
+      follicleCount.forEach((follicle) => {
+        if (follicle >= 19) {
+          this.counts['>19'].push(0)
+        } else if (follicle >= 18) {
+          this.counts['18-19'].push(0)
+        } else if (follicle >= 16) {
+          this.counts['16-17'].push(0)
+        } else if (follicle >= 14) {
+          this.counts['14-15'].push(0)
+        } else if (follicle >= 11) {
+          this.counts['11-13'].push(0)
+        } else {
+          this.counts['<11'].push(0)
+        }
+      })
+    }
   }
 }

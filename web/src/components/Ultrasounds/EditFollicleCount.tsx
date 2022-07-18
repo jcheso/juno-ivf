@@ -2,11 +2,7 @@ import { Fragment, useContext, useRef, useState } from 'react'
 
 import { Dialog, Transition } from '@headlessui/react'
 import CircleLoader from 'react-spinners/CircleLoader'
-import {
-  CreateFollicleCountInput,
-  UpdateFollicleCountInput,
-  UpdateTreatmentInput,
-} from 'types/graphql'
+import { UpdateFollicleCountInput, UpdateTreatmentInput } from 'types/graphql'
 
 import {
   Form,
@@ -23,12 +19,10 @@ import { toast } from '@redwoodjs/web/toast'
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-import { deleteFollicleCount } from '../../../../api/src/services/follicleCounts/follicleCounts'
-
 import { QUERY } from './FollicleCountCell'
 
 export default function EditFollicleCount({ open, setOpen, follicleCount }) {
-  const [patient, setPatient] = useContext(PatientContext)
+  const [patient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
   const [left, setLeft] = useState([...follicleCount.left])
@@ -59,6 +53,21 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
     mutation SetACF($id: String!, $input: UpdateTreatmentInput!) {
       updateTreatment(id: $id, input: $input) {
         id
+        startDate
+        endDate
+        wasSuccessful
+        isActive
+        clinician {
+          firstName
+          lastName
+        }
+        patient {
+          clinic {
+            name
+          }
+        }
+        count
+        acfId
       }
     }
   `
@@ -107,24 +116,10 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
       onError: () => {
         toast.error('Something went wrong, try again.')
       },
-      onCompleted: () => {
-        toast.success('Follicle Count updated successfully!')
-      },
     }
   )
 
-  const [setACF, { loading: settingACF }] = useMutation(SET_ACF, {
-    // TODO: Set this to refetch the query for the ACF header
-    // refetchQueries: [
-    //   {
-    //     query: QUERY,
-    //     variables: {
-    //       input: { patientId: patient.id, treatmentId: activeTreatment.id },
-    //     },
-    //   },
-    // ],
-    // awaitRefetchQueries: true,
-  })
+  const [setACF, { loading: settingACF }] = useMutation(SET_ACF)
 
   const loading = updatingFollicleCount || settingACF
 
@@ -154,6 +149,20 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
         id: follicleCount.id,
       },
     })
+    setTreatment({
+      ...activeTreatment,
+      acfId: 'null',
+    })
+    localStorage.setItem(
+      'treatmentCache',
+      JSON.stringify({
+        value: {
+          ...activeTreatment,
+          acfId: 'null',
+        },
+        expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
+      })
+    )
     closeModal()
   }
 
@@ -183,13 +192,22 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
     }
 
     if (data.isACF) {
-      await setACF({
+      const updatedTreatment = await setACF({
         variables: {
           id: activeTreatment.id,
           input: updateTreatmentInput,
         },
       })
+      setTreatment(updatedTreatment.data.updateTreatment)
+      localStorage.setItem(
+        'treatmentCache',
+        JSON.stringify({
+          value: updatedTreatment.data.updateTreatment,
+          expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
+        })
+      )
     }
+    toast.success('Follicle Count updated successfully!')
     closeModal()
   }
 
@@ -298,6 +316,9 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                                 id="isACF"
                                 aria-describedby="comments-description"
                                 name="isACF"
+                                defaultChecked={
+                                  follicleCount.id === activeTreatment.acfId
+                                }
                                 className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                               />
                             </div>
@@ -305,9 +326,8 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                               <Label
                                 name="isACF"
                                 className="font-medium text-gray-700"
-                                defaultValue={follicleCount.isACF}
                               >
-                                Set as ACF
+                                Set as Antral Follicle Count (AFC)
                               </Label>
                             </div>
                           </div>
@@ -351,6 +371,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                             {index % 5 == 0 && (
                               <button
                                 type="button"
+                                key={index}
                                 className="items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                                 onClick={() => addFollicle(length)}
                               >
@@ -360,6 +381,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                             {index % 5 !== 0 && index % 5 !== 4 && (
                               <button
                                 type="button"
+                                key={index}
                                 className="items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                                 onClick={() => addFollicle(length)}
                               >
@@ -369,6 +391,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                             {index % 5 == 4 && (
                               <button
                                 type="button"
+                                key={index}
                                 className="items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                                 onClick={() => addFollicle(length)}
                               >

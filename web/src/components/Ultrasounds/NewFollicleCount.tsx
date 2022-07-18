@@ -2,11 +2,7 @@ import { Fragment, useContext, useRef, useState } from 'react'
 
 import { Dialog, Transition } from '@headlessui/react'
 import CircleLoader from 'react-spinners/CircleLoader'
-import {
-  CreateFollicleCountInput,
-  FollicleCount,
-  UpdateTreatmentInput,
-} from 'types/graphql'
+import { CreateFollicleCountInput, UpdateTreatmentInput } from 'types/graphql'
 
 import {
   Form,
@@ -15,7 +11,6 @@ import {
   DateField,
   Submit,
   NumberField,
-  InputField,
   CheckboxField,
 } from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
@@ -27,7 +22,7 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 import { QUERY } from './FollicleCountCell'
 
 export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
-  const [patient, setPatient] = useContext(PatientContext)
+  const [patient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
   const [left, setLeft] = useState([])
@@ -61,6 +56,21 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
     mutation SetACF($id: String!, $input: UpdateTreatmentInput!) {
       updateTreatment(id: $id, input: $input) {
         id
+        startDate
+        endDate
+        wasSuccessful
+        isActive
+        clinician {
+          firstName
+          lastName
+        }
+        patient {
+          clinic {
+            name
+          }
+        }
+        count
+        acfId
       }
     }
   `
@@ -86,18 +96,7 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
     }
   )
 
-  const [setACF, { loading: settingACF }] = useMutation(SET_ACF, {
-    // TODO: Set this to refetch the query for the ACF header
-    // refetchQueries: [
-    //   {
-    //     query: QUERY,
-    //     variables: {
-    //       input: { patientId: patient.id, treatmentId: activeTreatment.id },
-    //     },
-    //   },
-    // ],
-    // awaitRefetchQueries: true,
-  })
+  const [setACF, { loading: settingACF }] = useMutation(SET_ACF)
 
   const loading = addingFollicleCount || settingACF
 
@@ -147,12 +146,21 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
     }
 
     if (data.isACF) {
-      await setACF({
+      const updatedTreatment = await setACF({
         variables: {
           id: activeTreatment.id,
           input: updateTreatmentInput,
         },
       })
+      // Set activeTreatment to updated treatment
+      setTreatment(updatedTreatment.data.updateTreatment)
+      localStorage.setItem(
+        'treatmentCache',
+        JSON.stringify({
+          value: updatedTreatment.data.updateTreatment,
+          expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
+        })
+      )
     }
     closeModal()
   }
@@ -270,7 +278,7 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                                 name="isACF"
                                 className="font-medium text-gray-700"
                               >
-                                Set as ACF
+                                Set as Antral Follicle Count (AFC)
                               </Label>
                             </div>
                           </div>
@@ -314,6 +322,7 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                             {index % 5 == 0 && (
                               <button
                                 type="button"
+                                key={index}
                                 className="items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                                 onClick={() => addFollicle(length)}
                               >
@@ -323,6 +332,7 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                             {index % 5 !== 0 && index % 5 !== 4 && (
                               <button
                                 type="button"
+                                key={index}
                                 className="items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                                 onClick={() => addFollicle(length)}
                               >
@@ -332,6 +342,7 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                             {index % 5 == 4 && (
                               <button
                                 type="button"
+                                key={index}
                                 className="items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                                 onClick={() => addFollicle(length)}
                               >

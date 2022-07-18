@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import { navigate, routes } from '@redwoodjs/router'
 
 import { PatientContext } from 'src/providers/context/PatientContext'
+import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 const PatientSearchResults = ({ patients }) => {
   const [patient, setPatient] = React.useContext(PatientContext)
+  const [activeTreatment, setTreatment] = useContext(TreatmentContext)
 
   return (
     <div className="mt-2 flex flex-col">
@@ -76,6 +78,7 @@ const PatientSearchResults = ({ patients }) => {
                     <button
                       onClick={() => {
                         setPatient(person)
+
                         localStorage.setItem(
                           'patientCache',
                           JSON.stringify({
@@ -85,6 +88,9 @@ const PatientSearchResults = ({ patients }) => {
                             ),
                           })
                         )
+                        setTreatment(null)
+                        localStorage.removeItem('treatmentCache')
+
                         navigate(routes.patientSummary())
                       }}
                       className="text-indigo-600 hover:text-indigo-900"
