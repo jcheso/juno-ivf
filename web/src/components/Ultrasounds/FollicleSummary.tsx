@@ -41,10 +41,13 @@ export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
       )
     }
     if (afcFollicleCount) {
+      console.log('Set AFC', afcFollicleCount)
       setAfc(
         countFolliclesInAFC(new FollicleMap(afcFollicleCount.left)) +
           countFolliclesInAFC(new FollicleMap(afcFollicleCount.right))
       )
+    } else {
+      setAfc(0)
     }
     if (latestFollicleCount && afcFollicleCount) {
       setFollicleRatio((rangeCount / afc) * 100)

@@ -17,7 +17,6 @@ export class FollicleMap {
       '11-13': [],
       '<11': [],
     }
-    console.log(follicleCount)
     if (follicleCount) {
       follicleCount.forEach((follicle) => {
         if (follicle >= 19) {

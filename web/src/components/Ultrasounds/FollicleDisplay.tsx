@@ -34,7 +34,7 @@ export default function FollicleDisplay({ follicleCounts }) {
         follicleCounts.find((fc) => fc.id === activeTreatment.acfId)
       )
     } else {
-      setAfcFollicleCount({})
+      setAfcFollicleCount(null)
     }
   }, [follicleCounts, activeTreatment])
 

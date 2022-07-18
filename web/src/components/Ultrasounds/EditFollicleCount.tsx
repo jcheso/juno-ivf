@@ -149,6 +149,20 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
         id: follicleCount.id,
       },
     })
+    setTreatment({
+      ...activeTreatment,
+      acfId: 'null',
+    })
+    localStorage.setItem(
+      'treatmentCache',
+      JSON.stringify({
+        value: {
+          ...activeTreatment,
+          acfId: 'null',
+        },
+        expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
+      })
+    )
     closeModal()
   }
 
