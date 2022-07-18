@@ -153,11 +153,11 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
         },
       })
       // Set activeTreatment to updated treatment
-      setTreatment(updatedTreatment.data.updatedTreatment)
+      setTreatment(updatedTreatment.data.updateTreatment)
       localStorage.setItem(
         'treatmentCache',
         JSON.stringify({
-          value: updatedTreatment.data.updatedTreatment,
+          value: updatedTreatment.data.updateTreatment,
           expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
         })
       )
@@ -322,6 +322,7 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                             {index % 5 == 0 && (
                               <button
                                 type="button"
+                                key={index}
                                 className="items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                                 onClick={() => addFollicle(length)}
                               >
@@ -331,6 +332,7 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                             {index % 5 !== 0 && index % 5 !== 4 && (
                               <button
                                 type="button"
+                                key={index}
                                 className="items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                                 onClick={() => addFollicle(length)}
                               >
@@ -340,6 +342,7 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                             {index % 5 == 4 && (
                               <button
                                 type="button"
+                                key={index}
                                 className="items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                                 onClick={() => addFollicle(length)}
                               >

@@ -3,15 +3,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { FollicleMap } from 'src/models/FollicleMap'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-export default function FollicleSummary({ follicleCounts }) {
+export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
   const [activeTreatment] = useContext(TreatmentContext)
-  const [afcFollicleCount, setAfcFollicleCount] = useState(null)
-
-  // Track range of follicles between 11-19mm
+  const [afc, setAfc] = useState(null)
   const [rangeCount, setRangeCount] = useState(null)
   const latestFollicleCount = follicleCounts[follicleCounts.length - 1]
-  const latestLeftFollicleMap = new FollicleMap(latestFollicleCount.left)
-  const latestRightFollicleMap = new FollicleMap(latestFollicleCount.right)
 
   const countFolliclesInRange = (follicleMap) => {
     let count = 0
@@ -23,7 +19,7 @@ export default function FollicleSummary({ follicleCounts }) {
     return count
   }
 
-  const countFolliclesinAFC = (follicleMap) => {
+  const countFolliclesInAFC = (follicleMap) => {
     let count = 0
     for (const key in follicleMap.counts) {
       {
@@ -32,35 +28,42 @@ export default function FollicleSummary({ follicleCounts }) {
     }
     return count
   }
+  const [follicleRatio, setFollicleRatio] = useState(0)
 
   useEffect(() => {
-    if (activeTreatment) {
-      setAfcFollicleCount(
-        follicleCounts.find((fc) => fc.id === activeTreatment.acfId)
+    if (latestFollicleCount) {
+      const latestLeftFollicleMap = new FollicleMap(latestFollicleCount.left)
+      const latestRightFollicleMap = new FollicleMap(latestFollicleCount.right)
+
+      setRangeCount(
+        countFolliclesInRange(latestLeftFollicleMap) +
+          countFolliclesInRange(latestRightFollicleMap)
       )
     }
-    setRangeCount(
-      countFolliclesInRange(latestLeftFollicleMap) +
-        countFolliclesInRange(latestRightFollicleMap)
-    )
-    setAfc(
-      countFolliclesinAFC(new FollicleMap(afcFollicleCount.left)) +
-        countFolliclesinAFC(new FollicleMap(afcFollicleCount.right))
-    )
-  }, [follicleCounts, activeTreatment])
-
-  // Get the follicle ranges for AFC
-  const [afc, setAfc] = useState(null)
-  // const afcLeftFollicleMap = new FollicleMap(afcFollicleCount.left)
-  // const afcRightFollicleMap = new FollicleMap(afcFollicleCount.right)
-  console.log(afcFollicleCount)
+    if (afcFollicleCount) {
+      setAfc(
+        countFolliclesInAFC(new FollicleMap(afcFollicleCount.left)) +
+          countFolliclesInAFC(new FollicleMap(afcFollicleCount.right))
+      )
+    }
+    if (latestFollicleCount && afcFollicleCount) {
+      setFollicleRatio((rangeCount / afc) * 100)
+    }
+  }, [
+    follicleCounts,
+    activeTreatment,
+    afcFollicleCount,
+    latestFollicleCount,
+    afc,
+    rangeCount,
+  ])
 
   const stats = [
-    { name: 'Antral Follicle Count (AFC)', stat: afc },
-    { name: 'Follicles between 11-19mm', stat: rangeCount },
+    { name: 'Antral Follicle Count (AFC)', stat: afc || 0 },
+    { name: 'Follicles between 11-19mm', stat: rangeCount || 0 },
     {
       name: 'Follicles between 11-19mm/AFC',
-      stat: `${((rangeCount / afc) * 100).toFixed(1)}%`,
+      stat: `${follicleRatio.toFixed(0)}%`,
     },
   ]
   return (
