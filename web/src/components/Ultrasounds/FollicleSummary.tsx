@@ -51,6 +51,8 @@ export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
     }
     if (latestFollicleCount && afcFollicleCount) {
       setFollicleRatio((rangeCount / afc) * 100)
+    } else {
+      setFollicleRatio(0)
     }
   }, [
     follicleCounts,
