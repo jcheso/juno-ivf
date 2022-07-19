@@ -64,19 +64,20 @@ model WaitList {
 }
 
 model Treatment {
-  id            String          @id @default(uuid())
-  clinician     User            @relation(fields: [clinicianId], references: [id])
-  clinicianId   String
-  patient       Patient         @relation(fields: [patientId], references: [id])
-  patientId     String
-  startDate     DateTime
-  endDate       DateTime?
-  wasSuccessful Boolean?
-  isActive      Boolean         @default(true)
-  createdAt     DateTime        @default(now())
-  count         Int             @default(0)
-  FollicleCount FollicleCount[]
-  acfId         String?
+  id                  String          @id @default(uuid())
+  clinician           User            @relation(fields: [clinicianId], references: [id])
+  clinicianId         String
+  patient             Patient         @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId           String
+  startDate           DateTime
+  endDate             DateTime?
+  wasSuccessful       Boolean?
+  isActive            Boolean         @default(true)
+  createdAt           DateTime        @default(now())
+  count               Int             @default(0)
+  FollicleCount       FollicleCount[]
+  acfId               String?
+  ageAtTreatmentStart Int?
 }
 
 model FollicleCount {
@@ -85,9 +86,9 @@ model FollicleCount {
   createdAt   DateTime  @default(now())
   date        DateTime  @default(now())
   patientId   String
-  Patient     Patient   @relation(fields: [patientId], references: [id])
+  Patient     Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
   treatmentId String
-  Treatment   Treatment @relation(fields: [treatmentId], references: [id])
+  Treatment   Treatment @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
   left        String
   right       String
 }

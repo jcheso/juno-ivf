@@ -68,6 +68,11 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
   const loading = queryLoading || mutationLoading
 
   const onSubmit = async (data) => {
+    const dob = new Date(patient.dob)
+    const startDate = new Date(data.startDate)
+    const diff_ms: any = startDate - dob
+    const age_dt = new Date(diff_ms)
+    const age = Math.abs(age_dt.getUTCFullYear() - 1970)
     const treatmentsResponse = await treatments()
     const input: CreateTreatmentInput = {
       startDate: data.startDate,
@@ -79,6 +84,8 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
       count: treatmentsResponse.data.treatments
         ? treatmentsResponse.data.treatments.length + 1
         : 1,
+      acfId: null,
+      ageAtTreatmentStart: age,
     }
     const response = await addTreatment({ variables: { input } })
     setTreatment(response.data.createTreatment)

@@ -12,6 +12,7 @@ export const schema = gql`
     createdAt: DateTime!
     count: Int
     acfId: String
+    ageAtTreatmentStart: Int
   }
 
   type Query {
@@ -29,6 +30,7 @@ export const schema = gql`
     isActive: Boolean!
     count: Int
     acfId: String
+    ageAtTreatmentStart: Int
   }
 
   input UpdateTreatmentInput {
@@ -40,6 +42,7 @@ export const schema = gql`
     isActive: Boolean
     count: Int
     acfId: String
+    ageAtTreatmentStart: Int
   }
 
   type Mutation {
