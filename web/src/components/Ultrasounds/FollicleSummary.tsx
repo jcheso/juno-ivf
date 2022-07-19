@@ -1,5 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 
+import { InformationCircleIcon } from '@heroicons/react/outline'
+
+import { Link } from '@redwoodjs/router'
+
 import { FollicleMap } from 'src/models/FollicleMap'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
@@ -8,6 +12,7 @@ export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
   const [afc, setAfc] = useState(null)
   const [rangeCount, setRangeCount] = useState(null)
   const latestFollicleCount = follicleCounts[follicleCounts.length - 1]
+  const [predictedEggs, setPredictedEggs] = useState(null)
 
   const countFolliclesInRange = (follicleMap) => {
     let count = 0
@@ -34,11 +39,11 @@ export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
     if (latestFollicleCount) {
       const latestLeftFollicleMap = new FollicleMap(latestFollicleCount.left)
       const latestRightFollicleMap = new FollicleMap(latestFollicleCount.right)
-
       setRangeCount(
         countFolliclesInRange(latestLeftFollicleMap) +
           countFolliclesInRange(latestRightFollicleMap)
       )
+      setPredictedEggs(rangeCount * 0.70601212 + 3.0297298881764334)
     }
     if (afcFollicleCount) {
       setAfc(
@@ -72,6 +77,33 @@ export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
   ]
   return (
     <div>
+      {rangeCount && (
+        <div className="rounded-md bg-blue-50 p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <InformationCircleIcon
+                className="h-5 w-5 text-blue-400"
+                aria-hidden="true"
+              />
+            </div>
+            <div className="ml-3 flex-1 md:flex md:justify-between">
+              <p className="text-sm text-blue-700">
+                If you trigger today, it is predicted that{' '}
+                {predictedEggs.toFixed(0)} eggs will be retrieved.
+              </p>
+
+              <p className="mt-3 text-sm md:mt-0 md:ml-6">
+                <Link
+                  to=""
+                  className="whitespace-nowrap font-medium text-purple-700 hover:text-purple-600"
+                >
+                  Details <span aria-hidden="true">&rarr;</span>
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
         {stats.map((item) => (
           <div

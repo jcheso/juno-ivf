@@ -17,12 +17,17 @@ export const schema = gql`
     treatmentId: String
   }
 
+  type EggPrediction {
+    eggs: Int
+  }
+
   type Query {
     follicleCounts: [FollicleCount!]! @requireAuth
     follicleCount(id: String!): FollicleCount @requireAuth
     treatmentFollicleCounts(
       input: TreatmentFollicleCountsInput
     ): [FollicleCount!]! @skipAuth
+    predictEggs(input: String!): EggPrediction @requireAuth
   }
 
   input CreateFollicleCountInput {
