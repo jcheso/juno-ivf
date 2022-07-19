@@ -117,7 +117,6 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
   }
 
   const onDelete = async () => {
-    console.log('Deleting treatment')
     await deleteTreatment({
       variables: {
         id: activeTreatment.id,

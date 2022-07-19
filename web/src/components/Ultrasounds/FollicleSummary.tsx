@@ -41,7 +41,6 @@ export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
       )
     }
     if (afcFollicleCount) {
-      console.log('Set AFC', afcFollicleCount)
       setAfc(
         countFolliclesInAFC(new FollicleMap(afcFollicleCount.left)) +
           countFolliclesInAFC(new FollicleMap(afcFollicleCount.right))
