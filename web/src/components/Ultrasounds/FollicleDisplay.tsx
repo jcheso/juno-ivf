@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import { PlusSmIcon as PlusSmIconOutline } from '@heroicons/react/outline'
+import { EggPredictionInput } from 'types/graphql'
 
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 import FollicleCount from './FollicleCount'
 import FollicleSummary from './FollicleSummary'
 import NewFollicleCount from './NewFollicleCount'
+import PredictEggsCell from './PredictEggsCell'
 
 export default function FollicleDisplay({ follicleCounts }) {
   const [activeTreatment] = useContext(TreatmentContext)
@@ -37,6 +39,8 @@ export default function FollicleDisplay({ follicleCounts }) {
       setAfcFollicleCount(null)
     }
   }, [follicleCounts, activeTreatment])
+
+  const eggPredictionInput = JSON.stringify(follicleCounts)
 
   return (
     <>
