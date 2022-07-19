@@ -30,6 +30,7 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
     setActive(activeTreatment.isActive)
   }, [activeTreatment])
   const cancelButtonRef = useRef(null)
+
   const UPDATE_TREATMENT = gql`
     mutation UpdateTreatment($id: String!, $input: UpdateTreatmentInput!) {
       updateTreatment(id: $id, input: $input) {
@@ -47,10 +48,19 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
         }
         count
         acfId
+        ageAtTreatmentStart
       }
     }
   `
-  const [updateTreatment, { loading }] = useMutation(UPDATE_TREATMENT, {
+  const DELETE_TREATMENT = gql`
+    mutation DeleteTreatment($id: String!) {
+      deleteTreatment(id: $id) {
+        id
+      }
+    }
+  `
+
+  const [updateTreatment, { loading: adding }] = useMutation(UPDATE_TREATMENT, {
     refetchQueries: [{ query: QUERY, variables: { patientId: patient.id } }],
     awaitRefetchQueries: true,
     onError: () => {
@@ -61,13 +71,36 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
     },
   })
 
+  const [deleteTreatment, { loading: deleting }] = useMutation(
+    DELETE_TREATMENT,
+    {
+      refetchQueries: [{ query: QUERY, variables: { patientId: patient.id } }],
+      awaitRefetchQueries: true,
+      onError: () => {
+        toast.error('Something went wrong, try again.')
+      },
+      onCompleted: () => {
+        toast.success('Treatment deleted!')
+      },
+    }
+  )
+
+  const loading = adding || deleting
+
   const onSubmit = async (data) => {
+    const dob = new Date(patient.dob)
+    const startDate = new Date(data.startDate)
+    const diff_ms: number = startDate - dob
+    const age_dt = new Date(diff_ms)
+    const age = Math.abs(age_dt.getUTCFullYear() - 1970)
+
     const input: UpdateTreatmentInput = {
       startDate: data.startDate,
       endDate: data.isActive ? null : data.endDate,
       clinicianId: data.clinicianId,
       isActive: data.isActive,
       wasSuccessful: data.wasSuccessful,
+      ageAtTreatmentStart: age,
     }
     const response = await updateTreatment({
       variables: { id: activeTreatment.id, input },
@@ -80,6 +113,19 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
         expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
       })
     )
+    setOpen(false)
+  }
+
+  const onDelete = async () => {
+    await deleteTreatment({
+      variables: {
+        id: activeTreatment.id,
+      },
+    })
+    setTimeout(() => {
+      localStorage.removeItem('treatmentCache')
+      setTreatment(null)
+    }, 50)
     setOpen(false)
   }
 
@@ -114,7 +160,7 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full sm:p-6">
+              <Dialog.Panel className="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-xl sm:w-full sm:p-6">
                 <Form className="space-y-6" onSubmit={onSubmit}>
                   <div>
                     <h3 className="text-lg font-medium leading-6 text-gray-900  px-4">
@@ -245,16 +291,16 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-2 sm:mt-3 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense px-4">
-                    {!loading ? (
+                  <div className="mt-2 sm:mt-3 sm:grid sm:grid-cols-3 sm:gap-3 sm:grid-flow-row-dense px-4">
+                    {!adding ? (
                       <Submit
                         disabled={loading}
-                        className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
+                        className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-3 sm:text-sm"
                       >
                         Update treatment
                       </Submit>
                     ) : (
-                      <div className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">
+                      <div className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-3 sm:text-sm">
                         <CircleLoader
                           loading={loading}
                           color="#ffffff"
@@ -262,7 +308,24 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                         />
                       </div>
                     )}
-
+                    {!deleting ? (
+                      <button
+                        type="button"
+                        disabled={loading}
+                        onClick={() => onDelete()}
+                        className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm"
+                      >
+                        Delete treatment
+                      </button>
+                    ) : (
+                      <div className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm">
+                        <CircleLoader
+                          loading={deleting}
+                          color="#ffffff"
+                          size={20}
+                        />
+                      </div>
+                    )}
                     <button
                       type="button"
                       disabled={loading}

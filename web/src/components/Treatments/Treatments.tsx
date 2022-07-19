@@ -11,6 +11,7 @@ import {
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
+import { treatments } from '../../../../api/src/services/treatments/treatments'
 import { Treatment } from '../../../types/graphql'
 
 import NewTreatmentCell from './NewTreatment/NewTreatmentCell'
@@ -178,6 +179,7 @@ const Treatments = ({ treatments }) => {
         setOpen={setNewTreatmentForm}
         setTreatment={setTreatment}
         patient={patient}
+        treatments={treatments}
         type="create"
       />
       {activeTreatment && (
@@ -186,6 +188,7 @@ const Treatments = ({ treatments }) => {
           setOpen={setUpdateTreatmentForm}
           setTreatment={setTreatment}
           patient={patient}
+          treatments={treatments}
           type="update"
         />
       )}

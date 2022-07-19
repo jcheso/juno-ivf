@@ -21,7 +21,12 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 import { QUERY } from '../TreatmentsCell'
 
-export default function NewTreatment({ open, setOpen, clinicians }) {
+export default function NewTreatment({
+  open,
+  setOpen,
+  clinicians,
+  treatments,
+}) {
   const [patient, setPatient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
@@ -42,33 +47,28 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
           }
         }
         count
+        ageAtTreatmentStart
       }
     }
   `
-  const [treatments, { loading: queryLoading }] = useLazyQuery(QUERY, {
-    variables: {
-      patientId: patient.id,
+
+  const [addTreatment, { loading }] = useMutation(CREATE_TREATMENT, {
+    refetchQueries: [{ query: QUERY, variables: { patientId: patient.id } }],
+    awaitRefetchQueries: true,
+    onError: () => {
+      toast.error('Something went wrong, try again.')
+    },
+    onCompleted: () => {
+      toast.success('Treatment added successfully!')
     },
   })
 
-  const [addTreatment, { loading: mutationLoading }] = useMutation(
-    CREATE_TREATMENT,
-    {
-      refetchQueries: [{ query: QUERY, variables: { patientId: patient.id } }],
-      awaitRefetchQueries: true,
-      onError: () => {
-        toast.error('Something went wrong, try again.')
-      },
-      onCompleted: () => {
-        toast.success('Treatment added successfully!')
-      },
-    }
-  )
-
-  const loading = queryLoading || mutationLoading
-
   const onSubmit = async (data) => {
-    const treatmentsResponse = await treatments()
+    const dob = new Date(patient.dob)
+    const startDate = new Date(data.startDate)
+    const diff_ms: any = startDate - dob
+    const age_dt = new Date(diff_ms)
+    const age = Math.abs(age_dt.getUTCFullYear() - 1970)
     const input: CreateTreatmentInput = {
       startDate: data.startDate,
       endDate: null,
@@ -76,9 +76,9 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
       clinicianId: data.clinician,
       isActive: true,
       wasSuccessful: false,
-      count: treatmentsResponse.data.treatments
-        ? treatmentsResponse.data.treatments.length + 1
-        : 1,
+      count: treatments ? treatments.length + 1 : 1,
+      acfId: null,
+      ageAtTreatmentStart: age,
     }
     const response = await addTreatment({ variables: { input } })
     setTreatment(response.data.createTreatment)
