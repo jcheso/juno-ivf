@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useContext } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 
 import { Menu, Transition } from '@headlessui/react'
 import { DotsVerticalIcon } from '@heroicons/react/solid'
@@ -13,7 +13,8 @@ import { treatment } from 'src/services/treatments/treatments'
 const StatusBar = () => {
   const [patient, setPatient] = useContext(PatientContext)
   const [activeTreatment, setActiveTreatment] = useContext(TreatmentContext)
-
+  const [age, setAge] = useState(null)
+  const [cycle, setCycle] = useState(null)
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
@@ -27,6 +28,17 @@ const StatusBar = () => {
       setActiveTreatment(null)
     }, 50)
   }
+
+  // useEffect to update the active treatment
+  useEffect(() => {
+    if (activeTreatment) {
+      setAge(activeTreatment.ageAtTreatmentStart)
+      setCycle(activeTreatment.count)
+    } else {
+      setAge(null)
+      setCycle(null)
+    }
+  }, [activeTreatment])
 
   return (
     <div className="w-full">
@@ -46,11 +58,7 @@ const StatusBar = () => {
             ) : (
               <Link to={routes.dashboard()}>Select a patient to view</Link>
             )}
-            {activeTreatment !== null ? (
-              ` | Age at Cycle Start: ${activeTreatment.ageAtTreatmentStart}`
-            ) : (
-              <Link to={routes.dashboard()}>Select a patient to view</Link>
-            )}
+            {activeTreatment !== null && ` | Age at Cycle Start: ${age}`}
           </p>
         </div>
 
