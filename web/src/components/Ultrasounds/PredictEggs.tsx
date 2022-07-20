@@ -15,13 +15,14 @@ export default function PredictEggs({ predictedEggs }) {
         </div>
         <div className="ml-3 flex-1 md:flex md:justify-between">
           <p className="text-sm text-blue-700">
-            If you trigger today, it is predicted there will be{' '}
-            {predictedEggs.eggs} eggs.
+            If you trigger today, Juno predicts that {predictedEggs?.eggs} eggs
+            will be retrieved.
           </p>
+
           <p className="mt-3 text-sm md:mt-0 md:ml-6">
             <Link
               to=""
-              className="whitespace-nowrap font-medium text-purple-700 hover:text-purple-600"
+              className="whitespace-nowrap font-medium text-blue-700 hover:text-blue-600"
             >
               Details <span aria-hidden="true">&rarr;</span>
             </Link>

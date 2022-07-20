@@ -88,7 +88,12 @@ export const statistics = async () => {
     stat: `${successfulTreatmentsRate.toFixed(0)}%`,
     previousStat: `${prevSuccessfulTreatmentsRate.toFixed(0)}%`,
     change: successfulTreatmentRateChangeRate.toFixed(0),
-    changeType: successfulTreatmentRateChangeRate > 0 ? 'increase' : 'decrease',
+    changeType:
+      successfulTreatmentRateChangeRate > 0
+        ? 'increase'
+        : successfulTreatmentRateChangeRate < 0
+        ? 'decrease'
+        : 'no change',
   }
 
   return {

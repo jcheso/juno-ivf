@@ -1,5 +1,9 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { ArrowSmDownIcon, ArrowSmUpIcon } from '@heroicons/react/solid'
+import {
+  ArrowSmDownIcon,
+  ArrowSmUpIcon,
+  MinusSmIcon,
+} from '@heroicons/react/solid'
 
 export default function Statistics({ statistics }) {
   const stats = [
@@ -33,7 +37,9 @@ export default function Statistics({ statistics }) {
                 className={classNames(
                   item.changeType === 'increase'
                     ? 'bg-green-100 text-green-800'
-                    : 'bg-red-100 text-red-800',
+                    : item.changeType == 'decrease'
+                    ? 'bg-red-100 text-red-800'
+                    : 'bg-gray-100 text-gray-800',
                   'inline-flex items-baseline px-2.5 py-0.5 rounded-full text-sm font-medium md:mt-2 lg:mt-0'
                 )}
               >
@@ -42,9 +48,14 @@ export default function Statistics({ statistics }) {
                     className="-ml-1 mr-0.5 flex-shrink-0 self-center h-5 w-5 text-green-500"
                     aria-hidden="true"
                   />
-                ) : (
+                ) : item.changeType === 'increase' ? (
                   <ArrowSmDownIcon
                     className="-ml-1 mr-0.5 flex-shrink-0 self-center h-5 w-5 text-red-500"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <MinusSmIcon
+                    className="-ml-1 mr-0.5 flex-shrink-0 self-center h-5 w-5 text-gray-500"
                     aria-hidden="true"
                   />
                 )}

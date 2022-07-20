@@ -27,7 +27,7 @@ export const schema = gql`
     treatmentFollicleCounts(
       input: TreatmentFollicleCountsInput
     ): [FollicleCount!]! @skipAuth
-    predictEggs(input: String!): EggPrediction @requireAuth
+    predictEggs(input: Int!): EggPrediction @requireAuth
   }
 
   input CreateFollicleCountInput {
