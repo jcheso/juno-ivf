@@ -161,9 +161,9 @@ export default function FollicleDisplay({ follicleCounts }) {
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium text-purple-800"></span>
               </div>
               <div className=" py-2 bg-white">
-                {labels.map((label, index) => (
+                {labels.map((label) => (
                   <div
-                    key={index}
+                    key={label}
                     className="border-gray-100 border-b-2  border-r-2 py-1 h-8"
                   >
                     <div className="text-sm font-medium text-gray-500 justify-center flex">
@@ -182,14 +182,12 @@ export default function FollicleDisplay({ follicleCounts }) {
             <div className="flex flex-row overflow-x-scroll">
               {follicleCounts.length > 0 &&
                 follicleCounts.map((follicleCount) => (
-                  <>
-                    <div key={follicleCount.id}>
-                      <FollicleCountGrouped
-                        follicleCount={follicleCount}
-                        isAcf={afcFollicleCount?.id === follicleCount.id}
-                      />
-                    </div>
-                  </>
+                  <div key={follicleCount.id}>
+                    <FollicleCountGrouped
+                      follicleCount={follicleCount}
+                      isAcf={afcFollicleCount?.id === follicleCount.id}
+                    />
+                  </div>
                 ))}
             </div>
             {follicleCounts.length == 0 && (

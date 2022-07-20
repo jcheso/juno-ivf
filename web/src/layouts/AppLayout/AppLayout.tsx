@@ -17,7 +17,7 @@ import {
 import { UserIcon } from '@heroicons/react/solid'
 
 import { useAuth } from '@redwoodjs/auth'
-import { Link, navigate, NavLink, routes } from '@redwoodjs/router'
+import { Link, NavLink, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
 import { PatientContext } from 'src/providers/context/PatientContext'
@@ -35,8 +35,8 @@ type AppLayoutProps = {
 const AppLayout = ({ children }: AppLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { logOut, currentUser } = useAuth()
-  const [patient, setPatient] = React.useContext(PatientContext)
-  const [activeTreatment, setActiveTreatment] = useContext(TreatmentContext)
+  const [patient] = React.useContext(PatientContext)
+  const [activeTreatment] = useContext(TreatmentContext)
   const patientHidden = patient == null ? true : false
   const treatmentHidden = activeTreatment == null ? true : false
   const navigation = [
@@ -45,6 +45,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       to: routes.dashboard(),
       icon: HomeIcon,
       current: true,
+      disabled: false,
     },
     {
       name: 'Patient Summary',
@@ -52,6 +53,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       icon: UsersIcon,
       current: false,
       hidden: patientHidden,
+      disabled: false,
     },
     {
       name: 'Treatments',
@@ -59,13 +61,16 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       icon: ChartBarIcon,
       current: false,
       hidden: patientHidden,
+      disabled: false,
     },
+
     {
-      name: 'Cycle Summary',
-      to: routes.cycleSummary(),
-      icon: CalendarIcon,
+      name: 'Ultrasounds',
+      to: routes.ultrasounds(),
+      icon: PhotographIcon,
       current: false,
       hidden: treatmentHidden,
+      disabled: false,
     },
     {
       name: 'Medicine',
@@ -73,6 +78,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       icon: FolderIcon,
       current: false,
       hidden: treatmentHidden,
+      disabled: true,
     },
     {
       name: 'Test Results',
@@ -80,13 +86,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       icon: BeakerIcon,
       current: false,
       hidden: treatmentHidden,
-    },
-    {
-      name: 'Ultrasounds',
-      to: routes.ultrasounds(),
-      icon: PhotographIcon,
-      current: false,
-      hidden: treatmentHidden,
+      disabled: true,
     },
     {
       name: 'Lab Status',
@@ -94,6 +94,15 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       icon: ClipboardListIcon,
       current: false,
       hidden: treatmentHidden,
+      disabled: true,
+    },
+    {
+      name: 'Cycle Summary',
+      to: '#',
+      icon: CalendarIcon,
+      current: false,
+      hidden: treatmentHidden,
+      disabled: true,
     },
   ]
 
@@ -160,7 +169,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                 </Transition.Child>
                 <div className="flex-shrink-0 flex items-center px-4">
                   <img
-                    className="h-8 w-auto"
+                    className="h-8 w-8"
                     src="https://img.icons8.com/external-wanicon-lineal-wanicon/FFFFFF/256/undefined/external-pregnancy-medical-wanicon-lineal-wanicon.png"
                     alt="Juno Logo"
                   />
@@ -173,8 +182,11 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                         key={item.name}
                         to={item.to}
                         className={
-                          `text-indigo-100 hover:bg-indigo-600 group flex items-center px-2 py-2 text-base font-medium rounded-md` +
-                          (item.hidden ? ' hidden' : '')
+                          `text-indigo-100  group flex items-center px-2 py-2 text-base font-medium rounded-md` +
+                          (item.hidden ? ' hidden' : '') +
+                          (item.disabled
+                            ? ' hover:bg-indigo-700 cursor-default'
+                            : 'hover:bg-indigo-600')
                         }
                         activeClassName="bg-indigo-800 text-white group flex items-center px-2 py-2 text-base font-medium rounded-md"
                       >
@@ -201,7 +213,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
           <div className="flex flex-col flex-grow pt-5 bg-indigo-700 overflow-y-auto">
             <div className="flex items-center flex-shrink-0 px-4">
               <img
-                className="h-8 w-auto"
+                className="h-8 w-8"
                 src="https://img.icons8.com/external-wanicon-lineal-wanicon/FFFFFF/256/undefined/external-pregnancy-medical-wanicon-lineal-wanicon.png"
                 alt="Juno Logo"
               />
@@ -215,7 +227,10 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                     to={item.to}
                     className={
                       `animate-fade text-indigo-100 hover:bg-indigo-600 link group flex items-center px-2 py-2 text-sm font-medium rounded-md` +
-                      (item.hidden ? ' hidden' : '')
+                      (item.hidden ? ' hidden' : '') +
+                      (item.disabled
+                        ? ' hover:bg-indigo-700 cursor-default'
+                        : 'hover:bg-indigo-600')
                     }
                     activeClassName="activeLink group flex items-center px-2 py-2 text-sm font-medium rounded-md bg-indigo-800 text-white"
                   >
