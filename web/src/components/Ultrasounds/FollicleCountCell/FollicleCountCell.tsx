@@ -36,7 +36,6 @@ export const Failure = ({ error }: CellFailureProps) => (
 export const Success = ({ treatmentFollicleCounts }: CellSuccessProps) => {
   // Parse the left and right string arrays into numbers
   const { height, width } = useWindowDimensions()
-  console.log(width)
   const treatmentFollicleCountsParsed = treatmentFollicleCounts.map(
     (follicleCount) => ({
       ...follicleCount,

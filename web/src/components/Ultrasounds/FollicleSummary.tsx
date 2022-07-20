@@ -75,7 +75,6 @@ export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
       stat: `${follicleRatio.toFixed(0)}%`,
     },
   ]
-  console.log(rangeCount)
 
   return (
     <div>
