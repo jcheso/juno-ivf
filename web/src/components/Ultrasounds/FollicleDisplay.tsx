@@ -62,7 +62,7 @@ export default function FollicleDisplay({ follicleCounts }) {
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div className="bg-white shadow overflow-hidden rounded-lg">
           <div className="flex h-96 flex-col">
             <div className="px-4 pt-5 pb-1 sm:px-6">
               <h3 className="text-lg leading-6 font-medium text-gray-900">

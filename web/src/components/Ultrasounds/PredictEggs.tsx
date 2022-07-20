@@ -4,7 +4,6 @@ import { InformationCircleIcon } from '@heroicons/react/solid'
 import { Link } from '@redwoodjs/router'
 
 export default function PredictEggs({ predictedEggs }) {
-  console.log(predictedEggs)
   return (
     <div className="rounded-md bg-blue-50 p-4">
       <div className="flex">
