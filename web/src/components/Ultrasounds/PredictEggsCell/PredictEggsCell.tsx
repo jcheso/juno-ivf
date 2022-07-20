@@ -3,7 +3,7 @@ import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import PredictEggs from '../PredictEggs'
 
 export const QUERY = gql`
-  query PredictEggsQuery($input: String!) {
+  query PredictEggsQuery($input: Int!) {
     predictEggs(input: $input) {
       eggs
     }
