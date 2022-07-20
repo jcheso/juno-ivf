@@ -181,7 +181,7 @@ export default function FollicleDisplay({ follicleCounts }) {
             </div>
             <div className="flex flex-row overflow-x-scroll">
               {follicleCounts.length > 0 &&
-                follicleCounts.map((follicleCount, index) => (
+                follicleCounts.map((follicleCount) => (
                   <>
                     <div key={follicleCount.id}>
                       <FollicleCountGrouped
