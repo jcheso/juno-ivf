@@ -5,24 +5,20 @@ import { InformationCircleIcon } from '@heroicons/react/outline'
 import { Link } from '@redwoodjs/router'
 
 import { FollicleMap } from 'src/models/FollicleMap'
+import { FollicleMapFull } from 'src/models/FollicleMapFull'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
   const [activeTreatment] = useContext(TreatmentContext)
   const [afc, setAfc] = useState(null)
   const [rangeCount, setRangeCount] = useState(null)
-  const latestFollicleCount = follicleCounts[follicleCounts.length - 1]
+  // const latestFollicleCount = follicleCounts[follicleCounts.length - 1]
+  // Scan through the follicleCounts to find the last day taht doesn't have a count of -1
+  const latestFollicleCount = follicleCounts
+    .slice(0)
+    .reverse()
+    .find((fc) => fc.count !== -1)
   const [predictedEggs, setPredictedEggs] = useState(null)
-
-  const countFolliclesInRange = (follicleMap) => {
-    let count = 0
-    for (const key in follicleMap.counts) {
-      if (key !== '<11' && key !== '>19') {
-        count += follicleMap.counts[key].length
-      }
-    }
-    return count
-  }
 
   const countFolliclesInAFC = (follicleMap) => {
     let count = 0
@@ -37,11 +33,14 @@ export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
 
   useEffect(() => {
     if (latestFollicleCount) {
-      const latestLeftFollicleMap = new FollicleMap(latestFollicleCount.left)
-      const latestRightFollicleMap = new FollicleMap(latestFollicleCount.right)
+      const latestLeftFollicleMap: FollicleMapFull = new FollicleMapFull(
+        latestFollicleCount.left
+      )
+      const latestRightFollicleMap: FollicleMapFull = new FollicleMapFull(
+        latestFollicleCount.right
+      )
       setRangeCount(
-        countFolliclesInRange(latestLeftFollicleMap) +
-          countFolliclesInRange(latestRightFollicleMap)
+        latestLeftFollicleMap.inRange + latestRightFollicleMap.inRange
       )
       setPredictedEggs(rangeCount * 0.70601212 + 3.0297298881764334)
     }
@@ -71,7 +70,7 @@ export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
     { name: 'Antral Follicle Count (AFC)', stat: afc || 0 },
     { name: 'Follicles between 11-19mm', stat: rangeCount || 0 },
     {
-      name: 'Follicles between 11-19mm/AFC',
+      name: 'Follicles between 11-19mm/AFC (FORT)',
       stat: `${follicleRatio.toFixed(0)}%`,
     },
   ]

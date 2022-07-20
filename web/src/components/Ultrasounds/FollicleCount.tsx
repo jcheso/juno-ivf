@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { FollicleMap } from 'src/models/FollicleMap'
+import { FollicleMapFull } from 'src/models/FollicleMapFull'
 
 import EditFollicleCount from './EditFollicleCount'
 
@@ -9,6 +10,8 @@ const FollicleCount = ({ follicleCount, isAcf }) => {
   const rightFollicleMap = new FollicleMap(follicleCount.right)
   const [open, setOpen] = useState(false)
 
+  const newRightFollicleMap = new FollicleMapFull(follicleCount.right)
+  console.log(newRightFollicleMap)
   return (
     <>
       <div className="bg-white shadow overflow-hidden rounded-lg">

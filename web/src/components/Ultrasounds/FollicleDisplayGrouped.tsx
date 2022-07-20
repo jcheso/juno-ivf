@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 
-import { PlusSmIcon as PlusSmIconOutline } from '@heroicons/react/outline'
 import { PlusSmIcon } from '@heroicons/react/solid'
 
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-import FollicleCount from './FollicleCount'
 import FollicleCountGrouped from './FollicleCountGrouped'
 import FollicleSummary from './FollicleSummary'
 import NewFollicleCount from './NewFollicleCount'
@@ -13,6 +11,33 @@ import NewFollicleCount from './NewFollicleCount'
 export default function FollicleDisplay({ follicleCounts }) {
   const [activeTreatment] = useContext(TreatmentContext)
   const [afcFollicleCount, setAfcFollicleCount] = useState(null)
+  const [open, setOpen] = useState(false)
+  const latestFollicleCount = follicleCounts
+    .slice(0)
+    .reverse()
+    .find((fc) => fc.count !== -1)
+  const { nextDay, nextDate }: { nextDay: number; nextDate: any } =
+    getNext(latestFollicleCount)
+  const labels = [
+    '>25',
+    '25',
+    '24',
+    '23',
+    '22',
+    '21',
+    '20',
+    '19',
+    '18',
+    '17',
+    '16',
+    '15',
+    '14',
+    '13',
+    '12',
+    '11',
+    '<11',
+  ]
+
   const tabs = [
     { name: 'Cycle 1', href: '#', current: true },
     { name: 'Cycle 2', href: '#', current: false },
@@ -24,20 +49,31 @@ export default function FollicleDisplay({ follicleCounts }) {
     return classes.filter(Boolean).join(' ')
   }
 
-  const [open, setOpen] = useState(false)
-  let nextDate: any = new Date(follicleCounts[follicleCounts.length - 1]?.date)
-  if (follicleCounts.length > 0) {
-    nextDate = new Date(nextDate.setDate(nextDate.getDate() + 1))
-  } else {
-    nextDate = new Date()
-  }
-  const lastDate: any = new Date(
-    follicleCounts[follicleCounts.length - 1]?.date
-  )
-  const diffTime: number = Math.abs(nextDate - lastDate)
-  const diffDays: number = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  const nextDay: number =
-    diffDays + follicleCounts[follicleCounts.length - 1]?.day || 0
+  const range = Array.from({ length: 16 }, (_, i) => i)
+  const emptyCounts = new Set()
+  range.forEach((num) => {
+    const day = follicleCounts.find((fc) => fc.day === num)
+    if (!day) {
+      emptyCounts.add(num)
+    }
+  })
+  emptyCounts.forEach((num: number) => {
+    let nextDate = new Date()
+    nextDate.setDate(nextDate.getDate() - 1)
+    if (follicleCounts.length > 0) {
+      nextDate = new Date(follicleCounts[num - 1].date)
+    }
+    nextDate.setDate(nextDate.getDate() + 1)
+    const emptyFollicleCount = {
+      day: num,
+      date: nextDate.toISOString(),
+      count: -1,
+      left: [],
+      right: [],
+      id: '',
+    }
+    follicleCounts.splice(num, 0, emptyFollicleCount)
+  })
 
   useEffect(() => {
     if (activeTreatment && follicleCounts.length > 0) {
@@ -118,60 +154,42 @@ export default function FollicleDisplay({ follicleCounts }) {
             </div>
           </div>
         </div>
-        <div className="px-4 py-5 sm:p-6">
+        <div className="px-4 py-2 sm:p-6">
           <div className="flex flex-row w-full">
             <div className="bg-white overflow-hidden w-24">
               <div className="flex w-full justify-center mt-0 h-6">
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium text-purple-800"></span>
               </div>
-              <div className="px-2 py-2 bg-white">
-                <div className="border-gray-100 border-b-2 py-1 h-8">
-                  <div className="text-sm font-medium text-gray-500 justify-end flex">
-                    {`>19`}
+              <div className=" py-2 bg-white">
+                {labels.map((label, index) => (
+                  <div
+                    key={index}
+                    className="border-gray-100 border-b-2  border-r-2 py-1 h-8"
+                  >
+                    <div className="text-sm font-medium text-gray-500 justify-center flex">
+                      {label}
+                    </div>
                   </div>
-                </div>
-                <div className="border-gray-100 border-b-2 py-1 h-8">
-                  <div className="text-sm font-medium text-gray-500 justify-end flex">
-                    18-19
-                  </div>
-                </div>
-                <div className="border-gray-100 border-b-2 py-1 h-8">
-                  <div className="text-sm font-medium text-gray-500 justify-end flex">
-                    16-17
-                  </div>
-                </div>
-                <div className="border-gray-100 border-b-2 py-1 h-8">
-                  <div className="text-sm font-medium text-gray-500 justify-end flex">
-                    14-15
-                  </div>
-                </div>
-                <div className="border-gray-100 border-b-2 py-1 h-8">
-                  <div className="text-sm font-medium text-gray-500 justify-end flex">
-                    11-13
-                  </div>
-                </div>
-                <div className="border-gray-100 border-b-2 py-1 h-8">
-                  <div className="text-sm font-medium text-gray-500 justify-end flex">
-                    {`<11`}
-                  </div>
-                </div>
-                <div className="pt-5 pb-1 sm:px-6p text-right">
+                ))}
+                <div className="pt-2 pb-1 sm:px-6p text-center">
                   <h3 className="text-lg leading-6 font-medium text-gray-900 w-full">
-                    Day:
+                    Day
                   </h3>
-                  <p className="mt-1 max-w-2xl text-sm text-gray-500">Date:</p>
+                  <p className="mt-1 max-w-2xl text-sm text-gray-500">Date</p>
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-10">
+            <div className="flex flex-row overflow-x-scroll">
               {follicleCounts.length > 0 &&
-                follicleCounts.map((follicleCount) => (
-                  <div key={follicleCount.id} className="">
-                    <FollicleCountGrouped
-                      follicleCount={follicleCount}
-                      isAcf={afcFollicleCount?.id === follicleCount.id}
-                    />
-                  </div>
+                follicleCounts.map((follicleCount, index) => (
+                  <>
+                    <div key={follicleCount.id}>
+                      <FollicleCountGrouped
+                        follicleCount={follicleCount}
+                        isAcf={afcFollicleCount?.id === follicleCount.id}
+                      />
+                    </div>
+                  </>
                 ))}
             </div>
             {follicleCounts.length == 0 && (
@@ -204,4 +222,17 @@ export default function FollicleDisplay({ follicleCounts }) {
       />
     </>
   )
+}
+function getNext(follicleCount: any) {
+  let nextDate: any = new Date(follicleCount?.date)
+  if (follicleCount) {
+    nextDate = new Date(nextDate.setDate(nextDate.getDate() + 1))
+  } else {
+    nextDate = new Date()
+  }
+  const lastDate: any = new Date(follicleCount?.date)
+  const diffTime: number = Math.abs(nextDate - lastDate)
+  const diffDays: number = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  const nextDay: number = diffDays + follicleCount?.day || 0
+  return { nextDay, nextDate }
 }
