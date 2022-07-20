@@ -3,6 +3,9 @@ import CircleLoader from 'react-spinners/CircleLoader'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import FollicleDisplay from '../FollicleDisplay'
+import FollicleDisplayGrouped from '../FollicleDisplayGrouped'
+
+import useWindowDimensions from './getWindowDimensions'
 
 export const QUERY = gql`
   query FindFollicleCountQuery($input: TreatmentFollicleCountsInput!) {
@@ -23,7 +26,7 @@ export const Loading = () => (
 )
 
 export const Empty = () => {
-  return <FollicleDisplay follicleCounts={[]} />
+  return <FollicleDisplayGrouped follicleCounts={[]} />
 }
 
 export const Failure = ({ error }: CellFailureProps) => (
@@ -32,6 +35,8 @@ export const Failure = ({ error }: CellFailureProps) => (
 
 export const Success = ({ treatmentFollicleCounts }: CellSuccessProps) => {
   // Parse the left and right string arrays into numbers
+  const { height, width } = useWindowDimensions()
+  console.log(width)
   const treatmentFollicleCountsParsed = treatmentFollicleCounts.map(
     (follicleCount) => ({
       ...follicleCount,
@@ -39,5 +44,11 @@ export const Success = ({ treatmentFollicleCounts }: CellSuccessProps) => {
       right: JSON.parse(follicleCount.right),
     })
   )
-  return <FollicleDisplay follicleCounts={treatmentFollicleCountsParsed} />
+  if (width < 600) {
+    return <FollicleDisplay follicleCounts={treatmentFollicleCountsParsed} />
+  } else {
+    return (
+      <FollicleDisplayGrouped follicleCounts={treatmentFollicleCountsParsed} />
+    )
+  }
 }

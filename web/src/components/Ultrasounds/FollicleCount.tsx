@@ -11,7 +11,7 @@ const FollicleCount = ({ follicleCount, isAcf }) => {
 
   return (
     <>
-      <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+      <div className="bg-white shadow overflow-hidden rounded-lg">
         <div className="px-4 pt-5 pb-1 sm:px-6">
           <div className="flex flex-row">
             <h3 className="text-lg leading-6 font-medium text-gray-900 w-full">
@@ -43,19 +43,19 @@ const FollicleCount = ({ follicleCount, isAcf }) => {
               <div className="text-sm font-medium text-gray-500 justify-center flex">
                 {key}
               </div>
-              <div className="flex flex-row space-x-1 items-center">
+              <div className="flex flex-row flex-wrap justify-evenly items-center px-1">
                 {leftFollicleMap.counts[key].map((count, index) => (
                   <div
                     key={index}
-                    className="bg-pink-400 rounded-full h-3 w-3"
+                    className="bg-pink-400 rounded-full h-2 w-2 m-0.5"
                   />
                 ))}
               </div>
-              <div className="flex flex-row space-x-1 items-center px-1">
+              <div className="flex flex-row flex-wrap justify-evenly items-center px-1">
                 {rightFollicleMap.counts[key].map((count, index) => (
                   <div
                     key={index}
-                    className="bg-purple-400 rounded-full h-3 w-3"
+                    className="bg-purple-400 rounded-full h-2 w-2 m-0.5"
                   />
                 ))}
               </div>
@@ -63,11 +63,11 @@ const FollicleCount = ({ follicleCount, isAcf }) => {
           ))}
           <div className="flex flex-row justify-center pt-2">
             <div className="flex flex-row items-center">
-              <div className="bg-pink-400 rounded-full h-3 w-3" />
+              <div className="bg-pink-400 rounded-full h-2 w-2" />
               <p className="text-sm  text-gray-500 text-left px-2">Left</p>
             </div>
             <div className="flex flex-row items-center">
-              <div className="bg-purple-400 rounded-full h-3 w-3" />
+              <div className="bg-purple-400 rounded-full h-2 w-2" />
               <p className="text-sm  text-gray-500 text-left px-2"> Right</p>
             </div>
           </div>
