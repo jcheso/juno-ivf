@@ -1,9 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 
-import { InformationCircleIcon } from '@heroicons/react/outline'
-
-import { Link } from '@redwoodjs/router'
-
 import { FollicleMap } from 'src/models/FollicleMap'
 import { FollicleMapFull } from 'src/models/FollicleMapFull'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
@@ -11,63 +7,24 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 import PredictEggsCell from './PredictEggsCell'
 export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
   const [activeTreatment] = useContext(TreatmentContext)
-  const [afc, setAfc] = useState(null)
-  const [rangeCount, setRangeCount] = useState(null)
-
-  // const latestFollicleCount = follicleCounts[follicleCounts.length - 1]
-  // Scan through the follicleCounts to find the last day taht doesn't have a count of -1
-  const latestFollicleCount = follicleCounts
-    .slice(0)
-    .reverse()
-    .find((fc) => fc.count !== -1)
-
-  const [predictedEggs, setPredictedEggs] = useState(null)
-
-  const countFolliclesInAFC = (follicleMap) => {
-    let count = 0
-    for (const key in follicleMap.counts) {
-      {
-        count += follicleMap.counts[key].length
-      }
-    }
-    return count
-  }
+  const [afc, setAfc] = useState(0)
   const [follicleRatio, setFollicleRatio] = useState(0)
+  const [rangeCount, setRangeCount] = useState(0)
 
   useEffect(() => {
-    if (latestFollicleCount) {
-      const latestLeftFollicleMap: FollicleMapFull = new FollicleMapFull(
-        latestFollicleCount.left
-      )
-      const latestRightFollicleMap: FollicleMapFull = new FollicleMapFull(
-        latestFollicleCount.right
-      )
-      setRangeCount(
-        latestLeftFollicleMap.inRange + latestRightFollicleMap.inRange
-      )
-      setPredictedEggs(rangeCount * 0.70601212 + 3.0297298881764334)
-    }
+    const latestFollicleCount = getFolliclesInRange(follicleCounts)
+    setRangeCount(getFolliclesInRange(follicleCounts))
+
     if (afcFollicleCount) {
       setAfc(
         countFolliclesInAFC(new FollicleMap(afcFollicleCount.left)) +
           countFolliclesInAFC(new FollicleMap(afcFollicleCount.right))
       )
-    } else {
-      setAfc(0)
     }
     if (latestFollicleCount && afcFollicleCount) {
       setFollicleRatio((rangeCount / afc) * 100)
-    } else {
-      setFollicleRatio(0)
     }
-  }, [
-    follicleCounts,
-    activeTreatment,
-    afcFollicleCount,
-    latestFollicleCount,
-    afc,
-    rangeCount,
-  ])
+  }, [follicleCounts, activeTreatment, afcFollicleCount, afc, rangeCount])
 
   const stats = [
     { name: 'Antral Follicle Count (AFC)', stat: afc || 0 },
@@ -98,4 +55,32 @@ export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
       </dl>
     </div>
   )
+}
+
+const countFolliclesInAFC = (follicleMap) => {
+  let count = 0
+  for (const key in follicleMap.counts) {
+    {
+      count += follicleMap.counts[key].length
+    }
+  }
+  return count
+}
+
+function getFolliclesInRange(follicleCounts: any) {
+  const latestFollicleCount = follicleCounts
+    .slice(0)
+    .reverse()
+    .find((fc) => fc.count !== -1)
+  if (latestFollicleCount) {
+    const latestLeftFollicleMap: FollicleMapFull = new FollicleMapFull(
+      latestFollicleCount.left
+    )
+    const latestRightFollicleMap: FollicleMapFull = new FollicleMapFull(
+      latestFollicleCount.right
+    )
+    const folliclesInRange =
+      latestLeftFollicleMap.inRange + latestRightFollicleMap.inRange
+    return folliclesInRange
+  }
 }

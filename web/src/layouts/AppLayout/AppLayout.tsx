@@ -183,7 +183,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                         to={item.to}
                         className={
                           `text-indigo-100  group flex items-center px-2 py-2 text-base font-medium rounded-md` +
-                          (item.hidden ? ' hidden' : '') +
+                          (item.hidden ? ' hidden ' : '') +
                           (item.disabled
                             ? ' hover:bg-indigo-700 cursor-default'
                             : 'hover:bg-indigo-600')
@@ -227,7 +227,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                     to={item.to}
                     className={
                       `animate-fade text-indigo-100 hover:bg-indigo-600 link group flex items-center px-2 py-2 text-sm font-medium rounded-md` +
-                      (item.hidden ? ' hidden' : '') +
+                      (item.hidden ? ' hidden ' : '') +
                       (item.disabled
                         ? ' hover:bg-indigo-700 cursor-default'
                         : 'hover:bg-indigo-600')
