@@ -6,6 +6,16 @@ export const QUERY = gql`
   query PredictEggsQuery($input: Int!) {
     predictEggs(input: $input) {
       eggs
+      modelDetails {
+        createdAt
+        version
+        modelUrl
+        shardUrl
+        imgUrl
+        imgDesc
+        description
+        userId
+      }
     }
   }
 `

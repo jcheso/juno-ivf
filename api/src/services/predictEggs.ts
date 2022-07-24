@@ -1,21 +1,26 @@
-import { logger } from 'src/lib/logger'
+import { db } from 'src/lib/db'
 
 const tf = require('@tensorflow/tfjs-node')
 
 export const predictEggs = async ({ input }) => {
-  logger.info('Running predictEggs service')
+  const latestModels = await db.predictEggsModel.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    take: 1,
+  })
+  if (!latestModels) {
+    throw new Error('No models found')
+  }
+  const latestModel = latestModels[0]
   if (input > 0) {
-    const model = await tf.loadLayersModel(
-      'https://storage.googleapis.com/juno-ivf/eggPredictionModel/model.json'
-    )
+    const model = await tf.loadLayersModel(latestModel.modelUrl)
     const follicleCount = tf.tensor([input])
-    logger.info('Input follicle count: ' + input)
     const prediction = model.predict(follicleCount.toFloat())
     const vals = await prediction.data()
     const result = Math.round(vals[0])
-    logger.info('Predicted egg count: ' + result)
-    return { eggs: result }
+    return { eggs: result, modelDetails: latestModel }
   } else {
-    return { eggs: 0 }
+    return { eggs: 0, modelDetails: latestModel }
   }
 }

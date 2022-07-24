@@ -102,5 +102,5 @@ model PredictEggsModel {
   imgDesc     String?
   description String
   userId      String
-  version     String
+  version     Int
 }

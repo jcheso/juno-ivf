@@ -8,7 +8,7 @@ export const schema = gql`
     imgDesc: String!
     description: String!
     userId: String!
-    version: String!
+    version: Int!
   }
 
   type Query {
@@ -23,7 +23,7 @@ export const schema = gql`
     imgDesc: String!
     description: String!
     userId: String!
-    version: String!
+    version: Int!
   }
 
   input UpdatePredictEggsModelInput {
@@ -33,7 +33,7 @@ export const schema = gql`
     imgDesc: String
     description: String
     userId: String
-    version: String
+    version: Int
   }
 
   type Mutation {

@@ -19,6 +19,7 @@ export const schema = gql`
 
   type EggPrediction {
     eggs: Int
+    modelDetails: PredictEggsModel
   }
 
   type Query {
