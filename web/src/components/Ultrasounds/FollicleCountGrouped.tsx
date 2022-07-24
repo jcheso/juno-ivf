@@ -1,10 +1,12 @@
 import { useState } from 'react'
 
+import { v4 as uuidv4 } from 'uuid'
+
 import { FollicleMapFull } from 'src/models/FollicleMapFull'
 
 import EditFollicleCount from './EditFollicleCount'
 
-const FollicleCount = ({ follicleCount, isAcf }) => {
+const FollicleCountGrouped = ({ follicleCount, isAcf }) => {
   const leftFollicleMap = new FollicleMapFull(follicleCount.left)
   const rightFollicleMap = new FollicleMapFull(follicleCount.right)
   const [open, setOpen] = useState(false)
@@ -24,23 +26,23 @@ const FollicleCount = ({ follicleCount, isAcf }) => {
           {Object.keys(leftFollicleMap.counts)
             .slice(0)
             .reverse()
-            .map((key, index) => (
+            .map((key) => (
               <div
-                key={index}
+                key={uuidv4()}
                 className="grid grid-cols-2 border-gray-100 border-b-2 border-r-2 py-1 h-8"
               >
                 <div className="flex flex-row flex-wrap justify-evenly  items-center">
-                  {leftFollicleMap.counts[key].map((count, index) => (
+                  {leftFollicleMap.counts[key].map(() => (
                     <div
-                      key={index}
+                      key={uuidv4()}
                       className="bg-pink-400 rounded-full h-2 w-2"
                     />
                   ))}
                 </div>
                 <div className="flex flex-row flex-wrap justify-evenly items-center">
-                  {rightFollicleMap.counts[key].map((count, index) => (
+                  {rightFollicleMap.counts[key].map(() => (
                     <div
-                      key={index}
+                      key={uuidv4()}
                       className="bg-purple-400 rounded-full h-2 w-2"
                     />
                   ))}
@@ -79,4 +81,4 @@ const FollicleCount = ({ follicleCount, isAcf }) => {
   )
 }
 
-export default FollicleCount
+export default FollicleCountGrouped

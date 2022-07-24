@@ -37,7 +37,7 @@ export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
 
   return (
     <div>
-      {follicleCounts.length > 0 && <PredictEggsCell input={rangeCount} />}
+      {follicleCounts[0].count !== -1 && <PredictEggsCell input={rangeCount} />}
       <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
         {stats.map((item) => (
           <div

@@ -3,6 +3,7 @@ import { Fragment, useContext, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import CircleLoader from 'react-spinners/CircleLoader'
 import { CreateFollicleCountInput, UpdateTreatmentInput } from 'types/graphql'
+import { v4 as uuidv4 } from 'uuid'
 
 import {
   Form,
@@ -319,51 +320,27 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                     <div className="flex md:flex-row flex-col px-4 gap-x-4 py-5">
                       <div className="md:w-1/2 grid grid-cols-5 w-full">
                         {lengths.map((length, index) => (
-                          <>
-                            {index % 5 == 0 && (
-                              <button
-                                type="button"
-                                key={index}
-                                className="items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                                onClick={() => addFollicle(length)}
-                              >
-                                {length}
-                              </button>
-                            )}
-                            {index % 5 !== 0 && index % 5 !== 4 && (
-                              <button
-                                type="button"
-                                key={index}
-                                className="items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                                onClick={() => addFollicle(length)}
-                              >
-                                {length}
-                              </button>
-                            )}
-                            {index % 5 == 4 && (
-                              <button
-                                type="button"
-                                key={index}
-                                className="items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                                onClick={() => addFollicle(length)}
-                              >
-                                {length}
-                              </button>
-                            )}
-                          </>
+                          <button
+                            type="button"
+                            key={uuidv4()}
+                            className="rounded-md m-1 items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                            onClick={() => addFollicle(length)}
+                          >
+                            {length}
+                          </button>
                         ))}
                       </div>
-                      <div className="md:w-1/2 flex flex-col w-full pt-5 md:pt-0">
+                      <div className="md:w-1/2 grid grid-rows-2 w-full pt-5 md:pt-0">
                         <div className="flex flex-col">
-                          <h1 className="text-gray-900 text-sm font-medium underline">
+                          <h1 className="text-sm font-medium text-gray-600 truncate">
                             Left Ovary Measurements
                           </h1>
                           <div className="grid grid-cols-6 md:grid-cols-10">
                             {left.map((len, index) => (
                               <button
                                 type="button"
-                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-purple-400 h-8 w-8 text-sm text-white text-center inline-flex items-center justify-center m-1"
-                                key={index}
+                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-purple-400 h-8 w-8 text-sm text-white text-center inline-flex items-center justify-center my-1"
+                                key={uuidv4()}
                                 onClick={() => removeFollicle(index, 'left')}
                               >
                                 {len}
@@ -372,15 +349,15 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                           </div>
                         </div>
                         <div className="flex flex-col pt-2">
-                          <h1 className="text-gray-900 text-sm font-medium underline">
+                          <h1 className="text-sm font-medium text-gray-600 truncate">
                             Right Ovary Measurements
                           </h1>
                           <div className="grid grid-cols-6 md:grid-cols-10">
                             {right.map((len, index) => (
                               <button
                                 type="button"
-                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-pink-400 h-8 w-8 text-sm text-white text-center inline-flex items-center justify-center m-1"
-                                key={index}
+                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-pink-400 h-8 w-8 text-sm text-white text-center inline-flex items-center justify-center my-1"
+                                key={uuidv4()}
                                 onClick={() => removeFollicle(index, 'right')}
                               >
                                 {len}

@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { v4 as uuidv4 } from 'uuid'
+
 import { FollicleMap } from 'src/models/FollicleMap'
 import { FollicleMapFull } from 'src/models/FollicleMapFull'
 
@@ -10,8 +12,6 @@ const FollicleCount = ({ follicleCount, isAcf }) => {
   const rightFollicleMap = new FollicleMap(follicleCount.right)
   const [open, setOpen] = useState(false)
 
-  const newRightFollicleMap = new FollicleMapFull(follicleCount.right)
-  console.log(newRightFollicleMap)
   return (
     <>
       <div className="bg-white shadow overflow-hidden rounded-lg">
@@ -40,7 +40,7 @@ const FollicleCount = ({ follicleCount, isAcf }) => {
 
           {Object.keys(leftFollicleMap.counts).map((key, index) => (
             <div
-              key={index}
+              key={uuidv4()}
               className="grid grid-cols-3 border-gray-100 border-b-2 py-1"
             >
               <div className="text-sm font-medium text-gray-500 justify-center flex">
@@ -49,7 +49,7 @@ const FollicleCount = ({ follicleCount, isAcf }) => {
               <div className="flex flex-row flex-wrap justify-evenly items-center px-1">
                 {leftFollicleMap.counts[key].map((count, index) => (
                   <div
-                    key={index}
+                    key={uuidv4()}
                     className="bg-pink-400 rounded-full h-2 w-2 m-0.5"
                   />
                 ))}
@@ -57,7 +57,7 @@ const FollicleCount = ({ follicleCount, isAcf }) => {
               <div className="flex flex-row flex-wrap justify-evenly items-center px-1">
                 {rightFollicleMap.counts[key].map((count, index) => (
                   <div
-                    key={index}
+                    key={uuidv4()}
                     className="bg-purple-400 rounded-full h-2 w-2 m-0.5"
                   />
                 ))}
