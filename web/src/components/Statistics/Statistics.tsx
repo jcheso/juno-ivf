@@ -48,7 +48,7 @@ export default function Statistics({ statistics }) {
                     className="-ml-1 mr-0.5 flex-shrink-0 self-center h-5 w-5 text-green-500"
                     aria-hidden="true"
                   />
-                ) : item.changeType === 'increase' ? (
+                ) : item.changeType === 'decrease' ? (
                   <ArrowSmDownIcon
                     className="-ml-1 mr-0.5 flex-shrink-0 self-center h-5 w-5 text-red-500"
                     aria-hidden="true"
