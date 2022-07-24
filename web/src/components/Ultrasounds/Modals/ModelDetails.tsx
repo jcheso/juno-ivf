@@ -3,9 +3,9 @@ import { Fragment, useContext, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Switch } from '@headlessui/react'
 import CircleLoader from 'react-spinners/CircleLoader'
-import { UpdateFollicleCountInput, UpdateTreatmentInput } from 'types/graphql'
-import { v4 as uuidv4 } from 'uuid'
+import { CreatePredictEggsModelInput } from 'types/graphql'
 
+import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -13,7 +13,6 @@ import {
   DateField,
   Submit,
   NumberField,
-  CheckboxField,
   FileField,
   TextAreaField,
 } from '@redwoodjs/forms'
@@ -23,9 +22,15 @@ import { toast } from '@redwoodjs/web/toast'
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-import { QUERY } from '../FollicleCountCell'
+import { QUERY } from '../PredictEggs/PredictEggsCell'
 
-export default function ModelDetails({ open, setOpen, modelDetails }) {
+export default function ModelDetails({
+  open,
+  setOpen,
+  modelDetails,
+  predictedEggs,
+}) {
+  const { logOut, currentUser } = useAuth()
   const [patient] = useContext(PatientContext)
   const [activeTreatment] = useContext(TreatmentContext)
   const [enabled, setEnabled] = useState(false)
@@ -37,76 +42,51 @@ export default function ModelDetails({ open, setOpen, modelDetails }) {
     setOpen(false)
   }
 
-  const UPDATE_FOLLICLE_COUNT = gql`
-    mutation UpdateFollicleCount(
-      $id: String!
-      $input: UpdateFollicleCountInput!
-    ) {
-      updateFollicleCount(id: $id, input: $input) {
+  const CREATE_MODEL = gql`
+    mutation CreatePredictEggsModel($input: CreatePredictEggsModelInput!) {
+      createPredictEggsModel(input: $input) {
         id
+        modelUrl
+        shardUrl
+        createdAt
+        version
+        description
       }
     }
   `
 
-  const [updateFollicleCount, { loading }] = useMutation(
-    UPDATE_FOLLICLE_COUNT,
-    {
-      refetchQueries: [
-        {
-          query: QUERY,
-          variables: {
-            input: { patientId: patient.id, treatmentId: activeTreatment.id },
-            patientId: patient.id,
-          },
+  const [createModel, { loading }] = useMutation(CREATE_MODEL, {
+    refetchQueries: [
+      {
+        query: QUERY,
+        variables: {
+          input: predictedEggs,
         },
-      ],
-      awaitRefetchQueries: true,
-      onError: () => {
-        toast.error('Something went wrong, try again.')
       },
-    }
-  )
+    ],
+    awaitRefetchQueries: true,
+    onError: () => {
+      toast.error('Something went wrong, try again.')
+    },
+  })
 
   const onSubmit = async (data) => {
     console.log(data)
-    // const updateFollicleInput: UpdateFollicleCountInput = {
-    //   day: data.day,
-    //   left: JSON.stringify(left),
-    //   right: JSON.stringify(right),
-    //   date: data.date,
-    //   patientId: undefined,
-    //   treatmentId: undefined,
+
+    // const createPredictEggsModelInput: CreatePredictEggsModelInput = {
+    //   model: modelFile,
+    //   shard: shardFile,
+    //   imgUrl: undefined,
+    //   imgDesc: undefined,
+    //   description: data.description,
+    //   userId: currentUser.id,
+    //   version: data.version,
     // }
-    // await updateFollicleCount({
-    //   variables: { id: follicleCount.id, input: updateFollicleInput },
+    // console.log(createPredictEggsModelInput)
+    // await createModel({
+    //   variables: { input: createPredictEggsModelInput },
     // })
-    // const updateTreatmentInput: UpdateTreatmentInput = {
-    //   clinicianId: undefined,
-    //   patientId: undefined,
-    //   startDate: undefined,
-    //   endDate: undefined,
-    //   wasSuccessful: undefined,
-    //   isActive: undefined,
-    //   count: undefined,
-    //   acfId: follicleCount.id,
-    // }
-    // if (data.isACF) {
-    //   const updatedTreatment = await setACF({
-    //     variables: {
-    //       id: activeTreatment.id,
-    //       input: updateTreatmentInput,
-    //     },
-    //   })
-    //   setTreatment(updatedTreatment.data.updateTreatment)
-    //   localStorage.setItem(
-    //     'treatmentCache',
-    //     JSON.stringify({
-    //       value: updatedTreatment.data.updateTreatment,
-    //       expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
-    //     })
-    //   )
-    // }
-    // toast.success('Follicle Count updated successfully!')
+    // toast.success('New model created successfully!')
     // closeModal()
   }
 

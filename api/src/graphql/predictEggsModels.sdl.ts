@@ -4,8 +4,8 @@ export const schema = gql`
     createdAt: DateTime!
     modelUrl: String!
     shardUrl: String!
-    imgUrl: String!
-    imgDesc: String!
+    imgUrl: String
+    imgDesc: String
     description: String!
     userId: String!
     version: Int!
@@ -19,16 +19,16 @@ export const schema = gql`
   input CreatePredictEggsModelInput {
     modelUrl: String!
     shardUrl: String!
-    imgUrl: String!
-    imgDesc: String!
+    imgUrl: String
+    imgDesc: String
     description: String!
     userId: String!
     version: Int!
   }
 
   input UpdatePredictEggsModelInput {
-    modelUrl: String
-    shardUrl: String
+    modelUrl: String!
+    shardUrl: String!
     imgUrl: String
     imgDesc: String
     description: String

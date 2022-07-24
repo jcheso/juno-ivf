@@ -38,6 +38,7 @@ export default function PredictEggs({ predictedEggs }) {
         open={open}
         setOpen={setOpen}
         modelDetails={predictedEggs?.modelDetails}
+        predictedEggs={predictedEggs?.eggs}
       />
     </>
   )
