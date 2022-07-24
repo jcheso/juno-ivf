@@ -8,13 +8,35 @@ import FollicleDisplayGrouped from '../FollicleDisplayGrouped'
 import useWindowDimensions from './getWindowDimensions'
 
 export const QUERY = gql`
-  query FindFollicleCountQuery($input: TreatmentFollicleCountsInput!) {
+  query FindFollicleCountQuery(
+    $input: TreatmentFollicleCountsInput!
+    $patientId: String!
+  ) {
     treatmentFollicleCounts(input: $input) {
       id
       day
       left
       right
       date
+    }
+    treatments: treatmentsByPatient(patientId: $patientId) {
+      id
+      startDate
+      endDate
+      wasSuccessful
+      isActive
+      clinician {
+        firstName
+        lastName
+      }
+      patient {
+        clinic {
+          name
+        }
+      }
+      count
+      acfId
+      ageAtTreatmentStart
     }
   }
 `
@@ -25,15 +47,18 @@ export const Loading = () => (
   </div>
 )
 
-export const Empty = () => {
-  return <FollicleDisplayGrouped follicleCounts={[]} />
+export const Empty = ({ treatments }) => {
+  return <FollicleDisplayGrouped follicleCounts={[]} treatments={treatments} />
 }
 
 export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ treatmentFollicleCounts }: CellSuccessProps) => {
+export const Success = ({
+  treatmentFollicleCounts,
+  treatments,
+}: CellSuccessProps) => {
   // Parse the left and right string arrays into numbers
   const { height, width } = useWindowDimensions()
   const treatmentFollicleCountsParsed = treatmentFollicleCounts.map(
@@ -47,7 +72,10 @@ export const Success = ({ treatmentFollicleCounts }: CellSuccessProps) => {
     return <FollicleDisplay follicleCounts={treatmentFollicleCountsParsed} />
   } else {
     return (
-      <FollicleDisplayGrouped follicleCounts={treatmentFollicleCountsParsed} />
+      <FollicleDisplayGrouped
+        follicleCounts={treatmentFollicleCountsParsed}
+        treatments={treatments}
+      />
     )
   }
 }

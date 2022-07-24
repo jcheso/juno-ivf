@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import { PlusSmIcon } from '@heroicons/react/solid'
+import { v4 as uuidv4 } from 'uuid'
 
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
@@ -8,9 +9,11 @@ import FollicleCountGrouped from './FollicleCountGrouped'
 import FollicleSummary from './FollicleSummary'
 import NewFollicleCount from './NewFollicleCount'
 
-export default function FollicleDisplay({ follicleCounts }) {
-  const [activeTreatment] = useContext(TreatmentContext)
-  const [afcFollicleCount, setAfcFollicleCount] = useState(null)
+export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
+  const [activeTreatment, setTreatment] = useContext(TreatmentContext)
+  const [afcFollicleCount, setAfcFollicleCount] = useState(
+    follicleCounts.find((fc) => fc.id === activeTreatment.acfId) || 0
+  )
   const [open, setOpen] = useState(false)
   const latestFollicleCount = follicleCounts
     .slice(0)
@@ -38,12 +41,22 @@ export default function FollicleDisplay({ follicleCounts }) {
     '<11',
   ]
 
-  const tabs = [
-    { name: 'Cycle 1', href: '#', current: true },
-    { name: 'Cycle 2', href: '#', current: false },
-    { name: 'Cycle 3', href: '#', current: false },
-    { name: 'Cycle 4', href: '#', current: false },
-  ]
+  const tabs = treatments.map((treatment) => {
+    return {
+      name: `Cycle ${treatment.count}`,
+      current: treatment.id === activeTreatment.id,
+      onClick: () => {
+        setTreatment(treatment)
+        localStorage.setItem(
+          'treatmentCache',
+          JSON.stringify({
+            value: treatment,
+            expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
+          })
+        )
+      },
+    }
+  })
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -74,8 +87,31 @@ export default function FollicleDisplay({ follicleCounts }) {
     }
     follicleCounts.splice(num, 0, emptyFollicleCount)
   })
-
   useEffect(() => {
+    const emptyCounts = new Set()
+    range.forEach((num) => {
+      const day = follicleCounts.find((fc) => fc.day === num)
+      if (!day) {
+        emptyCounts.add(num)
+      }
+    })
+    emptyCounts.forEach((num: number) => {
+      let nextDate = new Date()
+      nextDate.setDate(nextDate.getDate() - 1)
+      if (follicleCounts.length > 0) {
+        nextDate = new Date(follicleCounts[num - 1].date)
+      }
+      nextDate.setDate(nextDate.getDate() + 1)
+      const emptyFollicleCount = {
+        day: num,
+        date: nextDate.toISOString(),
+        count: -1,
+        left: [],
+        right: [],
+        id: '',
+      }
+      follicleCounts.splice(num, 0, emptyFollicleCount)
+    })
     if (activeTreatment && follicleCounts.length > 0) {
       setAfcFollicleCount(
         follicleCounts.find((fc) => fc.id === activeTreatment.acfId)
@@ -83,7 +119,7 @@ export default function FollicleDisplay({ follicleCounts }) {
     } else {
       setAfcFollicleCount(null)
     }
-  }, [follicleCounts, activeTreatment])
+  }, [follicleCounts, activeTreatment, range])
 
   return (
     <>
@@ -119,7 +155,7 @@ export default function FollicleDisplay({ follicleCounts }) {
           <div>
             <div className="sm:hidden">
               <label htmlFor="tabs" className="sr-only">
-                Select a tab
+                Select a cycle
               </label>
               {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
               <select
@@ -129,16 +165,18 @@ export default function FollicleDisplay({ follicleCounts }) {
                 defaultValue={tabs.find((tab) => tab.current).name}
               >
                 {tabs.map((tab) => (
-                  <option key={tab.name}>{tab.name}</option>
+                  <option key={uuidv4()} onClick={tab.onClick}>
+                    {tab.name}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="hidden sm:block">
               <nav className="flex space-x-4" aria-label="Tabs">
                 {tabs.map((tab) => (
-                  <a
-                    key={tab.name}
-                    href={tab.href}
+                  <button
+                    key={uuidv4()}
+                    onClick={tab.onClick}
                     className={classNames(
                       tab.current
                         ? 'bg-indigo-100 text-indigo-700'
@@ -148,7 +186,7 @@ export default function FollicleDisplay({ follicleCounts }) {
                     aria-current={tab.current ? 'page' : undefined}
                   >
                     {tab.name}
-                  </a>
+                  </button>
                 ))}
               </nav>
             </div>
@@ -163,7 +201,7 @@ export default function FollicleDisplay({ follicleCounts }) {
               <div className=" py-2 bg-white">
                 {labels.map((label) => (
                   <div
-                    key={label}
+                    key={uuidv4()}
                     className="border-gray-100 border-b-2  border-r-2 py-1 h-8"
                   >
                     <div className="text-sm font-medium text-gray-500 justify-center flex">
@@ -182,7 +220,7 @@ export default function FollicleDisplay({ follicleCounts }) {
             <div className="flex flex-row overflow-x-scroll">
               {follicleCounts.length > 0 &&
                 follicleCounts.map((follicleCount) => (
-                  <div key={follicleCount.id}>
+                  <div key={uuidv4()}>
                     <FollicleCountGrouped
                       follicleCount={follicleCount}
                       isAcf={afcFollicleCount?.id === follicleCount.id}

@@ -63,7 +63,7 @@ const StatusBar = () => {
         </div>
 
         <div className="mt-2 flex items-center justify-between sm:justify-start">
-          <span className="md:inline-flex items-center px-3 rounded-full text-sm font-medium align-middle bg-purple-100 text-purple-800 hidden">
+          <span className="bg-indigo-100 text-indigo-700 px-3 py-1 font-medium text-sm rounded-md hidden md:flex">
             {activeTreatment !== null
               ? `Cycle ${activeTreatment.count}`
               : 'No cycle selected'}

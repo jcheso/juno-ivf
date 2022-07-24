@@ -20,7 +20,7 @@ const UltrasoundsPage = () => {
     return (
       <>
         <MetaTags title="Ultrasounds" description="Ultrasounds page" />
-        <FollicleCountsCell input={input} />
+        <FollicleCountsCell input={input} patientId={patient.id} />
       </>
     )
   }

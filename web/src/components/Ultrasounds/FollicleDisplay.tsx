@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import { PlusSmIcon as PlusSmIconOutline } from '@heroicons/react/outline'
-import { EggPredictionInput } from 'types/graphql'
+import { v4 as uuidv4 } from 'uuid'
 
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 import FollicleCount from './FollicleCount'
 import FollicleSummary from './FollicleSummary'
 import NewFollicleCount from './NewFollicleCount'
-import PredictEggsCell from './PredictEggsCell'
 
 export default function FollicleDisplay({ follicleCounts }) {
   const [activeTreatment] = useContext(TreatmentContext)
@@ -40,11 +39,9 @@ export default function FollicleDisplay({ follicleCounts }) {
     }
   }, [follicleCounts, activeTreatment])
 
-  const eggPredictionInput = JSON.stringify(follicleCounts)
-
   return (
     <>
-      <div className="">
+      <div>
         <FollicleSummary
           follicleCounts={follicleCounts}
           afcFollicleCount={afcFollicleCount}
@@ -84,7 +81,7 @@ export default function FollicleDisplay({ follicleCounts }) {
           </div>
         </div>
         {reversedFollicleCounts.map((follicleCount) => (
-          <div key={follicleCount.id} className="">
+          <div key={uuidv4()}>
             <FollicleCount
               follicleCount={follicleCount}
               isAcf={afcFollicleCount?.id === follicleCount.id}
