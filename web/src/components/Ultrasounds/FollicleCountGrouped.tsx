@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { FollicleMapFull } from 'src/models/FollicleMapFull'
 
-import EditFollicleCount from './EditFollicleCount'
+import EditFollicleCount from './Modals/EditFollicleCount'
 
 const FollicleCountGrouped = ({ follicleCount, isAcf }) => {
   const leftFollicleMap = new FollicleMapFull(follicleCount.left)

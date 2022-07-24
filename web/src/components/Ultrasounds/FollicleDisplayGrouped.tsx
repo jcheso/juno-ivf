@@ -7,7 +7,7 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 import FollicleCountGrouped from './FollicleCountGrouped'
 import FollicleSummary from './FollicleSummary'
-import NewFollicleCount from './NewFollicleCount'
+import NewFollicleCount from './Modals/NewFollicleCount'
 
 export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)

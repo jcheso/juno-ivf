@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { FollicleMap } from 'src/models/FollicleMap'
 import { FollicleMapFull } from 'src/models/FollicleMapFull'
 
-import EditFollicleCount from './EditFollicleCount'
+import EditFollicleCount from './Modals/EditFollicleCount'
 
 const FollicleCount = ({ follicleCount, isAcf }) => {
   const leftFollicleMap = new FollicleMap(follicleCount.left)

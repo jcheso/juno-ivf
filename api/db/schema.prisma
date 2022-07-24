@@ -92,3 +92,15 @@ model FollicleCount {
   left        String
   right       String
 }
+
+model PredictEggsModel {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  modelUrl    String
+  shardUrl    String
+  imgUrl      String?
+  imgDesc     String?
+  description String
+  userId      String
+  version     String
+}
