@@ -2,7 +2,7 @@ import { Fragment, useContext, useRef, useState } from 'react'
 
 import { Dialog, Transition } from '@headlessui/react'
 import CircleLoader from 'react-spinners/CircleLoader'
-import { UpdateFollicleCountInput, UpdateTreatmentInput } from 'types/graphql'
+import { CreateFollicleCountInput, UpdateTreatmentInput } from 'types/graphql'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
@@ -20,32 +20,36 @@ import { toast } from '@redwoodjs/web/toast'
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-import { QUERY } from './FollicleCountCell'
+import { QUERY } from '../FollicleCountCell'
 
-export default function EditFollicleCount({ open, setOpen, follicleCount }) {
+export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
   const [patient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
-  const [left, setLeft] = useState([...follicleCount.left])
-  const [right, setRight] = useState([...follicleCount.right])
+  const [left, setLeft] = useState([])
+  const [right, setRight] = useState([])
   const [ovary, setOvary] = useState('left')
   const lengths = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
+    24, 25, 26, 27, 28,
   ]
 
   const closeModal = () => {
     setOpen(false)
-    setLeft([...follicleCount.left])
-    setRight([...follicleCount.right])
+    setLeft([])
+    setRight([])
   }
 
-  const UPDATE_FOLLICLE_COUNT = gql`
-    mutation UpdateFollicleCount(
-      $id: String!
-      $input: UpdateFollicleCountInput!
-    ) {
-      updateFollicleCount(id: $id, input: $input) {
+  const CREATE_FOLLICLE_COUNT = gql`
+    mutation CreateFollicleCount($input: CreateFollicleCountInput!) {
+      createFollicleCount(input: $input) {
         id
+        day
+        createdAt
+        patientId
+        left
+        right
+        date
       }
     }
   `
@@ -73,16 +77,8 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
     }
   `
 
-  const DELETE_FOLLICLE_COUNT = gql`
-    mutation DeleteFollicleCount($id: String!) {
-      deleteFollicleCount(id: $id) {
-        id
-      }
-    }
-  `
-
-  const [deleteFollicleCount, { loading: deleting }] = useMutation(
-    DELETE_FOLLICLE_COUNT,
+  const [addFollicleCount, { loading: addingFollicleCount }] = useMutation(
+    CREATE_FOLLICLE_COUNT,
     {
       refetchQueries: [
         {
@@ -98,33 +94,14 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
         toast.error('Something went wrong, try again.')
       },
       onCompleted: () => {
-        toast.success('Follicle Count deleted!')
-      },
-    }
-  )
-
-  const [updateFollicleCount, { loading: updatingFollicleCount }] = useMutation(
-    UPDATE_FOLLICLE_COUNT,
-    {
-      refetchQueries: [
-        {
-          query: QUERY,
-          variables: {
-            input: { patientId: patient.id, treatmentId: activeTreatment.id },
-            patientId: patient.id,
-          },
-        },
-      ],
-      awaitRefetchQueries: true,
-      onError: () => {
-        toast.error('Something went wrong, try again.')
+        toast.success('Follicle Count added successfully!')
       },
     }
   )
 
   const [setACF, { loading: settingACF }] = useMutation(SET_ACF)
 
-  const loading = updatingFollicleCount || settingACF
+  const loading = addingFollicleCount || settingACF
 
   const addFollicle = (length) => {
     if (ovary == 'left') {
@@ -146,43 +123,18 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
     }
   }
 
-  const onDelete = async () => {
-    await deleteFollicleCount({
-      variables: {
-        id: follicleCount.id,
-      },
-    })
-    const newAfcId =
-      activeTreatment.acfId === follicleCount.id ? null : activeTreatment.acfId
-    setTreatment({
-      ...activeTreatment,
-      acfId: newAfcId,
-    })
-    localStorage.setItem(
-      'treatmentCache',
-      JSON.stringify({
-        value: {
-          ...activeTreatment,
-          acfId: 'null',
-        },
-        expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
-      })
-    )
-    closeModal()
-  }
-
   const onSubmit = async (data) => {
-    const updateFollicleInput: UpdateFollicleCountInput = {
+    const createFollicleInput: CreateFollicleCountInput = {
       day: data.day,
       left: JSON.stringify(left),
       right: JSON.stringify(right),
       date: data.date,
-      patientId: undefined,
-      treatmentId: undefined,
+      patientId: patient.id,
+      treatmentId: activeTreatment.id,
     }
 
-    await updateFollicleCount({
-      variables: { id: follicleCount.id, input: updateFollicleInput },
+    const newFollicleCount = await addFollicleCount({
+      variables: { input: createFollicleInput },
     })
 
     const updateTreatmentInput: UpdateTreatmentInput = {
@@ -193,7 +145,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
       wasSuccessful: undefined,
       isActive: undefined,
       count: undefined,
-      acfId: follicleCount.id,
+      acfId: newFollicleCount.data.createFollicleCount.id,
     }
 
     if (data.isACF) {
@@ -203,6 +155,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
           input: updateTreatmentInput,
         },
       })
+      // Set activeTreatment to updated treatment
       setTreatment(updatedTreatment.data.updateTreatment)
       localStorage.setItem(
         'treatmentCache',
@@ -212,7 +165,6 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
         })
       )
     }
-    toast.success('Follicle Count updated successfully!')
     closeModal()
   }
 
@@ -256,7 +208,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                   <div className="px-4">
                     <div className="md:col-span-1">
                       <h3 className="text-lg font-medium leading-6 text-gray-900">
-                        Edit Follicle Count
+                        New Follicle Count
                       </h3>
                       <p className="mt-1 text-sm text-gray-500">
                         Select from the left or right ovary and enter the
@@ -281,7 +233,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                               name="day"
                               className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                               errorClassName="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                              defaultValue={follicleCount.day}
+                              defaultValue={nextDay}
                               validation={{
                                 required: {
                                   value: true,
@@ -300,7 +252,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                             </Label>
                             <DateField
                               name="date"
-                              defaultValue={follicleCount.date.slice(0, 10)}
+                              defaultValue={nextDate.toJSON().slice(0, 10)}
                               className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               validation={{
@@ -321,9 +273,6 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                                 id="isACF"
                                 aria-describedby="comments-description"
                                 name="isACF"
-                                defaultChecked={
-                                  follicleCount.id === activeTreatment.acfId
-                                }
                                 className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                               />
                             </div>
@@ -371,7 +320,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                     </div>
                     <div className="flex md:flex-row flex-col px-4 gap-x-4 py-5">
                       <div className="md:w-1/2 grid grid-cols-5 w-full">
-                        {lengths.map((length) => (
+                        {lengths.map((length, index) => (
                           <button
                             type="button"
                             key={uuidv4()}
@@ -420,16 +369,16 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-2 sm:mt-3 sm:grid sm:grid-cols-3 sm:gap-3 sm:grid-flow-row-dense px-4">
+                  <div className="mt-2 sm:mt-3 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense px-4">
                     {!loading ? (
                       <Submit
-                        disabled={loading || deleting}
-                        className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-3 sm:text-sm"
+                        disabled={loading}
+                        className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
                       >
-                        Update Follicle Count
+                        Add Follicle Count
                       </Submit>
                     ) : (
-                      <div className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-3 sm:text-sm">
+                      <div className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">
                         <CircleLoader
                           loading={loading}
                           color="#ffffff"
@@ -438,28 +387,10 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                       </div>
                     )}
 
-                    {!deleting ? (
-                      <button
-                        type="button"
-                        disabled={deleting || loading}
-                        onClick={() => onDelete()}
-                        className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm"
-                      >
-                        Delete Follicle Count
-                      </button>
-                    ) : (
-                      <div className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm">
-                        <CircleLoader
-                          loading={deleting}
-                          color="#ffffff"
-                          size={20}
-                        />
-                      </div>
-                    )}
                     <button
                       type="button"
                       disabled={loading}
-                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-1 sm:text-sm"
+                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
                       onClick={() => {
                         closeModal()
                       }}

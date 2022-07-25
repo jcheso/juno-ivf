@@ -18,9 +18,11 @@ import { useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
 import { PatientContext } from 'src/providers/context/PatientContext'
+import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 const AddPatient = ({ clinics, clinicians }) => {
   const [patient, setPatient] = useContext(PatientContext)
+  const [activeTreatment, setTreatment] = useContext(TreatmentContext)
 
   const CREATE_PATIENT = gql`
     mutation CreatePatient($input: CreatePatientInput!) {
@@ -56,6 +58,16 @@ const AddPatient = ({ clinics, clinicians }) => {
   const onSubmit = async (data) => {
     const response = await addPatient({ variables: { input: data } })
     setPatient(response.data.createPatient)
+    // Set patient cache and clear treatment cache
+    localStorage.setItem(
+      'patientCache',
+      JSON.stringify({
+        value: response.data.createPatient,
+        expires: new Date(new Date().getTime() + 12 * 60 * 60 * 1000),
+      })
+    )
+    setTreatment(null)
+    localStorage.removeItem('treatmentCache')
     navigate(routes.patientSummary())
   }
 

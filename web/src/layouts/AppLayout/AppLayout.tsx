@@ -35,8 +35,8 @@ type AppLayoutProps = {
 const AppLayout = ({ children }: AppLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { logOut, currentUser } = useAuth()
-  const [patient] = React.useContext(PatientContext)
-  const [activeTreatment] = useContext(TreatmentContext)
+  const [patient, setPatient] = React.useContext(PatientContext)
+  const [activeTreatment, setActiveTreatment] = useContext(TreatmentContext)
   const patientHidden = patient == null ? true : false
   const treatmentHidden = activeTreatment == null ? true : false
   const navigation = [
@@ -106,10 +106,18 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     },
   ]
 
+  const logOutFunction = () => {
+    logOut()
+    localStorage.removeItem('patientCache')
+    localStorage.removeItem('treatmentCache')
+    setPatient(null)
+    setActiveTreatment(null)
+  }
+
   const userNavigation = [
     // { name: 'Your Profile', to: '#', onClick: null },
     // { name: 'Settings', to: '#', onClick: null },
-    { name: 'Sign out', to: '#', onClick: logOut },
+    { name: 'Sign out', to: '#', onClick: logOutFunction },
   ]
 
   return (
@@ -313,7 +321,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
           <main>
             <div className="py-6">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pt-6">
+              <div className="xl:max-w-[80%]	max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pt-6">
                 {children}
               </div>
             </div>

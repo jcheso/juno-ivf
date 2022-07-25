@@ -8,7 +8,6 @@ import { Link, navigate, routes } from '@redwoodjs/router'
 
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
-import { treatment } from 'src/services/treatments/treatments'
 
 const StatusBar = () => {
   const [patient, setPatient] = useContext(PatientContext)

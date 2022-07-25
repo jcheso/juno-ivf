@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "PredictEggsModel" ALTER COLUMN "imgUrl" DROP NOT NULL,
+ALTER COLUMN "imgDesc" DROP NOT NULL;

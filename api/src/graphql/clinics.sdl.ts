@@ -30,7 +30,7 @@ export const schema = gql`
   type Query {
     clinics: [Clinic!]! @skipAuth
     clinic(id: String!): Clinic @requireAuth
-    statistics: Statistics @skipAuth
+    statistics: Statistics @requireAuth
   }
 
   input CreateClinicInput {
@@ -42,7 +42,7 @@ export const schema = gql`
   }
 
   type Mutation {
-    createClinic(input: CreateClinicInput!): Clinic! @skipAuth
+    createClinic(input: CreateClinicInput!): Clinic! @requireAuth
     updateClinic(id: String!, input: UpdateClinicInput!): Clinic! @requireAuth
     deleteClinic(id: String!): Clinic! @requireAuth
   }

@@ -17,7 +17,7 @@ model User {
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
-  roles               String      @default("admin")
+  roles               String      @default("user")
   patients            Patient[]
   clinic              Clinic      @relation(fields: [clinicId], references: [id])
   clinicId            String
@@ -91,4 +91,16 @@ model FollicleCount {
   Treatment   Treatment @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
   left        String
   right       String
+}
+
+model PredictEggsModel {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  modelUrl    String
+  shardUrl    String
+  imgUrl      String?
+  imgDesc     String?
+  description String
+  userId      String
+  version     Int
 }

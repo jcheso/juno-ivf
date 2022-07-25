@@ -4,7 +4,7 @@ import { FollicleMap } from 'src/models/FollicleMap'
 import { FollicleMapFull } from 'src/models/FollicleMapFull'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-import PredictEggsCell from './PredictEggsCell'
+import PredictEggsCell from './PredictEggs/PredictEggsCell'
 export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
   const [activeTreatment] = useContext(TreatmentContext)
   const [afc, setAfc] = useState(0)

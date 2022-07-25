@@ -1,22 +1,37 @@
-import * as tf from '@tensorflow/tfjs'
-
+import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 
+const tf = require('@tensorflow/tfjs-node')
+
 export const predictEggs = async ({ input }) => {
-  logger.info('Running predictEggs service')
+  const latestModels = await db.predictEggsModel.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    take: 1,
+  })
+  if (!latestModels) {
+    throw new Error('No models found')
+  }
+  const latestModel = latestModels[0]
+
+  // Define the weights URL to pass into model loader
+  const options = {
+    weightUrlConverter: async () => {
+      return latestModel.shardUrl
+    },
+  }
+
   if (input > 0) {
-    const model = await tf.loadLayersModel(
-      'https://storage.googleapis.com/juno-ivf/eggPredictionModel/model.json'
-    )
+    logger.info('Predicting eggs')
+    logger.info(`Input: ${input}`)
+    const model = await tf.loadLayersModel(latestModel.modelUrl, options)
     const follicleCount = tf.tensor([input])
-    logger.info('Input follicle count: ' + input)
     const prediction = model.predict(follicleCount.toFloat())
-    // @ts-expect-errorts-ignore
-    const vals = await prediction.data()
-    const result = Math.round(vals[0])
-    logger.info('Predicted egg count: ' + result)
-    return { eggs: result }
+    const result = prediction.dataSync()[0]
+    logger.info(`Prediction: ${result}`)
+    return { eggs: Math.round(result), modelDetails: latestModel }
   } else {
-    return { eggs: 0 }
+    return { eggs: 0, modelDetails: latestModel }
   }
 }
