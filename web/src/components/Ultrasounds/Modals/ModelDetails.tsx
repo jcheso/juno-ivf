@@ -37,9 +37,14 @@ export default function ModelDetails({
   const [modelFile, setModelFile] = useState(null)
   const [loading, setLoading] = useState(false)
   const cancelButtonRef = useRef(null)
-  const closeModal = () => {
-    setOpen(false)
-  }
+
+  // Initialise Firebase
+  const credential = JSON.parse(
+    Buffer.from(process.env.GOOGLE_FIREBASE_CONFIG, 'base64').toString()
+  )
+  const firebaseConfig = credential
+  const app = initializeApp(firebaseConfig)
+  const storage = getStorage(app)
 
   const CREATE_MODEL = gql`
     mutation CreatePredictEggsModel($input: CreatePredictEggsModelInput!) {
@@ -68,21 +73,13 @@ export default function ModelDetails({
       toast.error('Something went wrong, try again.')
     },
   })
-  const credential = JSON.parse(
-    Buffer.from(process.env.GOOGLE_FIREBASE_CONFIG, 'base64').toString()
-  )
-
-  const firebaseConfig = credential
-
-  const app = initializeApp(firebaseConfig)
-  const storage = getStorage(app)
 
   const onSubmit = async (data) => {
     setLoading(true)
     const shardFileRef = ref(storage, `v${data.version}/${shardFile.name}`)
     const modelFileRef = ref(storage, `v${data.version}/${modelFile.name}`)
-    const shardSnapshot = await uploadBytes(shardFileRef, shardFile)
-    const modelSnapshot = await uploadBytes(modelFileRef, modelFile)
+    await uploadBytes(shardFileRef, shardFile)
+    await uploadBytes(modelFileRef, modelFile)
     const modelUrl = await getDownloadURL(modelFileRef)
     const shardUrl = await getDownloadURL(shardFileRef)
     const createPredictEggsModelInput: CreatePredictEggsModelInput = {
@@ -97,8 +94,8 @@ export default function ModelDetails({
     await createModel({
       variables: { input: createPredictEggsModelInput },
     })
-    toast.success('New model created successfully!')
-    closeModal()
+    toast.success(`Model updated to Version ${data.version} successfully!`)
+    setOpen(false)
     setLoading(false)
   }
 
@@ -112,7 +109,7 @@ export default function ModelDetails({
         as="div"
         className="relative z-10"
         initialFocus={cancelButtonRef}
-        onClose={closeModal}
+        onClose={setOpen(false)}
       >
         <Transition.Child
           as={Fragment}
@@ -431,7 +428,7 @@ export default function ModelDetails({
                       disabled={loading}
                       className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-1 sm:text-sm"
                       onClick={() => {
-                        closeModal()
+                        setOpen(false)
                       }}
                       ref={cancelButtonRef}
                     >

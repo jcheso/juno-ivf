@@ -27,7 +27,7 @@ export const schema = gql`
     follicleCount(id: String!): FollicleCount @requireAuth
     treatmentFollicleCounts(
       input: TreatmentFollicleCountsInput
-    ): [FollicleCount!]! @skipAuth
+    ): [FollicleCount!]! @requireAuth
     predictEggs(input: Int!): EggPrediction @requireAuth
   }
 
