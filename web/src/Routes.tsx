@@ -17,7 +17,7 @@ const Routes = () => {
         <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
         <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
       </Set>
-      <Private unauthenticated="login" roles={['admin', 'user']}>
+      <Private unauthenticated="login" roles="admin">
         <Set wrap={PredictEggsModelsLayout}>
           <Route path="/predict-eggs-models/new" page={PredictEggsModelNewPredictEggsModelPage} name="newPredictEggsModel" />
           <Route path="/predict-eggs-models/{id}/edit" page={PredictEggsModelEditPredictEggsModelPage} name="editPredictEggsModel" />
@@ -43,7 +43,7 @@ const Routes = () => {
           <Route path="/clinics" page={ClinicClinicsPage} name="clinics" />
         </Set>
       </Private>
-      <Private unauthenticated="login" roles="admin">
+      <Private unauthenticated="login" roles={['admin', 'user']}>
         <Set wrap={AppLayout}>
           <Route path="/dashboard" page={DashboardPage} name="dashboard" />
           <Route path="/add-patient" page={AddPatientPage} name="addPatient" />
