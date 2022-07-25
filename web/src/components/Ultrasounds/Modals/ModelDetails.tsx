@@ -109,7 +109,7 @@ export default function ModelDetails({
         as="div"
         className="relative z-10"
         initialFocus={cancelButtonRef}
-        onClose={setOpen(false)}
+        onClose={() => setOpen(false)}
       >
         <Transition.Child
           as={Fragment}
