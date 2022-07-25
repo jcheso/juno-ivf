@@ -56,7 +56,27 @@ const PatientSearchResults = ({ patients }) => {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {patients.map((person) => (
-                <tr key={person.email}>
+                <tr
+                  key={person.email}
+                  className="hover:bg-purple-50 cursor-pointer"
+                  onClick={() => {
+                    setPatient(person)
+
+                    localStorage.setItem(
+                      'patientCache',
+                      JSON.stringify({
+                        value: person,
+                        expires: new Date(
+                          new Date().getTime() + 12 * 60 * 60 * 1000
+                        ),
+                      })
+                    )
+                    setTreatment(null)
+                    localStorage.removeItem('treatmentCache')
+
+                    navigate(routes.patientSummary())
+                  }}
+                >
                   <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
                     {person.firstName}
                   </td>

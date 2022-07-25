@@ -82,7 +82,7 @@ const Treatments = ({ treatments }) => {
                     )
                   }}
                   className={
-                    `block w-full hover:bg-gray-50 cursor-pointer ` +
+                    `block w-full hover:bg-purple-50 cursor-pointer ` +
                     (activeTreatment != null &&
                     activeTreatment.id === treatment.id
                       ? 'bg-gray-50'
