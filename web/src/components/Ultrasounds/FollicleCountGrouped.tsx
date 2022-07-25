@@ -6,7 +6,7 @@ import { FollicleMapFull } from 'src/models/FollicleMapFull'
 
 import EditFollicleCount from './Modals/EditFollicleCount'
 
-const FollicleCountGrouped = ({ follicleCount, isAcf }) => {
+const FollicleCountGrouped = ({ follicleCount, isAcf, isTrigger }) => {
   const leftFollicleMap = new FollicleMapFull(follicleCount.left)
   const rightFollicleMap = new FollicleMapFull(follicleCount.right)
   const [open, setOpen] = useState(false)
@@ -18,6 +18,11 @@ const FollicleCountGrouped = ({ follicleCount, isAcf }) => {
           {isAcf && follicleCount.count != -1 && (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-purple-100 text-purple-800">
               AFC
+            </span>
+          )}
+          {isTrigger && follicleCount.count != -1 && (
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-pink-100 text-pink-800 ">
+              Trigger
             </span>
           )}
         </div>

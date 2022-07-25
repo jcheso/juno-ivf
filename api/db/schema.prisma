@@ -80,6 +80,7 @@ model Treatment {
   ageAtTreatmentStart Int?
   outcome             String?
   type                String?
+  triggerDate         DateTime?
 }
 
 model FollicleCount {

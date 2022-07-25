@@ -73,6 +73,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
         outcome
         type
         ageAtTreatmentStart
+        triggerDate
       }
     }
   `
@@ -260,7 +261,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                   <div className="px-4">
                     <div className="md:col-span-1">
                       <h3 className="text-lg font-medium leading-6 text-gray-900">
-                        Edit Follicle Count
+                        Edit Follicle Measurements
                       </h3>
                       <p className="mt-1 text-sm text-gray-500">
                         Select from the left or right ovary and enter the

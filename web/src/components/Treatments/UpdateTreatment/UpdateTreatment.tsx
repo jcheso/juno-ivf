@@ -51,6 +51,7 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
         ageAtTreatmentStart
         type
         outcome
+        triggerDate
       }
     }
   `
