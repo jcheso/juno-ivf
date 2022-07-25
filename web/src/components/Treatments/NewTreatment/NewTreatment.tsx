@@ -1,6 +1,5 @@
 import { Fragment, useContext, useRef } from 'react'
 
-import { useLazyQuery } from '@apollo/client'
 import { Dialog, Transition } from '@headlessui/react'
 import CircleLoader from 'react-spinners/CircleLoader'
 import { CreateTreatmentInput } from 'types/graphql'
@@ -30,7 +29,7 @@ export default function NewTreatment({
   const [patient, setPatient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
-
+  const treatmentTypes = ['IVF', 'ICSI', 'FET']
   const CREATE_TREATMENT = gql`
     mutation CreateTreatment($input: CreateTreatmentInput!) {
       createTreatment(input: $input) {
@@ -79,6 +78,8 @@ export default function NewTreatment({
       count: treatments ? treatments.length + 1 : 1,
       acfId: null,
       ageAtTreatmentStart: age,
+      outcome: undefined,
+      type: data.type,
     }
     const response = await addTreatment({ variables: { input } })
     setTreatment(response.data.createTreatment)
@@ -172,6 +173,26 @@ export default function NewTreatment({
                               {clinicians.map((clinician) => (
                                 <option key={clinician.id} value={clinician.id}>
                                   {clinician.firstName} {clinician.lastName}
+                                </option>
+                              ))}
+                            </SelectField>
+                          </div>
+                          <div className="col-span-6 sm:col-span-3">
+                            <Label
+                              name="type"
+                              className="block text-sm font-medium text-gray-700"
+                              errorClassName="block text-sm font-medium text-red-500"
+                            >
+                              Type*
+                            </Label>
+                            <SelectField
+                              name="type"
+                              className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              errorClassName="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                            >
+                              {treatmentTypes.map((type, index) => (
+                                <option key={index} value={type}>
+                                  {type}
                                 </option>
                               ))}
                             </SelectField>

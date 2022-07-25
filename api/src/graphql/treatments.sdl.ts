@@ -13,6 +13,8 @@ export const schema = gql`
     count: Int
     acfId: String
     ageAtTreatmentStart: Int
+    outcome: String
+    type: String
   }
 
   type Query {
@@ -31,6 +33,8 @@ export const schema = gql`
     count: Int
     acfId: String
     ageAtTreatmentStart: Int
+    outcome: String
+    type: String
   }
 
   input UpdateTreatmentInput {
@@ -43,6 +47,8 @@ export const schema = gql`
     count: Int
     acfId: String
     ageAtTreatmentStart: Int
+    outcome: String
+    type: String
   }
 
   type Mutation {

@@ -49,6 +49,8 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
         count
         acfId
         ageAtTreatmentStart
+        type
+        outcome
       }
     }
   `
@@ -85,9 +87,26 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
     }
   )
 
+  const outcomes = [
+    'Biochemical pregnancy',
+    'Clinical pregnancy',
+    'Ectopic pregnancy',
+    'Live birth',
+    'Miscarriage (FH seen)',
+    'Miscarriage (No sac seen)',
+    'Miscarriage (Sac seen, no FH)',
+    'Neonatal death',
+    'Not pregnant',
+    'Ongoing clinical pregnancy',
+    'Still birth',
+    'Therapeutic abortion',
+    'Unknown (No pregnancy data)',
+  ]
+
   const loading = adding || deleting
 
   const onSubmit = async (data) => {
+    console.log(data)
     const dob = new Date(patient.dob)
     const startDate = new Date(data.startDate)
     const diff_ms: number = startDate - dob
@@ -101,6 +120,8 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
       isActive: data.isActive,
       wasSuccessful: data.wasSuccessful,
       ageAtTreatmentStart: age,
+      outcome: data.outcome,
+      type: data.type,
     }
     const response = await updateTreatment({
       variables: { id: activeTreatment.id, input },
@@ -169,63 +190,65 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                     <div className="bg-white px-4 py-5 sm:rounded-lg sm:p-6">
                       <div className="md:grid md:gap-6">
                         <div className="mt-5 md:mt-0 md:col-span-2 space-y-3">
-                          <div className="col-span-6 sm:col-span-3">
-                            <Label
-                              name="startDate"
-                              className="block text-sm font-medium text-gray-700"
-                              errorClassName="block text-sm font-medium text-red-500"
-                            >
-                              Start Date*
-                            </Label>
-                            <DateField
-                              name="startDate"
-                              defaultValue={activeTreatment.startDate.slice(
-                                0,
-                                10
-                              )}
-                              className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                              errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                              validation={{
-                                required: {
-                                  value: true,
-                                  message: 'Start Date is required',
-                                },
-                              }}
-                            />
-                            <FieldError
-                              name="startDate"
-                              className="block text-xs font-medium text-red-500 pt-1"
-                            />
-                          </div>
-                          <div className="col-span-6 sm:col-span-3">
-                            <Label
-                              name="endDate"
-                              className="block text-sm font-medium text-gray-700"
-                              errorClassName="block text-sm font-medium text-red-500"
-                            >
-                              End Date
-                            </Label>
-                            <DateField
-                              name="endDate"
-                              defaultValue={
-                                activeTreatment.endDate
-                                  ? activeTreatment.endDate.slice(0, 10)
-                                  : null
-                              }
-                              validation={{
-                                required: {
-                                  value: !isActive,
-                                  message:
-                                    'An end date is required if the treatment is no longer active',
-                                },
-                              }}
-                              className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                              errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                            />
-                            <FieldError
-                              name="endDate"
-                              className="block text-xs font-medium text-red-500 pt-1"
-                            />
+                          <div className="grid md:grid-cols-6 md:space-x-6">
+                            <div className="col-span-6 sm:col-span-3">
+                              <Label
+                                name="startDate"
+                                className="block text-sm font-medium text-gray-700"
+                                errorClassName="block text-sm font-medium text-red-500"
+                              >
+                                Start Date*
+                              </Label>
+                              <DateField
+                                name="startDate"
+                                defaultValue={activeTreatment.startDate.slice(
+                                  0,
+                                  10
+                                )}
+                                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                validation={{
+                                  required: {
+                                    value: true,
+                                    message: 'Start Date is required',
+                                  },
+                                }}
+                              />
+                              <FieldError
+                                name="startDate"
+                                className="block text-xs font-medium text-red-500 pt-1"
+                              />
+                            </div>
+                            <div className="col-span-6 sm:col-span-3">
+                              <Label
+                                name="endDate"
+                                className="block text-sm font-medium text-gray-700"
+                                errorClassName="block text-sm font-medium text-red-500"
+                              >
+                                End Date
+                              </Label>
+                              <DateField
+                                name="endDate"
+                                defaultValue={
+                                  activeTreatment.endDate
+                                    ? activeTreatment.endDate.slice(0, 10)
+                                    : null
+                                }
+                                validation={{
+                                  required: {
+                                    value: !isActive,
+                                    message:
+                                      'An end date is required if the treatment is no longer active',
+                                  },
+                                }}
+                                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                              />
+                              <FieldError
+                                name="endDate"
+                                className="block text-xs font-medium text-red-500 pt-1"
+                              />
+                            </div>
                           </div>
                           <div className="col-span-6 sm:col-span-3">
                             <Label
@@ -249,42 +272,66 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                               ))}
                             </SelectField>
                           </div>
-                          <div className="relative flex items-start ">
-                            <div className="flex items-center h-5">
-                              <CheckboxField
-                                name="wasSuccessful"
-                                defaultChecked={activeTreatment.wasSuccessful}
-                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                errorClassName="focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded"
-                              />
-                            </div>
-                            <div className="ml-3 text-sm">
-                              <Label
-                                name="wasSuccessful"
-                                className="font-medium text-gray-700"
-                              >
-                                Successful
-                              </Label>
-                            </div>
+                          <div className="col-span-6 sm:col-span-3">
+                            <Label
+                              name="outcome"
+                              className="block text-sm font-medium text-gray-700"
+                              errorClassName="block text-sm font-medium text-red-500"
+                            >
+                              Status/Outcome
+                            </Label>
+                            <SelectField
+                              name="outcome"
+                              // set default value of treatment
+                              defaultValue={activeTreatment.outcome}
+                              className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              errorClassName="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                            >
+                              {outcomes.map((outcome, index) => (
+                                <option key={index} value={outcome}>
+                                  {outcome}
+                                </option>
+                              ))}
+                            </SelectField>
                           </div>
-                          <div className="relative flex items-start ">
-                            <div className="flex items-center h-5">
-                              <CheckboxField
-                                name="isActive"
-                                defaultChecked={activeTreatment.isActive}
-                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                onClick={() => {
-                                  setActive(!isActive)
-                                }}
-                              />
+                          <div className="grid md:grid-cols-2">
+                            <div className="relative flex items-start ">
+                              <div className="flex items-center h-5">
+                                <CheckboxField
+                                  name="wasSuccessful"
+                                  defaultChecked={activeTreatment.wasSuccessful}
+                                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                  errorClassName="focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded"
+                                />
+                              </div>
+                              <div className="ml-3 text-sm">
+                                <Label
+                                  name="wasSuccessful"
+                                  className="font-medium text-gray-700"
+                                >
+                                  Successful
+                                </Label>
+                              </div>
                             </div>
-                            <div className="ml-3 text-sm">
-                              <Label
-                                name="isActive"
-                                className="font-medium text-gray-700"
-                              >
-                                Active
-                              </Label>
+                            <div className="relative flex items-start ">
+                              <div className="flex items-center h-5">
+                                <CheckboxField
+                                  name="isActive"
+                                  defaultChecked={activeTreatment.isActive}
+                                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                  onClick={() => {
+                                    setActive(!isActive)
+                                  }}
+                                />
+                              </div>
+                              <div className="ml-3 text-sm">
+                                <Label
+                                  name="isActive"
+                                  className="font-medium text-gray-700"
+                                >
+                                  Active
+                                </Label>
+                              </div>
                             </div>
                           </div>
                         </div>
