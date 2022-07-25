@@ -146,7 +146,7 @@ const WebLayout = ({ children }: WebLayoutProps) => {
               </div>
             )}
           </div>
-          <div className="py-4 flex flex-wrap justify-center space-x-6 lg:hidden">
+          {/* <div className="py-4 flex flex-wrap justify-center space-x-6 lg:hidden">
             {headerNavigation.map((link) => (
               <a
                 key={link.name}
@@ -156,7 +156,7 @@ const WebLayout = ({ children }: WebLayoutProps) => {
                 {link.name}
               </a>
             ))}
-          </div>
+          </div> */}
         </nav>
       </header>
       <div className="flex-grow">{children}</div>
