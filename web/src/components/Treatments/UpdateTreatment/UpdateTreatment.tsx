@@ -107,7 +107,6 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
   const loading = adding || deleting
 
   const onSubmit = async (data) => {
-    console.log(data)
     const dob = new Date(patient.dob)
     const startDate = new Date(data.startDate)
     const diff_ms: number = startDate - dob
