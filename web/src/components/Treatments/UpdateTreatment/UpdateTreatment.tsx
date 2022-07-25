@@ -325,7 +325,7 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                                   name="isActive"
                                   className="font-medium text-gray-700"
                                 >
-                                  Active
+                                  In Progress
                                 </Label>
                               </div>
                             </div>

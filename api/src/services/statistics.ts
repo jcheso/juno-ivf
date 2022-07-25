@@ -53,7 +53,7 @@ export const statistics = async () => {
   const totalTreatments = {
     name: 'Total Treatments',
     stat: totalTreatmentsCount,
-    previousStat: await previousTreatmentCount,
+    previousStat: previousTreatmentCount,
     change: treatmentCountChangeRate.toFixed(0),
     changeType:
       treatmentCountChangeRate > 0
