@@ -28,7 +28,7 @@ export const schema = gql`
   }
 
   type Query {
-    clinics: [Clinic!]! @requireAuth
+    clinics: [Clinic!]! @skipAuth
     clinic(id: String!): Clinic @requireAuth
     statistics: Statistics @requireAuth
   }
