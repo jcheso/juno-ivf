@@ -321,7 +321,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
           <main>
             <div className="py-6">
-              <div className="xl:max-w-[80%]	max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pt-6">
+              <div className="xl:max-w-[90%] max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pt-6">
                 {children}
               </div>
             </div>
