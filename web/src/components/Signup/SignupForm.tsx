@@ -12,7 +12,7 @@ import {
   Submit,
   SelectField,
 } from '@redwoodjs/forms'
-import { Link, routes } from '@redwoodjs/router'
+import { Link, navigate, routes } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/toast'
 const SignupForm = ({ clinics }) => {
   const { signUp, loading: authorising } = useAuth()
@@ -34,6 +34,7 @@ const SignupForm = ({ clinics }) => {
     } else {
       toast.success('Welcome to Juno!')
     }
+    navigate(routes.dashboard())
     setSubmitting(false)
   }
 
