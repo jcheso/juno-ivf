@@ -1,4 +1,5 @@
 import { db } from 'src/lib/db'
+import { logger } from 'src/lib/logger'
 
 const tf = require('@tensorflow/tfjs-node')
 
@@ -13,13 +14,23 @@ export const predictEggs = async ({ input }) => {
     throw new Error('No models found')
   }
   const latestModel = latestModels[0]
+
+  // Define the weights URL to pass into model loader
+  const options = {
+    weightUrlConverter: async () => {
+      return latestModel.shardUrl
+    },
+  }
+
   if (input > 0) {
-    const model = await tf.loadLayersModel(latestModel.modelUrl)
+    logger.info('Predicting eggs')
+    logger.info(`Input: ${input}`)
+    const model = await tf.loadLayersModel(latestModel.modelUrl, options)
     const follicleCount = tf.tensor([input])
     const prediction = model.predict(follicleCount.toFloat())
-    const vals = await prediction.data()
-    const result = Math.round(vals[0])
-    return { eggs: result, modelDetails: latestModel }
+    const result = prediction.dataSync()[0]
+    logger.info(`Prediction: ${result}`)
+    return { eggs: Math.round(result), modelDetails: latestModel }
   } else {
     return { eggs: 0, modelDetails: latestModel }
   }

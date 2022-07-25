@@ -1,7 +1,11 @@
+import { Buffer } from 'buffer'
+
 import { Fragment, useContext, useRef, useState } from 'react'
 
 import { Dialog, Transition } from '@headlessui/react'
 import { Switch } from '@headlessui/react'
+import { initializeApp } from 'firebase/app'
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import CircleLoader from 'react-spinners/CircleLoader'
 import { CreatePredictEggsModelInput } from 'types/graphql'
 
@@ -36,7 +40,7 @@ export default function ModelDetails({
   const [enabled, setEnabled] = useState(false)
   const [shardFile, setShardFile] = useState(null)
   const [modelFile, setModelFile] = useState(null)
-
+  const [loading, setLoading] = useState(false)
   const cancelButtonRef = useRef(null)
   const closeModal = () => {
     setOpen(false)
@@ -55,7 +59,7 @@ export default function ModelDetails({
     }
   `
 
-  const [createModel, { loading }] = useMutation(CREATE_MODEL, {
+  const [createModel] = useMutation(CREATE_MODEL, {
     refetchQueries: [
       {
         query: QUERY,
@@ -69,25 +73,40 @@ export default function ModelDetails({
       toast.error('Something went wrong, try again.')
     },
   })
+  const credential = JSON.parse(
+    Buffer.from(process.env.GOOGLE_FIREBASE_CONFIG, 'base64').toString()
+  )
+
+  const firebaseConfig = credential
+
+  const app = initializeApp(firebaseConfig)
+  const storage = getStorage(app)
 
   const onSubmit = async (data) => {
-    console.log(data)
-
-    // const createPredictEggsModelInput: CreatePredictEggsModelInput = {
-    //   model: modelFile,
-    //   shard: shardFile,
-    //   imgUrl: undefined,
-    //   imgDesc: undefined,
-    //   description: data.description,
-    //   userId: currentUser.id,
-    //   version: data.version,
-    // }
-    // console.log(createPredictEggsModelInput)
-    // await createModel({
-    //   variables: { input: createPredictEggsModelInput },
-    // })
-    // toast.success('New model created successfully!')
-    // closeModal()
+    setLoading(true)
+    const shardFileRef = ref(storage, `v${data.version}/${shardFile.name}`)
+    const modelFileRef = ref(storage, `v${data.version}/${modelFile.name}`)
+    const shardSnapshot = await uploadBytes(shardFileRef, shardFile)
+    const modelSnapshot = await uploadBytes(modelFileRef, modelFile)
+    const modelUrl = await getDownloadURL(modelFileRef)
+    const shardUrl = await getDownloadURL(shardFileRef)
+    console.log(modelUrl, shardUrl)
+    const createPredictEggsModelInput: CreatePredictEggsModelInput = {
+      modelUrl: modelUrl,
+      shardUrl: shardUrl,
+      imgUrl: undefined,
+      imgDesc: undefined,
+      description: data.description,
+      userId: currentUser.id,
+      version: data.version,
+    }
+    console.log(createPredictEggsModelInput)
+    await createModel({
+      variables: { input: createPredictEggsModelInput },
+    })
+    toast.success('New model created successfully!')
+    closeModal()
+    setLoading(false)
   }
 
   function classNames(...classes) {
@@ -148,7 +167,7 @@ export default function ModelDetails({
                               Version*
                             </Label>
                             <NumberField
-                              name="day"
+                              name="version"
                               className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                               errorClassName="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                               defaultValue={modelDetails.version}
