@@ -31,7 +31,7 @@ export default function ModelDetails({
   modelDetails,
   predictedEggs,
 }) {
-  const { currentUser } = useAuth()
+  const { hasRole, currentUser } = useAuth()
   const [enabled, setEnabled] = useState(false)
   const [shardFile, setShardFile] = useState(null)
   const [modelFile, setModelFile] = useState(null)
@@ -213,7 +213,15 @@ export default function ModelDetails({
                             >
                               <Switch
                                 checked={enabled}
-                                onChange={setEnabled}
+                                onChange={() => {
+                                  if (hasRole('admin')) {
+                                    setEnabled(!enabled)
+                                  } else {
+                                    toast.error(
+                                      'Only admins can update the model!'
+                                    )
+                                  }
+                                }}
                                 className={classNames(
                                   enabled ? 'bg-indigo-600' : 'bg-gray-200',
                                   'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
@@ -262,133 +270,141 @@ export default function ModelDetails({
                       </div>
                     </div>
                     <div className="grid grid-cols-2 space-x-6 mt-3">
-                      <div>
-                        <h3 className="block text-sm font-medium text-gray-700">
-                          Model File*
-                        </h3>
-                        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                          {modelFile === null ? (
-                            <div className="space-y-1 text-center">
-                              <div className="flex text-sm text-gray-600">
-                                <Label
-                                  name="modelUpload"
-                                  className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                                >
-                                  <span>Upload a file</span>
-                                  <FileField
-                                    id="modelUpload"
-                                    disabled={!enabled}
+                      {enabled && (
+                        <div>
+                          <h3 className="block text-sm font-medium text-gray-700">
+                            Model File*
+                          </h3>
+                          <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                            {modelFile === null ? (
+                              <div className="space-y-1 text-center">
+                                <div className="flex text-sm text-gray-600">
+                                  <Label
                                     name="modelUpload"
-                                    className="sr-only"
-                                    onChange={(e) => {
-                                      // check if the file type is JSON
-                                      if (
-                                        e.target.files[0].type ===
-                                        'application/json'
-                                      ) {
-                                        setModelFile(e.target.files[0])
-                                      } else {
-                                        e.target.value = ''
-                                        toast.error('Please upload a JSON file')
-                                      }
-                                    }}
-                                    validation={{
-                                      required: {
-                                        value: true,
-                                        message:
-                                          'A Model JSON file is required',
-                                      },
-                                    }}
-                                  />
-                                </Label>
-                                <p className="pl-1">or drag and drop</p>
+                                    className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                                  >
+                                    <span>Upload a file</span>
+                                    <FileField
+                                      id="modelUpload"
+                                      disabled={!enabled}
+                                      name="modelUpload"
+                                      className="sr-only"
+                                      onChange={(e) => {
+                                        // check if the file type is JSON
+                                        if (
+                                          e.target.files[0].type ===
+                                          'application/json'
+                                        ) {
+                                          setModelFile(e.target.files[0])
+                                        } else {
+                                          e.target.value = ''
+                                          toast.error(
+                                            'Please upload a JSON file'
+                                          )
+                                        }
+                                      }}
+                                      validation={{
+                                        required: {
+                                          value: true,
+                                          message:
+                                            'A Model JSON file is required',
+                                        },
+                                      }}
+                                    />
+                                  </Label>
+                                  <p className="pl-1">or drag and drop</p>
+                                </div>
+                                <p className="text-xs text-gray-500">
+                                  JSON Format
+                                </p>
                               </div>
-                              <p className="text-xs text-gray-500">
-                                JSON Format
-                              </p>
-                            </div>
-                          ) : (
-                            <div className="flex flex-col text-center space-y-1">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setModelFile(null)
-                                }}
-                                className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                              >
-                                {modelFile.name}
-                              </button>
-                              <p className="text-xs text-gray-500">
-                                {modelFile.size}kB
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <div>
-                        <h3 className="block text-sm font-medium text-gray-700">
-                          Shard File*
-                        </h3>
-                        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                          {shardFile === null ? (
-                            <div className="space-y-1 text-center">
-                              <div className="flex text-sm text-gray-600">
-                                <Label
-                                  name="shardUpload"
-                                  className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                            ) : (
+                              <div className="flex flex-col text-center space-y-1">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setModelFile(null)
+                                  }}
+                                  className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                                 >
-                                  <span>Upload a file</span>
-
-                                  <FileField
-                                    id="shardUpload"
-                                    disabled={!enabled}
-                                    name="shardUpload"
-                                    className="sr-only"
-                                    onChange={(e) => {
-                                      // check if the file type is bin
-                                      if (
-                                        e.target.files[0].type ===
-                                        'application/octet-stream'
-                                      ) {
-                                        setShardFile(e.target.files[0])
-                                      } else {
-                                        e.target.value = ''
-                                        toast.error('Please upload a BIN file')
-                                      }
-                                    }}
-                                    validation={{
-                                      required: {
-                                        value: true,
-                                        message:
-                                          'A Model JSON file is required',
-                                      },
-                                    }}
-                                  />
-                                </Label>
-                                <p className="pl-1">or drag and drop</p>
+                                  {modelFile.name}
+                                </button>
+                                <p className="text-xs text-gray-500">
+                                  {modelFile.size}kB
+                                </p>
                               </div>
-                              <p className="text-xs text-gray-500">
-                                BIN Format
-                              </p>
-                            </div>
-                          ) : (
-                            <div className="flex flex-col text-center space-y-1">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setShardFile(null)
-                                }}
-                                className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                              >
-                                {shardFile.name}
-                              </button>
-                              <p className="text-xs text-gray-500">
-                                {shardFile.size}kB
-                              </p>
-                            </div>
-                          )}
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      )}
+                      {enabled && (
+                        <div>
+                          <h3 className="block text-sm font-medium text-gray-700">
+                            Shard File*
+                          </h3>
+                          <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                            {shardFile === null ? (
+                              <div className="space-y-1 text-center">
+                                <div className="flex text-sm text-gray-600">
+                                  <Label
+                                    name="shardUpload"
+                                    className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                                  >
+                                    <span>Upload a file</span>
+
+                                    <FileField
+                                      id="shardUpload"
+                                      disabled={!enabled}
+                                      name="shardUpload"
+                                      className="sr-only"
+                                      onChange={(e) => {
+                                        // check if the file type is bin
+                                        if (
+                                          e.target.files[0].type ===
+                                          'application/octet-stream'
+                                        ) {
+                                          setShardFile(e.target.files[0])
+                                        } else {
+                                          e.target.value = ''
+                                          toast.error(
+                                            'Please upload a BIN file'
+                                          )
+                                        }
+                                      }}
+                                      validation={{
+                                        required: {
+                                          value: true,
+                                          message:
+                                            'A Model JSON file is required',
+                                        },
+                                      }}
+                                    />
+                                  </Label>
+                                  <p className="pl-1">or drag and drop</p>
+                                </div>
+                                <p className="text-xs text-gray-500">
+                                  BIN Format
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="flex flex-col text-center space-y-1">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setShardFile(null)
+                                  }}
+                                  className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                                >
+                                  {shardFile.name}
+                                </button>
+                                <p className="text-xs text-gray-500">
+                                  {shardFile.size}kB
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
