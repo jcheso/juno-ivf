@@ -196,7 +196,9 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
           <div className="flex flex-row w-full justify-center">
             <div className="bg-white overflow-hidden w-24">
               <div className="flex w-full justify-center mt-0 h-6">
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium text-purple-800"></span>
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium text-gray-500">
+                  (mm)
+                </span>
               </div>
               <div className=" py-2 bg-white">
                 {labels.map((label) => (
@@ -217,7 +219,7 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
                 </div>
               </div>
             </div>
-            <div className="flex flex-row xl:overflow-hidden overflow-x-scroll">
+            <div className="flex flex-row overflow-x-scroll">
               {follicleCounts.length > 0 &&
                 follicleCounts.map((follicleCount) => (
                   <div key={uuidv4()}>
@@ -228,13 +230,6 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
                   </div>
                 ))}
             </div>
-            {follicleCounts.length == 0 && (
-              <div className="pt-24 flex justify-center align-middle w-full col-start-4 h-full">
-                <span className="h-12 inline-flex align-middle items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-purple-100 text-purple-800">
-                  No measurements recorded
-                </span>
-              </div>
-            )}
           </div>
         </div>
         <div className="px-4 py-4 sm:px-6">
