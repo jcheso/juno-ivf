@@ -88,6 +88,7 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
   )
 
   const outcomes = [
+    'None',
     'Biochemical pregnancy',
     'Clinical pregnancy',
     'Ectopic pregnancy',
@@ -197,7 +198,7 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                                 className="block text-sm font-medium text-gray-700"
                                 errorClassName="block text-sm font-medium text-red-500"
                               >
-                                Start Date*
+                                Start Date
                               </Label>
                               <DateField
                                 name="startDate"
@@ -206,13 +207,8 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                                   10
                                 )}
                                 className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                disabled={true}
                                 errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                validation={{
-                                  required: {
-                                    value: true,
-                                    message: 'Start Date is required',
-                                  },
-                                }}
                               />
                               <FieldError
                                 name="startDate"
