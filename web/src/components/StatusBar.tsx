@@ -12,7 +12,9 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 const StatusBar = () => {
   const [patient, setPatient] = useContext(PatientContext)
   const [activeTreatment, setActiveTreatment] = useContext(TreatmentContext)
-  const [age, setAge] = useState(null)
+  const [age, setAge] = useState(
+    activeTreatment ? activeTreatment.ageAtTreatmentStart : null
+  )
   const [cycle, setCycle] = useState(null)
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -27,17 +29,6 @@ const StatusBar = () => {
       setActiveTreatment(null)
     }, 50)
   }
-
-  // useEffect to update the active treatment
-  useEffect(() => {
-    if (activeTreatment) {
-      setAge(activeTreatment.ageAtTreatmentStart)
-      setCycle(activeTreatment.count)
-    } else {
-      setAge(null)
-      setCycle(null)
-    }
-  }, [activeTreatment])
 
   return (
     <div className="w-full">

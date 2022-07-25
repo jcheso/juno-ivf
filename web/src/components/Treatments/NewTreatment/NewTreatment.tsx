@@ -47,6 +47,8 @@ export default function NewTreatment({
         }
         count
         ageAtTreatmentStart
+        outcome
+        type
       }
     }
   `

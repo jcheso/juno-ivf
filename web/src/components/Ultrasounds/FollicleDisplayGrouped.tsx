@@ -15,10 +15,6 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
     follicleCounts.find((fc) => fc.id === activeTreatment.acfId) || 0
   )
   const [open, setOpen] = useState(false)
-  const latestFollicleCount = follicleCounts
-    .slice(0)
-    .reverse()
-    .find((fc) => fc.count !== -1)
   const nextDate = new Date(activeTreatment.startDate)
 
   const labels = [

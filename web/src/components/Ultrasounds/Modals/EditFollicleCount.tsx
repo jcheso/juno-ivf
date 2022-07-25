@@ -72,6 +72,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
         acfId
         outcome
         type
+        ageAtTreatmentStart
       }
     }
   `
