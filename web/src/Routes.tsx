@@ -17,20 +17,12 @@ const Routes = () => {
         <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
         <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
       </Set>
-      <Private unauthenticated="login" roles="admin">
+      <Private unauthenticated="login" roles={['admin', 'user']}>
         <Set wrap={PredictEggsModelsLayout}>
           <Route path="/predict-eggs-models/new" page={PredictEggsModelNewPredictEggsModelPage} name="newPredictEggsModel" />
           <Route path="/predict-eggs-models/{id}/edit" page={PredictEggsModelEditPredictEggsModelPage} name="editPredictEggsModel" />
           <Route path="/predict-eggs-models/{id}" page={PredictEggsModelPredictEggsModelPage} name="predictEggsModel" />
           <Route path="/predict-eggs-models" page={PredictEggsModelPredictEggsModelsPage} name="predictEggsModels" />
-        </Set>
-        <Set wrap={AppLayout}>
-          <Route path="/dashboard" page={DashboardPage} name="dashboard" />
-          <Route path="/add-patient" page={AddPatientPage} name="addPatient" />
-          <Route path="/patient-summary" page={PatientSummaryPage} name="patientSummary" />
-          <Route path="/treatments" page={TreatmentsPage} name="treatments" />
-          <Route path="/cycle-summary" page={CycleSummaryPage} name="cycleSummary" />
-          <Route path="/ultrasounds" page={UltrasoundsPage} name="ultrasounds" />
         </Set>
         <Set wrap={UsersLayout}>
           <Route path="/users/new" page={UserNewUserPage} name="newUser" />
@@ -51,7 +43,16 @@ const Routes = () => {
           <Route path="/clinics" page={ClinicClinicsPage} name="clinics" />
         </Set>
       </Private>
-
+      <Private unauthenticated="login" roles="admin">
+        <Set wrap={AppLayout}>
+          <Route path="/dashboard" page={DashboardPage} name="dashboard" />
+          <Route path="/add-patient" page={AddPatientPage} name="addPatient" />
+          <Route path="/patient-summary" page={PatientSummaryPage} name="patientSummary" />
+          <Route path="/treatments" page={TreatmentsPage} name="treatments" />
+          <Route path="/cycle-summary" page={CycleSummaryPage} name="cycleSummary" />
+          <Route path="/ultrasounds" page={UltrasoundsPage} name="ultrasounds" />
+        </Set>
+      </Private>
       <Route notfound page={NotFoundPage} />
     </Router>
   )
