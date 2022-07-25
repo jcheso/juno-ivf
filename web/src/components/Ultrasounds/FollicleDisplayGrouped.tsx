@@ -19,8 +19,8 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
     .slice(0)
     .reverse()
     .find((fc) => fc.count !== -1)
-  const { nextDay, nextDate }: { nextDay: number; nextDate: any } =
-    getNext(latestFollicleCount)
+  const nextDate = new Date(activeTreatment.startDate)
+
   const labels = [
     '>25',
     '25',
@@ -71,7 +71,7 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
     }
   })
   emptyCounts.forEach((num: number) => {
-    let nextDate = new Date()
+    let nextDate = new Date(activeTreatment.startDate)
     nextDate.setDate(nextDate.getDate() - 1)
     if (follicleCounts.length > 0) {
       nextDate = new Date(follicleCounts[num - 1].date)
@@ -245,25 +245,7 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
           </div>
         </div>
       </div>
-      <NewFollicleCount
-        open={open}
-        setOpen={setOpen}
-        nextDay={nextDay}
-        nextDate={nextDate}
-      />
+      <NewFollicleCount open={open} setOpen={setOpen} nextDate={nextDate} />
     </>
   )
-}
-function getNext(follicleCount: any) {
-  let nextDate: any = new Date(follicleCount?.date)
-  if (follicleCount) {
-    nextDate = new Date(nextDate.setDate(nextDate.getDate() + 1))
-  } else {
-    nextDate = new Date()
-  }
-  const lastDate: any = new Date(follicleCount?.date)
-  const diffTime: number = Math.abs(nextDate - lastDate)
-  const diffDays: number = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  const nextDay: number = diffDays + follicleCount?.day || 0
-  return { nextDay, nextDate }
 }

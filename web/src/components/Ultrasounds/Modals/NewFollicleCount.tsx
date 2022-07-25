@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment, useContext, useRef, useState } from 'react'
 
 import { Dialog, Transition } from '@headlessui/react'
@@ -22,13 +23,15 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 import { QUERY } from '../FollicleCountCell'
 
-export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
+export default function NewFollicleCount({ open, setOpen, nextDate }) {
   const [patient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
   const [left, setLeft] = useState([])
   const [right, setRight] = useState([])
   const [ovary, setOvary] = useState('left')
+  const [day, setDay] = useState(0)
+
   const lengths = [
     4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
     24, 25, 26, 27, 28,
@@ -73,6 +76,8 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
         }
         count
         acfId
+        outcome
+        type
       }
     }
   `
@@ -124,8 +129,15 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
   }
 
   const onSubmit = async (data) => {
+    // Set the day as the difference in days between data.date and treatment.startDate
+    const day = Math.round(
+      (new Date(data.date).getTime() -
+        new Date(activeTreatment.startDate).getTime()) /
+        (1000 * 60 * 60 * 24)
+    )
+
     const createFollicleInput: CreateFollicleCountInput = {
-      day: data.day,
+      day: activeTreatment.startDate ? day : 0,
       left: JSON.stringify(left),
       right: JSON.stringify(right),
       date: data.date,
@@ -227,19 +239,14 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                               className="block text-sm font-medium text-gray-700"
                               errorClassName="block text-sm font-medium text-red-500"
                             >
-                              Day*
+                              Day
                             </Label>
                             <NumberField
                               name="day"
                               className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                               errorClassName="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                              defaultValue={nextDay}
-                              validation={{
-                                required: {
-                                  value: true,
-                                  message: 'Day is required',
-                                },
-                              }}
+                              disabled={true}
+                              value={day}
                             ></NumberField>
                           </div>
                           <div className="sm:col-span-2">
@@ -252,7 +259,10 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                             </Label>
                             <DateField
                               name="date"
-                              defaultValue={nextDate.toJSON().slice(0, 10)}
+                              defaultValue={activeTreatment.startDate.slice(
+                                0,
+                                10
+                              )}
                               className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               validation={{
@@ -260,6 +270,27 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                                   value: true,
                                   message: 'Date is required',
                                 },
+                              }}
+                              min={activeTreatment.startDate.slice(0, 10)}
+                              max={new Date().toISOString().slice(0, 10)}
+                              onChange={(e) => {
+                                const day = new Date(e.target.value).getDate()
+                                const month = new Date(
+                                  e.target.value
+                                ).getMonth()
+                                const year = new Date(
+                                  e.target.value
+                                ).getFullYear()
+                                const date: any = new Date(year, month, day)
+                                const treatmentStartDate: any = new Date(
+                                  activeTreatment.startDate
+                                )
+                                setDay(
+                                  Math.round(
+                                    (date - treatmentStartDate) /
+                                      (1000 * 60 * 60 * 24)
+                                  )
+                                )
                               }}
                             />
                             <FieldError
@@ -320,7 +351,7 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                     </div>
                     <div className="flex md:flex-row flex-col px-4 gap-x-4 py-5">
                       <div className="md:w-1/2 grid grid-cols-5 w-full">
-                        {lengths.map((length, index) => (
+                        {lengths.map((length) => (
                           <button
                             type="button"
                             key={uuidv4()}
@@ -334,7 +365,7 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                       <div className="md:w-1/2 grid grid-rows-2 w-full pt-5 md:pt-0">
                         <div className="flex flex-col">
                           <h1 className="text-sm font-medium text-gray-600 truncate">
-                            Left Ovary Measurements
+                            Left Ovary Measurements (mm)
                           </h1>
                           <div className="grid grid-cols-6 md:grid-cols-10">
                             {left.map((len, index) => (
@@ -351,7 +382,7 @@ export default function NewFollicleCount({ open, setOpen, nextDay, nextDate }) {
                         </div>
                         <div className="flex flex-col pt-2">
                           <h1 className="text-sm font-medium text-gray-600 truncate">
-                            Right Ovary Measurements
+                            Right Ovary Measurements (mm)
                           </h1>
                           <div className="grid grid-cols-6 md:grid-cols-10">
                             {right.map((len, index) => (

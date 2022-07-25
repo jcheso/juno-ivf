@@ -51,13 +51,13 @@ const StatusBar = () => {
               ? `${patient.firstName} ${patient.lastName}`
               : 'No patient selected'}
           </h1>
-          <p className="mt-1 text-xs md:text-sm text-gray-500 truncate">
+          <p className="mt-1 text-xs md:text-sm text-gray-500 truncate hidden md:flex">
             {patient !== null ? (
               `Date of Birth: ${new Date(patient.dob).toLocaleDateString()}`
             ) : (
               <Link to={routes.dashboard()}>Select a patient to view</Link>
             )}
-            {activeTreatment !== null && ` | Age: ${age}`}
+            {activeTreatment !== null && ` | Age at Treatment Start: ${age}`}
           </p>
         </div>
 

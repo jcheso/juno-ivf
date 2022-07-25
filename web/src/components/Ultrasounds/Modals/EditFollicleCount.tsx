@@ -29,6 +29,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
   const [left, setLeft] = useState([...follicleCount.left])
   const [right, setRight] = useState([...follicleCount.right])
   const [ovary, setOvary] = useState('left')
+  const [day, setDay] = useState(follicleCount.day)
   const lengths = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
   ]
@@ -69,6 +70,8 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
         }
         count
         acfId
+        outcome
+        type
       }
     }
   `
@@ -173,7 +176,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
 
   const onSubmit = async (data) => {
     const updateFollicleInput: UpdateFollicleCountInput = {
-      day: data.day,
+      day: day,
       left: JSON.stringify(left),
       right: JSON.stringify(right),
       date: data.date,
@@ -275,20 +278,15 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                               className="block text-sm font-medium text-gray-700"
                               errorClassName="block text-sm font-medium text-red-500"
                             >
-                              Day*
+                              Day
                             </Label>
                             <NumberField
                               name="day"
                               className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                               errorClassName="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                              defaultValue={follicleCount.day}
-                              validation={{
-                                required: {
-                                  value: true,
-                                  message: 'Day is required',
-                                },
-                              }}
-                            ></NumberField>
+                              disabled={true}
+                              value={day}
+                            />
                           </div>
                           <div className="sm:col-span-2">
                             <Label
@@ -301,6 +299,8 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                             <DateField
                               name="date"
                               defaultValue={follicleCount.date.slice(0, 10)}
+                              min={activeTreatment.startDate.slice(0, 10)}
+                              max={new Date().toISOString().slice(0, 10)}
                               className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               validation={{
@@ -308,6 +308,26 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                                   value: true,
                                   message: 'Date is required',
                                 },
+                              }}
+                              // When a new value is selected, update the setDay as the difference between activeTreatment.startDate and the selected date
+                              onChange={(e) => {
+                                const day = new Date(e.target.value).getDate()
+                                const month = new Date(
+                                  e.target.value
+                                ).getMonth()
+                                const year = new Date(
+                                  e.target.value
+                                ).getFullYear()
+                                const date: any = new Date(year, month, day)
+                                const treatmentStartDate: any = new Date(
+                                  activeTreatment.startDate
+                                )
+                                setDay(
+                                  Math.round(
+                                    (date - treatmentStartDate) /
+                                      (1000 * 60 * 60 * 24)
+                                  )
+                                )
                               }}
                             />
                             <FieldError
