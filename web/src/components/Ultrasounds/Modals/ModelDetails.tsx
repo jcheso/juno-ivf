@@ -23,9 +23,6 @@ import {
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-import { PatientContext } from 'src/providers/context/PatientContext'
-import { TreatmentContext } from 'src/providers/context/TreatmentContext'
-
 import { QUERY } from '../PredictEggs/PredictEggsCell'
 
 export default function ModelDetails({
@@ -34,9 +31,7 @@ export default function ModelDetails({
   modelDetails,
   predictedEggs,
 }) {
-  const { logOut, currentUser } = useAuth()
-  const [patient] = useContext(PatientContext)
-  const [activeTreatment] = useContext(TreatmentContext)
+  const { currentUser } = useAuth()
   const [enabled, setEnabled] = useState(false)
   const [shardFile, setShardFile] = useState(null)
   const [modelFile, setModelFile] = useState(null)
@@ -90,7 +85,6 @@ export default function ModelDetails({
     const modelSnapshot = await uploadBytes(modelFileRef, modelFile)
     const modelUrl = await getDownloadURL(modelFileRef)
     const shardUrl = await getDownloadURL(shardFileRef)
-    console.log(modelUrl, shardUrl)
     const createPredictEggsModelInput: CreatePredictEggsModelInput = {
       modelUrl: modelUrl,
       shardUrl: shardUrl,
@@ -100,7 +94,6 @@ export default function ModelDetails({
       userId: currentUser.id,
       version: data.version,
     }
-    console.log(createPredictEggsModelInput)
     await createModel({
       variables: { input: createPredictEggsModelInput },
     })
@@ -170,7 +163,11 @@ export default function ModelDetails({
                               name="version"
                               className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                               errorClassName="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                              defaultValue={modelDetails.version}
+                              value={
+                                enabled
+                                  ? modelDetails.version + 1
+                                  : modelDetails.version
+                              }
                               validation={{
                                 required: {
                                   value: true,
@@ -293,7 +290,6 @@ export default function ModelDetails({
                                       } else {
                                         e.target.value = ''
                                         toast.error('Please upload a JSON file')
-                                        console.log(e.target.files[0])
                                       }
                                     }}
                                     validation={{
@@ -358,7 +354,6 @@ export default function ModelDetails({
                                       } else {
                                         e.target.value = ''
                                         toast.error('Please upload a BIN file')
-                                        console.log(e.target.files[0])
                                       }
                                     }}
                                     validation={{
