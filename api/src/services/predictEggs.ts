@@ -28,6 +28,7 @@ export const predictEggs = async ({ input }) => {
     const model = await tf.loadLayersModel(latestModel.modelUrl, options)
     const follicleCount = tf.tensor([input])
     const prediction = model.predict(follicleCount.toFloat())
+    // @ts-expect-errorts-ignore
     const result = prediction.dataSync()[0]
     logger.info(`Prediction: ${result}`)
     return { eggs: Math.round(result), modelDetails: latestModel }
