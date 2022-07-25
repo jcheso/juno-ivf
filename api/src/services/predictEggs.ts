@@ -1,7 +1,7 @@
+import * as tf from '@tensorflow/tfjs'
+
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
-
-const tf = require('@tensorflow/tfjs-node')
 
 export const predictEggs = async ({ input }) => {
   const latestModels = await db.predictEggsModel.findMany({
