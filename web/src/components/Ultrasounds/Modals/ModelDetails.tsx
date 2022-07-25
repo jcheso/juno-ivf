@@ -37,11 +37,12 @@ export default function ModelDetails({
   const [modelFile, setModelFile] = useState(null)
   const [loading, setLoading] = useState(false)
   const cancelButtonRef = useRef(null)
-
+  console.log(process.env.GOOGLE_FIREBASE_CONFIG)
   // Initialise Firebase
   const credential = JSON.parse(
     Buffer.from(process.env.GOOGLE_FIREBASE_CONFIG, 'base64').toString()
   )
+  console.log(credential)
   const firebaseConfig = credential
   const app = initializeApp(firebaseConfig)
   const storage = getStorage(app)
