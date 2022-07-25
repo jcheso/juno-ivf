@@ -23,7 +23,7 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 import { QUERY } from '../FollicleCountCell'
 
-export default function NewFollicleCount({ open, setOpen, nextDate }) {
+export default function NewFollicleCount({ open, setOpen }) {
   const [patient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
@@ -58,7 +58,7 @@ export default function NewFollicleCount({ open, setOpen, nextDate }) {
   `
 
   const SET_ACF = gql`
-    mutation SetACF($id: String!, $input: UpdateTreatmentInput!) {
+    mutation SetTreatmentACF($id: String!, $input: UpdateTreatmentInput!) {
       updateTreatment(id: $id, input: $input) {
         id
         startDate
@@ -78,6 +78,8 @@ export default function NewFollicleCount({ open, setOpen, nextDate }) {
         acfId
         outcome
         type
+        triggerDate
+        ageAtTreatmentStart
       }
     }
   `
@@ -220,7 +222,7 @@ export default function NewFollicleCount({ open, setOpen, nextDate }) {
                   <div className="px-4">
                     <div className="md:col-span-1">
                       <h3 className="text-lg font-medium leading-6 text-gray-900">
-                        New Follicle Count
+                        New Follicle Measurements
                       </h3>
                       <p className="mt-1 text-sm text-gray-500">
                         Select from the left or right ovary and enter the

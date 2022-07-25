@@ -6,14 +6,12 @@ import {
   UsersIcon,
   CheckCircleIcon,
   ClockIcon,
-  InformationCircleIcon,
   TagIcon,
 } from '@heroicons/react/solid'
 
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-import { treatments } from '../../../../api/src/services/treatments/treatments'
 import { Treatment } from '../../../types/graphql'
 
 import NewTreatmentCell from './NewTreatment/NewTreatmentCell'

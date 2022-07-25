@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import { PlusSmIcon } from '@heroicons/react/solid'
+import { FaSyringe } from 'react-icons/fa'
 import { v4 as uuidv4 } from 'uuid'
 
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
@@ -8,6 +9,7 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 import FollicleCountGrouped from './FollicleCountGrouped'
 import FollicleSummary from './FollicleSummary'
 import NewFollicleCount from './Modals/NewFollicleCount'
+import SetTrigger from './Modals/SetTrigger'
 
 export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
@@ -15,7 +17,12 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
     follicleCounts.find((fc) => fc.id === activeTreatment.acfId) || 0
   )
   const [open, setOpen] = useState(false)
+  const [trigger, setTrigger] = useState(false)
   const nextDate = new Date(activeTreatment.startDate)
+  const [latestFollicleCountDate, setLatestFollicleCountDate] = useState(
+    follicleCounts[follicleCounts.length - 1].date
+  )
+  console.log(latestFollicleCountDate)
 
   const labels = [
     '>25',
@@ -58,63 +65,15 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
     return classes.filter(Boolean).join(' ')
   }
 
-  const range = Array.from({ length: 16 }, (_, i) => i)
-  const emptyCounts = new Set()
-  range.forEach((num) => {
-    const day = follicleCounts.find((fc) => fc.day === num)
-    if (!day) {
-      emptyCounts.add(num)
-    }
-  })
-  emptyCounts.forEach((num: number) => {
-    let nextDate = new Date(activeTreatment.startDate)
-    nextDate.setDate(nextDate.getDate() - 1)
-    if (follicleCounts.length > 0) {
-      nextDate = new Date(follicleCounts[num - 1].date)
-    }
-    nextDate.setDate(nextDate.getDate() + 1)
-    const emptyFollicleCount = {
-      day: num,
-      date: nextDate.toISOString(),
-      count: -1,
-      left: [],
-      right: [],
-      id: '',
-    }
-    follicleCounts.splice(num, 0, emptyFollicleCount)
-  })
+  const range = setGraph(follicleCounts, activeTreatment)
+
   useEffect(() => {
-    const emptyCounts = new Set()
-    range.forEach((num) => {
-      const day = follicleCounts.find((fc) => fc.day === num)
-      if (!day) {
-        emptyCounts.add(num)
-      }
-    })
-    emptyCounts.forEach((num: number) => {
-      let nextDate = new Date()
-      nextDate.setDate(nextDate.getDate() - 1)
-      if (follicleCounts.length > 0) {
-        nextDate = new Date(follicleCounts[num - 1].date)
-      }
-      nextDate.setDate(nextDate.getDate() + 1)
-      const emptyFollicleCount = {
-        day: num,
-        date: nextDate.toISOString(),
-        count: -1,
-        left: [],
-        right: [],
-        id: '',
-      }
-      follicleCounts.splice(num, 0, emptyFollicleCount)
-    })
-    if (activeTreatment && follicleCounts.length > 0) {
-      setAfcFollicleCount(
-        follicleCounts.find((fc) => fc.id === activeTreatment.acfId)
-      )
-    } else {
-      setAfcFollicleCount(null)
-    }
+    setGraphOnEffect(
+      range,
+      follicleCounts,
+      activeTreatment,
+      setAfcFollicleCount
+    )
   }, [follicleCounts, activeTreatment, range])
 
   return (
@@ -142,13 +101,13 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
               className="-ml-1.5 mr-1 h-5 w-5 text-gray-400"
               aria-hidden="true"
             />
-            <span>Add new</span>
+            <span>Add new measurements</span>
           </button>
         </div>
       </div>
       <div className="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
         <div className="px-4 py-5 sm:px-6">
-          <div>
+          <div className="flex flex-row justify-between">
             <div className="sm:hidden">
               <label htmlFor="tabs" className="sr-only">
                 Select a cycle
@@ -186,6 +145,14 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
                 ))}
               </nav>
             </div>
+            <button
+              type="button"
+              onClick={() => setTrigger(!trigger)}
+              className="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              <FaSyringe className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
+              Trigger
+            </button>
           </div>
         </div>
         <div className="px-4 py-2 sm:p-6">
@@ -222,6 +189,9 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
                     <FollicleCountGrouped
                       follicleCount={follicleCount}
                       isAcf={afcFollicleCount?.id === follicleCount.id}
+                      isTrigger={
+                        follicleCount?.date === activeTreatment.triggerDate
+                      }
                     />
                   </div>
                 ))}
@@ -241,7 +211,80 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
           </div>
         </div>
       </div>
+      <SetTrigger
+        open={trigger}
+        setOpen={setTrigger}
+        latestDate={latestFollicleCountDate}
+      />
       <NewFollicleCount open={open} setOpen={setOpen} nextDate={nextDate} />
     </>
   )
+}
+
+function setGraphOnEffect(
+  range: number[],
+  follicleCounts: any,
+  activeTreatment: any,
+  setAfcFollicleCount: React.Dispatch<any>
+) {
+  const emptyCounts = new Set()
+  range.forEach((num) => {
+    const day = follicleCounts.find((fc) => fc.day === num)
+    if (!day) {
+      emptyCounts.add(num)
+    }
+  })
+  emptyCounts.forEach((num: number) => {
+    let nextDate = new Date()
+    nextDate.setDate(nextDate.getDate() - 1)
+    if (follicleCounts.length > 0) {
+      nextDate = new Date(follicleCounts[num - 1].date)
+    }
+    nextDate.setDate(nextDate.getDate() + 1)
+    const emptyFollicleCount = {
+      day: num,
+      date: nextDate.toISOString(),
+      count: -1,
+      left: [],
+      right: [],
+      id: '',
+    }
+    follicleCounts.splice(num, 0, emptyFollicleCount)
+  })
+  if (activeTreatment && follicleCounts.length > 0) {
+    setAfcFollicleCount(
+      follicleCounts.find((fc) => fc.id === activeTreatment.acfId)
+    )
+  } else {
+    setAfcFollicleCount(null)
+  }
+}
+
+function setGraph(follicleCounts: any, activeTreatment: any) {
+  const range = Array.from({ length: 16 }, (_, i) => i)
+  const emptyCounts = new Set()
+  range.forEach((num) => {
+    const day = follicleCounts.find((fc) => fc.day === num)
+    if (!day) {
+      emptyCounts.add(num)
+    }
+  })
+  emptyCounts.forEach((num: number) => {
+    let nextDate = new Date(activeTreatment.startDate)
+    nextDate.setDate(nextDate.getDate() - 1)
+    if (follicleCounts.length > 0) {
+      nextDate = new Date(follicleCounts[num - 1].date)
+    }
+    nextDate.setDate(nextDate.getDate() + 1)
+    const emptyFollicleCount = {
+      day: num,
+      date: nextDate.toISOString(),
+      count: -1,
+      left: [],
+      right: [],
+      id: '',
+    }
+    follicleCounts.splice(num, 0, emptyFollicleCount)
+  })
+  return range
 }

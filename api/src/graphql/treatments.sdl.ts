@@ -15,6 +15,7 @@ export const schema = gql`
     ageAtTreatmentStart: Int
     outcome: String
     type: String
+    triggerDate: DateTime
   }
 
   type Query {
@@ -35,6 +36,7 @@ export const schema = gql`
     ageAtTreatmentStart: Int
     outcome: String
     type: String
+    triggerDate: DateTime
   }
 
   input UpdateTreatmentInput {
@@ -49,6 +51,7 @@ export const schema = gql`
     ageAtTreatmentStart: Int
     outcome: String
     type: String
+    triggerDate: DateTime
   }
 
   type Mutation {
