@@ -52,6 +52,8 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
         type
         outcome
         triggerDate
+        eggsRetrieved
+        eggRetrievalDate
       }
     }
   `

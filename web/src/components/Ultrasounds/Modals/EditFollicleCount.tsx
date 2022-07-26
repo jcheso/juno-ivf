@@ -74,6 +74,8 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
         type
         ageAtTreatmentStart
         triggerDate
+        eggsRetrieved
+        eggRetrievalDate
       }
     }
   `

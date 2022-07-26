@@ -5,7 +5,14 @@ import { Dialog, Transition } from '@headlessui/react'
 import CircleLoader from 'react-spinners/CircleLoader'
 import { UpdateTreatmentInput } from 'types/graphql'
 
-import { Form, Label, FieldError, DateField, Submit } from '@redwoodjs/forms'
+import {
+  Form,
+  Label,
+  FieldError,
+  DateField,
+  Submit,
+  NumberField,
+} from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
@@ -14,7 +21,7 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 import { QUERY } from '../FollicleCountCell'
 
-export default function SetTrigger({ open, setOpen, latestDate }) {
+export default function SetEggsRetrieved({ open, setOpen, latestDate }) {
   const [patient] = useContext(PatientContext)
   const [activeTreatment, setActiveTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
@@ -45,7 +52,7 @@ export default function SetTrigger({ open, setOpen, latestDate }) {
       }
     }
   `
-  const [updateTreatment, { loading }] = useMutation(UPDATE_TREATMENT, {
+  const [setEggsRetrieved, { loading }] = useMutation(UPDATE_TREATMENT, {
     refetchQueries: [
       {
         query: QUERY,
@@ -60,7 +67,7 @@ export default function SetTrigger({ open, setOpen, latestDate }) {
       toast.error('Something went wrong, try again.')
     },
     onCompleted: () => {
-      toast.success('Trigger date set successfully!')
+      toast.success('Eggs retrieved recorded successfully!')
     },
   })
 
@@ -75,9 +82,11 @@ export default function SetTrigger({ open, setOpen, latestDate }) {
       ageAtTreatmentStart: undefined,
       outcome: undefined,
       type: undefined,
-      triggerDate: data.triggerDate,
+      triggerDate: undefined,
+      eggsRetrieved: data.eggsRetrieved,
+      eggRetrievalDate: data.eggRetrievalDate,
     }
-    const response = await updateTreatment({
+    const response = await setEggsRetrieved({
       variables: { id: activeTreatment.id, input },
     })
     setActiveTreatment(response.data.updateTreatment)
@@ -126,34 +135,62 @@ export default function SetTrigger({ open, setOpen, latestDate }) {
                 <Form className="space-y-6" onSubmit={onSubmit}>
                   <div>
                     <h3 className="text-lg font-medium leading-6 text-gray-900  px-4">
-                      Set Trigger Date
+                      Record Eggs Retrieved
                     </h3>
                     <div className="bg-white px-4 py-5 sm:rounded-lg sm:p-6">
-                      <div className="md:grid md:gap-6">
-                        <div className="mt-5 md:mt-0 md:col-span-2 space-y-3">
-                          <div className="grid md:space-x-6">
-                            <div className="">
-                              <Label
-                                name="triggerDate"
-                                className="block text-sm font-medium text-gray-700"
-                                errorClassName="block text-sm font-medium text-red-500"
-                              >
-                                Trigger Date
-                              </Label>
-                              <DateField
-                                name="triggerDate"
-                                defaultValue={latestDate.slice(0, 10)}
-                                min={activeTreatment.startDate?.slice(0, 10)}
-                                max={new Date().toISOString().slice(0, 10)}
-                                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                              />
-                              <FieldError
-                                name="triggerDate"
-                                className="block text-xs font-medium text-red-500 pt-1"
-                              />
-                            </div>
-                          </div>
+                      <div className="md:grid md:gap-6 md:grid-cols-2 mt-5 md:mt-0 md:space-x-3">
+                        <div className="">
+                          <Label
+                            name="eggRetrievalDate"
+                            className="block text-sm font-medium text-gray-700"
+                            errorClassName="block text-sm font-medium text-red-500"
+                          >
+                            Retrieval Date
+                          </Label>
+                          <DateField
+                            name="eggRetrievalDate"
+                            defaultValue={latestDate.slice(0, 10)}
+                            min={activeTreatment.startDate?.slice(0, 10)}
+                            max={new Date().toISOString().slice(0, 10)}
+                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            validation={{
+                              required: {
+                                value: true,
+                                message: 'Date is required',
+                              },
+                            }}
+                          />
+                          <FieldError
+                            name="triggerDate"
+                            className="block text-xs font-medium text-red-500 pt-1"
+                          />
+                        </div>
+                        <div className="">
+                          <Label
+                            name="eggsRetrieved"
+                            className="block text-sm font-medium text-gray-700"
+                            errorClassName="block text-sm font-medium text-red-500"
+                          >
+                            Eggs Retrieved
+                          </Label>
+                          <NumberField
+                            name="eggsRetrieved"
+                            min={0}
+                            defaultValue={0}
+                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            validation={{
+                              required: {
+                                value: true,
+                                message: 'A number is required',
+                              },
+                            }}
+                          />
+                          <FieldError
+                            name="eggsRetrieved"
+                            className="block text-xs font-medium text-red-500 pt-1"
+                          />
                         </div>
                       </div>
                     </div>
@@ -164,7 +201,7 @@ export default function SetTrigger({ open, setOpen, latestDate }) {
                         disabled={loading}
                         className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
                       >
-                        Trigger
+                        Record
                       </Submit>
                     ) : (
                       <div className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">

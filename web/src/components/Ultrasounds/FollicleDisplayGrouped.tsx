@@ -9,6 +9,7 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 import FollicleCountGrouped from './FollicleCountGrouped'
 import FollicleSummary from './FollicleSummary'
 import NewFollicleCount from './Modals/NewFollicleCount'
+import SetEggsRetrieved from './Modals/SetEggsRetrieved'
 import SetTrigger from './Modals/SetTrigger'
 
 export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
@@ -18,6 +19,7 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
   )
   const [open, setOpen] = useState(false)
   const [trigger, setTrigger] = useState(false)
+  const [eggsRetrieved, setEggsRetrieved] = useState(false)
   const nextDate = new Date(activeTreatment.startDate)
   const [latestFollicleCountDate, setLatestFollicleCountDate] = useState(
     follicleCounts.length > 0
@@ -76,7 +78,6 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
       setAfcFollicleCount
     )
   }, [follicleCounts, activeTreatment, range])
-
   return (
     <>
       <div>
@@ -146,14 +147,24 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
                 ))}
               </nav>
             </div>
-            <button
-              type="button"
-              onClick={() => setTrigger(!trigger)}
-              className="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              <FaSyringe className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
-              Assign Trigger
-            </button>
+            <div className="flex flex-row justify-evenly space-x-4">
+              <button
+                type="button"
+                onClick={() => setTrigger(!trigger)}
+                className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                {/* <FaSyringe className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" /> */}
+                Assign Trigger
+              </button>
+              <button
+                type="button"
+                onClick={() => setEggsRetrieved(!eggsRetrieved)}
+                className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                {/* <FaSyringe className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" /> */}
+                Record Eggs Retrieved
+              </button>
+            </div>
           </div>
         </div>
         <div className="px-4 py-2 sm:p-6">
@@ -191,8 +202,14 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
                       follicleCount={follicleCount}
                       isAcf={afcFollicleCount?.id === follicleCount.id}
                       isTrigger={
-                        follicleCount?.date === activeTreatment.triggerDate
+                        follicleCount?.date.slice(0, 10) ===
+                        activeTreatment.triggerDate?.slice(0, 10)
                       }
+                      isEggRetrieval={
+                        follicleCount?.date.slice(0, 10) ===
+                        activeTreatment.eggRetrievalDate?.slice(0, 10)
+                      }
+                      eggsRetrieved={activeTreatment.eggsRetrieved}
                     />
                   </div>
                 ))}
@@ -212,6 +229,11 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
           </div>
         </div>
       </div>
+      <SetEggsRetrieved
+        open={eggsRetrieved}
+        setOpen={setEggsRetrieved}
+        latestDate={latestFollicleCountDate}
+      />
       <SetTrigger
         open={trigger}
         setOpen={setTrigger}

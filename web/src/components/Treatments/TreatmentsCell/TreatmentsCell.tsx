@@ -27,6 +27,8 @@ export const QUERY = gql`
       type
       outcome
       triggerDate
+      eggsRetrieved
+      eggRetrievalDate
     }
   }
 `
