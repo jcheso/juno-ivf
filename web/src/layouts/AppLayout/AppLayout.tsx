@@ -20,6 +20,7 @@ import { useAuth } from '@redwoodjs/auth'
 import { Link, NavLink, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
+import DashboardHeader from 'src/components/ClinicianSummary'
 import StatusBar from 'src/components/StatusBar/StatusBar'
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'

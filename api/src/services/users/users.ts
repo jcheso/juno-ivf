@@ -1,8 +1,32 @@
 import type { Prisma } from '@prisma/client'
+import { Treatment } from 'types/graphql'
 
 import type { ResolverArgs } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
+
+export const userStats = async ({ id }) => {
+  // Get the user matching the ID and count the number of treatments and patients
+  const user = await db.user.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      patients: true,
+      treatments: true,
+    },
+  })
+  const totalPatients = user.patients.length
+  const activeTreatments = user.treatments.filter(
+    (treatment) => treatment.isActive
+  ).length
+  const totalTreatments = user.treatments.length
+  return {
+    totalPatients,
+    activeTreatments,
+    totalTreatments,
+  }
+}
 
 export const users = () => {
   return db.user.findMany()
