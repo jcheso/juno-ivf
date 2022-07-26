@@ -59,7 +59,7 @@ const FollicleCountGrouped = ({ follicleCount, isAcf, isTrigger }) => {
               {follicleCount.day}
             </h3>
             <p className="mt-1 text-xs text-gray-500">
-              {new Date(follicleCount.date).toLocaleDateString()}
+              {new Date(follicleCount.date).toLocaleDateString('en-GB')}
             </p>
           </div>
         </div>

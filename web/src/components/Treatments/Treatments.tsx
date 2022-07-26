@@ -148,7 +148,9 @@ const Treatments = ({ treatments }) => {
                           <p>
                             Started on{' '}
                             <time dateTime={treatment.startDate}>
-                              {treatment.startDate.slice(0, 10)}
+                              {new Date(treatment.startDate).toLocaleDateString(
+                                'en-GB'
+                              )}
                             </time>
                           </p>
                         </div>
@@ -162,7 +164,9 @@ const Treatments = ({ treatments }) => {
                               <p>
                                 Completed on{' '}
                                 <time dateTime={treatment.endDate}>
-                                  {treatment.endDate.slice(0, 10)}
+                                  {new Date(
+                                    treatment.endDate
+                                  ).toLocaleDateString('en-GB')}
                                 </time>
                               </p>
                             </>

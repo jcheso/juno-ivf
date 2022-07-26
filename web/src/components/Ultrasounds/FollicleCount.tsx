@@ -29,7 +29,7 @@ const FollicleCount = ({ follicleCount, isAcf }) => {
             )}
           </div>
           <p className="mt-1 max-w-2xl text-sm text-gray-500">
-            {new Date(follicleCount.date).toLocaleDateString()}
+            {new Date(follicleCount.date).toLocaleDateString('en-GB')}
           </p>
         </div>
 

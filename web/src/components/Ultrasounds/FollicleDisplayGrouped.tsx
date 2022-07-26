@@ -22,7 +22,6 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
   const [latestFollicleCountDate, setLatestFollicleCountDate] = useState(
     follicleCounts[follicleCounts.length - 1].date
   )
-  console.log(latestFollicleCountDate)
 
   const labels = [
     '>25',
@@ -216,7 +215,7 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
         setOpen={setTrigger}
         latestDate={latestFollicleCountDate}
       />
-      <NewFollicleCount open={open} setOpen={setOpen} nextDate={nextDate} />
+      <NewFollicleCount open={open} setOpen={setOpen} />
     </>
   )
 }

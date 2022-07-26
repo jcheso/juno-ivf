@@ -26,6 +26,7 @@ export const QUERY = gql`
       ageAtTreatmentStart
       type
       outcome
+      triggerDate
     }
   }
 `

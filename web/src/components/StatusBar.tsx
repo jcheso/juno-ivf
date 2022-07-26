@@ -44,7 +44,9 @@ const StatusBar = () => {
           </h1>
           <p className="mt-1 text-xs md:text-sm text-gray-500 truncate hidden md:flex">
             {patient !== null ? (
-              `Date of Birth: ${new Date(patient.dob).toLocaleDateString()}`
+              `Date of Birth: ${new Date(patient.dob).toLocaleDateString(
+                'en-GB'
+              )}`
             ) : (
               <Link to={routes.dashboard()}>Select a patient to view</Link>
             )}
@@ -53,11 +55,14 @@ const StatusBar = () => {
         </div>
 
         <div className="mt-2 flex items-center justify-between sm:justify-start">
-          <span className="bg-indigo-100 text-indigo-700 px-3 py-1 font-medium text-sm rounded-md hidden md:flex">
-            {activeTreatment !== null
-              ? `Cycle ${activeTreatment.count}`
-              : 'No cycle selected'}
-          </span>
+          {patient && (
+            <span className="bg-indigo-100 text-indigo-700 px-3 py-1 font-medium text-sm rounded-md hidden md:flex">
+              {activeTreatment !== null
+                ? `Cycle ${activeTreatment.count}`
+                : 'No cycle selected'}
+            </span>
+          )}
+
           {patient !== null && (
             <Menu as="div" className="ml-3 relative inline-block text-left">
               <div>

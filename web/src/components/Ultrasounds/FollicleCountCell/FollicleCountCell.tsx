@@ -37,6 +37,9 @@ export const QUERY = gql`
       count
       acfId
       ageAtTreatmentStart
+      triggerDate
+      outcome
+      type
     }
   }
 `
