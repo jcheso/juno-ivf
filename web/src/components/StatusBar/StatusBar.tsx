@@ -43,22 +43,23 @@ const StatusBar = ({ treatments }) => {
         <div className="sm:w-0 sm:flex-1 content-center align-middle md:flex-row">
           <h1
             id="message-heading"
-            className="text-sm md:text-lg font-medium text-gray-900 pt-1 md:pt-2"
+            className="text-base md:text-lg font-medium text-gray-900 pt-1 md:pt-2"
           >
             {patient !== null
               ? `${patient.firstName} ${patient.lastName}`
               : 'No patient selected'}
           </h1>
           <div className="flex flex-col md:flex-row">
-            <div className="mt-1 text-xs md:text-sm text-gray-500 truncate">
+            <div className=" text-xs md:text-sm text-gray-500 truncate">
               {patient !== null ? (
                 `DOB: ${new Date(patient.dob).toLocaleDateString('en-GB')}`
               ) : (
                 <Link to={routes.dashboard()}>Select a patient to view</Link>
               )}
             </div>
-            <div className="mt-1 text-xs md:text-sm text-gray-500 truncate md:pl-1">
-              {activeTreatment !== null && `Age at Cycle Start: ${age}`}
+            <div className="text-xs md:text-sm text-gray-500 truncate md:pl-1 flex flex-row">
+              <div className="hidden md:flex mr-1">|</div>
+              {activeTreatment !== null && ` Age at Cycle Start: ${age}`}
             </div>
           </div>
         </div>
@@ -222,7 +223,7 @@ const StatusBar = ({ treatments }) => {
         </div>
       </div>
       {patient !== null && (
-        <div className="relative inline-block text-left pt-3 sm:mx-3">
+        <div className="ml-3 relative inline-block text-left pt-3 sm:mx-3">
           <button
             onClick={() => clearContext()}
             aria-label="Clear patient"
