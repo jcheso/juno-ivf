@@ -119,7 +119,7 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
       endDate: data.isActive ? null : data.endDate,
       clinicianId: data.clinicianId,
       isActive: data.isActive,
-      wasSuccessful: data.wasSuccessful,
+      wasSuccessful: data.outcome === 'Live birth' ? true : false,
       ageAtTreatmentStart: age,
       outcome: data.outcome,
       type: data.type,
@@ -291,24 +291,6 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                             </SelectField>
                           </div>
                           <div className="grid md:grid-cols-2">
-                            <div className="relative flex items-start ">
-                              <div className="flex items-center h-5">
-                                <CheckboxField
-                                  name="wasSuccessful"
-                                  defaultChecked={activeTreatment.wasSuccessful}
-                                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                  errorClassName="focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded"
-                                />
-                              </div>
-                              <div className="ml-3 text-sm">
-                                <Label
-                                  name="wasSuccessful"
-                                  className="font-medium text-gray-700"
-                                >
-                                  Successful
-                                </Label>
-                              </div>
-                            </div>
                             <div className="relative flex items-start ">
                               <div className="flex items-center h-5">
                                 <CheckboxField

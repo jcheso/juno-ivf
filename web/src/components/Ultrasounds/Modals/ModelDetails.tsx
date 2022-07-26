@@ -257,11 +257,11 @@ export default function ModelDetails({
                               Description
                             </Label>
                             <TextAreaField
-                              rows={10}
+                              rows={!enabled ? 15 : 6}
                               name="description"
                               id="description"
                               disabled={!enabled}
-                              className="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md h-56"
+                              className="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                               defaultValue={modelDetails.description}
                               validation={{
                                 required: {
@@ -318,10 +318,9 @@ export default function ModelDetails({
                                             }}
                                           />
                                         </Label>
-                                        <p className="pl-1">or drag and drop</p>
                                       </div>
                                       <p className="text-xs text-gray-500">
-                                        JSON Format
+                                        JPEG/PNG Format
                                       </p>
                                     </div>
                                   ) : (
@@ -401,7 +400,6 @@ export default function ModelDetails({
                                       }}
                                     />
                                   </Label>
-                                  <p className="pl-1">or drag and drop</p>
                                 </div>
                                 <p className="text-xs text-gray-500">
                                   JSON Format
@@ -469,7 +467,6 @@ export default function ModelDetails({
                                       }}
                                     />
                                   </Label>
-                                  <p className="pl-1">or drag and drop</p>
                                 </div>
                                 <p className="text-xs text-gray-500">
                                   BIN Format

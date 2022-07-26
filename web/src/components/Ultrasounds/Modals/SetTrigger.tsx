@@ -143,13 +143,6 @@ export default function SetTrigger({ open, setOpen, latestDate }) {
                                 defaultValue={latestDate.slice(0, 10)}
                                 min={activeTreatment.startDate?.slice(0, 10)}
                                 max={new Date().toISOString().slice(0, 10)}
-                                validation={{
-                                  required: {
-                                    value: true,
-                                    message:
-                                      'A date is required to set the trigger date.',
-                                  },
-                                }}
                                 className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               />
