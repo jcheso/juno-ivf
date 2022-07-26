@@ -392,7 +392,7 @@ export default function NewFollicleCount({ open, setOpen }) {
                             {right.map((len, index) => (
                               <button
                                 type="button"
-                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-pink-400 h-8 w-8 text-sm text-white text-center inline-flex items-center justify-center my-1"
+                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-pink-400 h-10 w-10 text-sm text-white text-center inline-flex items-center justify-center my-1"
                                 key={uuidv4()}
                                 onClick={() => removeFollicle(index, 'right')}
                               >
