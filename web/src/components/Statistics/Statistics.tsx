@@ -19,7 +19,7 @@ export default function Statistics({ statistics }) {
   return (
     <div>
       <h3 className="text-lg leading-6 font-medium text-gray-900">
-        Last 30 Days
+        Clinic Summary - Last 30 Days
       </h3>
       <dl className="mt-5 grid grid-cols-1 rounded-lg bg-white overflow-hidden shadow divide-y divide-gray-200 md:grid-cols-3 md:divide-y-0 md:divide-x">
         {stats.map((item) => (

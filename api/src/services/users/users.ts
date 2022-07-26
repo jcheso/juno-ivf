@@ -18,9 +18,11 @@ export const userStats = async ({ id }) => {
   })
   const totalPatients = user.patients.length
   const activeTreatments = user.treatments.filter(
-    (treatment) => treatment.isActive
+    (treatment) => treatment.isActive === true
   ).length
-  const totalTreatments = user.treatments.length
+  const totalTreatments = user.treatments.filter(
+    (treatment) => treatment.wasSuccessful === true
+  ).length
   return {
     totalPatients,
     activeTreatments,
