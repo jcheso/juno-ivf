@@ -6,11 +6,16 @@ import { FollicleMapFull } from 'src/models/FollicleMapFull'
 
 import EditFollicleCount from './Modals/EditFollicleCount'
 
-const FollicleCountGrouped = ({ follicleCount, isAcf, isTrigger }) => {
+const FollicleCountGrouped = ({
+  follicleCount,
+  isAcf,
+  isTrigger,
+  isEggRetrieval,
+  eggsRetrieved,
+}) => {
   const leftFollicleMap = new FollicleMapFull(follicleCount.left)
   const rightFollicleMap = new FollicleMapFull(follicleCount.right)
   const [open, setOpen] = useState(false)
-
   return (
     <>
       <div className="bg-white overflow-hidden w-24">
@@ -21,8 +26,13 @@ const FollicleCountGrouped = ({ follicleCount, isAcf, isTrigger }) => {
             </span>
           )}
           {isTrigger && follicleCount.count != -1 && (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-pink-100 text-pink-800 ">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-yellow-100 text-yellow-800 ">
               Trigger
+            </span>
+          )}
+          {isEggRetrieval && (
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-pink-100 text-pink-800 ">
+              {eggsRetrieved} Eggs
             </span>
           )}
         </div>
@@ -59,7 +69,7 @@ const FollicleCountGrouped = ({ follicleCount, isAcf, isTrigger }) => {
               {follicleCount.day}
             </h3>
             <p className="mt-1 text-xs text-gray-500">
-              {new Date(follicleCount.date).toLocaleDateString()}
+              {new Date(follicleCount.date).toLocaleDateString('en-GB')}
             </p>
           </div>
         </div>

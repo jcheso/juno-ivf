@@ -74,6 +74,8 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
         type
         ageAtTreatmentStart
         triggerDate
+        eggsRetrieved
+        eggRetrievalDate
       }
     }
   `
@@ -391,13 +393,13 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                         </button>
                       </span>
                     </div>
-                    <div className="flex md:flex-row flex-col px-4 gap-x-4 py-5">
+                    <div className="flex md:flex-row flex-col gap-x-4">
                       <div className="md:w-1/2 grid grid-cols-5 w-full">
                         {lengths.map((length) => (
                           <button
                             type="button"
                             key={uuidv4()}
-                            className="rounded-md m-1 items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                            className="rounded-md m-1 items-center px-4 py-4 border border-gray-300 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                             onClick={() => addFollicle(length)}
                           >
                             {length}
@@ -413,7 +415,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                             {left.map((len, index) => (
                               <button
                                 type="button"
-                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-purple-400 h-8 w-8 text-sm text-white text-center inline-flex items-center justify-center my-1"
+                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-purple-400 h-10 w-10 text-sm text-white text-center inline-flex items-center justify-center my-1"
                                 key={uuidv4()}
                                 onClick={() => removeFollicle(index, 'left')}
                               >
@@ -430,7 +432,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                             {right.map((len, index) => (
                               <button
                                 type="button"
-                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-pink-400 h-8 w-8 text-sm text-white text-center inline-flex items-center justify-center my-1"
+                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-pink-400 h-10 w-10 text-sm text-white text-center inline-flex items-center justify-center my-1"
                                 key={uuidv4()}
                                 onClick={() => removeFollicle(index, 'right')}
                               >

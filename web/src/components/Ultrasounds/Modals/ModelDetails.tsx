@@ -145,7 +145,7 @@ export default function ModelDetails({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-5xl sm:w-full sm:p-6">
+              <Dialog.Panel className="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-5xl w-full sm:p-6">
                 <Form className="space-y-6" onSubmit={onSubmit}>
                   <div className="px-4">
                     <div className="flex sm:flex-row flex-col">
@@ -257,11 +257,11 @@ export default function ModelDetails({
                               Description
                             </Label>
                             <TextAreaField
-                              rows={10}
+                              rows={!enabled ? 15 : 6}
                               name="description"
                               id="description"
                               disabled={!enabled}
-                              className="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md h-56"
+                              className="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                               defaultValue={modelDetails.description}
                               validation={{
                                 required: {
@@ -284,7 +284,7 @@ export default function ModelDetails({
                                   <TextField
                                     name="imgDesc"
                                     className="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                    defaultValue={modelDetails.description}
+                                    defaultValue={modelDetails.imgDesc}
                                   />
                                 </div>
                                 <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
@@ -318,10 +318,9 @@ export default function ModelDetails({
                                             }}
                                           />
                                         </Label>
-                                        <p className="pl-1">or drag and drop</p>
                                       </div>
                                       <p className="text-xs text-gray-500">
-                                        JSON Format
+                                        JPEG/PNG Format
                                       </p>
                                     </div>
                                   ) : (
@@ -401,7 +400,6 @@ export default function ModelDetails({
                                       }}
                                     />
                                   </Label>
-                                  <p className="pl-1">or drag and drop</p>
                                 </div>
                                 <p className="text-xs text-gray-500">
                                   JSON Format
@@ -469,7 +467,6 @@ export default function ModelDetails({
                                       }}
                                     />
                                   </Label>
-                                  <p className="pl-1">or drag and drop</p>
                                 </div>
                                 <p className="text-xs text-gray-500">
                                   BIN Format

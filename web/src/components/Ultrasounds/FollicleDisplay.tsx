@@ -66,7 +66,7 @@ export default function FollicleDisplay({ follicleCounts }) {
                 Day {nextDay}
               </h3>
               <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                {new Date(nextDate).toLocaleDateString()}
+                {new Date(nextDate).toLocaleDateString('en-GB')}
               </p>
             </div>
             <div className="border-t border-gray-200 px-4 py-5 sm:px-6 justify-center items-center flex h-full">

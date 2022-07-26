@@ -20,10 +20,12 @@ import { useAuth } from '@redwoodjs/auth'
 import { Link, NavLink, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
+import DashboardHeader from 'src/components/ClinicianSummary'
+import StatusBar from 'src/components/StatusBar/StatusBar'
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-import StatusBar from '../../components/StatusBar'
+import StatusBarCell from '../../components/StatusBar/StatusBarCell'
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -263,11 +265,16 @@ const AppLayout = ({ children }: AppLayoutProps) => {
               <span className="sr-only">Open sidebar</span>
               <MenuAlt2Icon className="h-6 w-6" aria-hidden="true" />
             </button>
-            <div className="flex-1 px-4 flex justify-between sm:px-6 lg:mx-auto lg:px-8">
+            <div className="flex-1 md:px-4 px-2 flex justify-between sm:px-6 lg:mx-auto lg:px-8">
               <div className="flex-1 flex">
-                <StatusBar></StatusBar>
+                {patient ? (
+                  <StatusBarCell patientId={patient.id} />
+                ) : (
+                  <StatusBar treatments={null} />
+                )}
               </div>
-              <div className="ml-4 flex items-center md:ml-6">
+              <div className="hidden md:flex border-r-2 my-3 ml-1" />
+              <div className="flex items-center md:ml-6">
                 <Menu as="div" className="ml-3 relative">
                   <div>
                     <Menu.Button className="max-w-xs bg-white rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 lg:p-2 lg:rounded-md lg:hover:bg-gray-50">

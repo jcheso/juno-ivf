@@ -81,6 +81,8 @@ model Treatment {
   outcome             String?
   type                String?
   triggerDate         DateTime?
+  eggsRetrieved       Int?
+  eggRetrievalDate    DateTime?
 }
 
 model FollicleCount {

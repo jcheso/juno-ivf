@@ -37,6 +37,11 @@ export const QUERY = gql`
       count
       acfId
       ageAtTreatmentStart
+      triggerDate
+      outcome
+      type
+      eggsRetrieved
+      eggRetrievalDate
     }
   }
 `
@@ -69,7 +74,12 @@ export const Success = ({
     })
   )
   if (width < 600) {
-    return <FollicleDisplay follicleCounts={treatmentFollicleCountsParsed} />
+    return (
+      <FollicleDisplayGrouped
+        follicleCounts={treatmentFollicleCountsParsed}
+        treatments={treatments}
+      />
+    )
   } else {
     return (
       <FollicleDisplayGrouped

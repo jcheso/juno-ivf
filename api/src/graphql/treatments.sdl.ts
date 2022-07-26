@@ -16,6 +16,8 @@ export const schema = gql`
     outcome: String
     type: String
     triggerDate: DateTime
+    eggsRetrieved: Int
+    eggRetrievalDate: DateTime
   }
 
   type Query {
@@ -37,6 +39,8 @@ export const schema = gql`
     outcome: String
     type: String
     triggerDate: DateTime
+    eggsRetrieved: Int
+    eggRetrievalDate: DateTime
   }
 
   input UpdateTreatmentInput {
@@ -52,6 +56,8 @@ export const schema = gql`
     outcome: String
     type: String
     triggerDate: DateTime
+    eggsRetrieved: Int
+    eggRetrievalDate: DateTime
   }
 
   type Mutation {

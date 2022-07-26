@@ -9,6 +9,7 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 import FollicleCountGrouped from './FollicleCountGrouped'
 import FollicleSummary from './FollicleSummary'
 import NewFollicleCount from './Modals/NewFollicleCount'
+import SetEggsRetrieved from './Modals/SetEggsRetrieved'
 import SetTrigger from './Modals/SetTrigger'
 
 export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
@@ -18,11 +19,13 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
   )
   const [open, setOpen] = useState(false)
   const [trigger, setTrigger] = useState(false)
+  const [eggsRetrieved, setEggsRetrieved] = useState(false)
   const nextDate = new Date(activeTreatment.startDate)
   const [latestFollicleCountDate, setLatestFollicleCountDate] = useState(
-    follicleCounts[follicleCounts.length - 1].date
+    follicleCounts.length > 0
+      ? follicleCounts[follicleCounts.length - 1].date
+      : activeTreatment.startDate
   )
-  console.log(latestFollicleCountDate)
 
   const labels = [
     '>25',
@@ -75,7 +78,6 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
       setAfcFollicleCount
     )
   }, [follicleCounts, activeTreatment, range])
-
   return (
     <>
       <div>
@@ -101,13 +103,13 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
               className="-ml-1.5 mr-1 h-5 w-5 text-gray-400"
               aria-hidden="true"
             />
-            <span>Add new measurements</span>
+            <span>New</span>
           </button>
         </div>
       </div>
-      <div className="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
+      <div className="bg-white overflow-hidden shadow rounded-md divide-y divide-gray-200">
         <div className="px-4 py-5 sm:px-6">
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row md:justify-between justify-evenly">
             <div className="sm:hidden">
               <label htmlFor="tabs" className="sr-only">
                 Select a cycle
@@ -145,25 +147,35 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
                 ))}
               </nav>
             </div>
-            <button
-              type="button"
-              onClick={() => setTrigger(!trigger)}
-              className="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              <FaSyringe className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
-              Assign Trigger
-            </button>
+            <div className="flex flex-col md:flex-row justify-evenly md:space-x-4 space-y-2 md:space-y-0">
+              <button
+                type="button"
+                onClick={() => setTrigger(!trigger)}
+                className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                {/* <FaSyringe className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" /> */}
+                Assign Trigger
+              </button>
+              <button
+                type="button"
+                onClick={() => setEggsRetrieved(!eggsRetrieved)}
+                className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                {/* <FaSyringe className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" /> */}
+                Record Eggs Retrieved
+              </button>
+            </div>
           </div>
         </div>
         <div className="px-4 py-2 sm:p-6">
           <div className="flex flex-row w-full justify-center">
-            <div className="bg-white overflow-hidden w-24">
+            <div className="bg-white ">
               <div className="flex w-full justify-center mt-0 h-6">
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium text-gray-500">
                   (mm)
                 </span>
               </div>
-              <div className=" py-2 bg-white">
+              <div className="py-2 bg-white">
                 {labels.map((label) => (
                   <div
                     key={uuidv4()}
@@ -190,8 +202,14 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
                       follicleCount={follicleCount}
                       isAcf={afcFollicleCount?.id === follicleCount.id}
                       isTrigger={
-                        follicleCount?.date === activeTreatment.triggerDate
+                        follicleCount?.date.slice(0, 10) ===
+                        activeTreatment.triggerDate?.slice(0, 10)
                       }
+                      isEggRetrieval={
+                        follicleCount?.date.slice(0, 10) ===
+                        activeTreatment.eggRetrievalDate?.slice(0, 10)
+                      }
+                      eggsRetrieved={activeTreatment.eggsRetrieved}
                     />
                   </div>
                 ))}
@@ -211,12 +229,17 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
           </div>
         </div>
       </div>
+      <SetEggsRetrieved
+        open={eggsRetrieved}
+        setOpen={setEggsRetrieved}
+        latestDate={latestFollicleCountDate}
+      />
       <SetTrigger
         open={trigger}
         setOpen={setTrigger}
         latestDate={latestFollicleCountDate}
       />
-      <NewFollicleCount open={open} setOpen={setOpen} nextDate={nextDate} />
+      <NewFollicleCount open={open} setOpen={setOpen} />
     </>
   )
 }
