@@ -1,3 +1,5 @@
+import BeatLoader from 'react-spinners/BeatLoader'
+
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import ClinicianSummary from '../ClinicianSummary'
@@ -12,7 +14,11 @@ export const QUERY = gql`
   }
 `
 
-export const Loading = () => <div></div>
+export const Loading = () => (
+  <div className="flex justify-center items-center h-48">
+    <BeatLoader loading={true} color="#4338ca" size={8} />
+  </div>
+)
 
 export const Empty = () => <div>Empty</div>
 

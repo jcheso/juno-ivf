@@ -1,3 +1,4 @@
+import { BeatLoader } from 'react-spinners'
 import CircleLoader from 'react-spinners/CircleLoader'
 import { SearchPatients } from 'types/graphql'
 
@@ -27,15 +28,13 @@ export const QUERY = gql`
 `
 
 export const Loading = () => (
-  <div className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
-    <div className="flex justify-center items-center">
-      <CircleLoader loading={true} color="#4338ca" />
-    </div>
+  <div className="flex justify-center items-center h-12 bg-white">
+    <BeatLoader loading={true} color="#4338ca" size={8} />
   </div>
 )
 
 export const Empty = () => (
-  <div className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
+  <div className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0 bg-white">
     No patients found
   </div>
 )
