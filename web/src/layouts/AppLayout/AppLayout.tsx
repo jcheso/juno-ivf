@@ -20,10 +20,11 @@ import { useAuth } from '@redwoodjs/auth'
 import { Link, NavLink, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
+import StatusBar from 'src/components/StatusBar/StatusBar'
 import { PatientContext } from 'src/providers/context/PatientContext'
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
-import StatusBar from '../../components/StatusBar'
+import StatusBarCell from '../../components/StatusBar/StatusBarCell'
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -265,7 +266,11 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             </button>
             <div className="flex-1 px-4 flex justify-between sm:px-6 lg:mx-auto lg:px-8">
               <div className="flex-1 flex">
-                <StatusBar></StatusBar>
+                {patient ? (
+                  <StatusBarCell patientId={patient.id} />
+                ) : (
+                  <StatusBar treatments={null} />
+                )}
               </div>
               <div className="ml-4 flex items-center md:ml-6">
                 <Menu as="div" className="ml-3 relative">

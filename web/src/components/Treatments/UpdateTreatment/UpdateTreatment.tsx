@@ -108,19 +108,13 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
   const loading = adding || deleting
 
   const onSubmit = async (data) => {
-    const dob = new Date(patient.dob)
-    const startDate = new Date(data.startDate)
-    const diff_ms: number = startDate - dob
-    const age_dt = new Date(diff_ms)
-    const age = Math.abs(age_dt.getUTCFullYear() - 1970)
-
     const input: UpdateTreatmentInput = {
       startDate: data.startDate,
       endDate: data.isActive ? null : data.endDate,
       clinicianId: data.clinicianId,
       isActive: data.isActive,
       wasSuccessful: data.outcome === 'Live birth' ? true : false,
-      ageAtTreatmentStart: age,
+      ageAtTreatmentStart: undefined,
       outcome: data.outcome,
       type: data.type,
     }

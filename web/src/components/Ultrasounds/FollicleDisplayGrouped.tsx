@@ -20,7 +20,9 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
   const [trigger, setTrigger] = useState(false)
   const nextDate = new Date(activeTreatment.startDate)
   const [latestFollicleCountDate, setLatestFollicleCountDate] = useState(
-    follicleCounts[follicleCounts.length - 1].date
+    follicleCounts.length > 0
+      ? follicleCounts[follicleCounts.length - 1].date
+      : activeTreatment.startDate
   )
 
   const labels = [
