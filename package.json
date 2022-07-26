@@ -22,5 +22,9 @@
   "prisma": {
     "seed": "yarn rw exec seed"
   },
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.0",
+  "scripts": {
+        "ci:build": "yarn rw build",
+        "ci:migrate": "DATABASE_URL=$MIGRATE_DATABASE yarn rw deploy vercel --no-build"
+    }
 }
