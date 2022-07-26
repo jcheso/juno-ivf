@@ -187,9 +187,9 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
                   </div>
                 ))}
                 <div className="pt-2 pb-1 sm:px-6p text-center">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900 w-full">
+                  <h1 className="text-lg leading-6 font-medium text-gray-900 w-full">
                     Day
-                  </h3>
+                  </h1>
                   <p className="mt-1 max-w-2xl text-sm text-gray-500">Date</p>
                 </div>
               </div>

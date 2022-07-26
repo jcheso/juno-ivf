@@ -76,9 +76,9 @@ const AddPatient = ({ clinics, clinicians }) => {
       <div className="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="md:col-span-1">
-            <h3 className="text-lg font-medium leading-6 text-gray-900">
+            <h1 className="text-lg font-medium leading-6 text-gray-900">
               Personal Information
-            </h3>
+            </h1>
             {/* <p className="mt-1 text-sm text-gray-500">
               Use a permanent address where you can receive mail.
             </p> */}

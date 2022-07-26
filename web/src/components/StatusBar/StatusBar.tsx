@@ -57,10 +57,12 @@ const StatusBar = ({ treatments }) => {
                 <Link to={routes.dashboard()}>Select a patient to view</Link>
               )}
             </div>
-            <div className="text-xs md:text-sm text-gray-500 truncate md:pl-1 flex flex-row">
-              <div className="hidden md:flex mr-1">|</div>
-              {activeTreatment !== null && ` Age at Cycle Start: ${age}`}
-            </div>
+            {activeTreatment !== null && (
+              <div className="text-xs md:text-sm text-gray-500 truncate md:pl-1 flex flex-row">
+                <div className="hidden md:flex mr-1">|</div>
+                <div className="">Age at Cycle Start: {age}</div>
+              </div>
+            )}
           </div>
         </div>
 
