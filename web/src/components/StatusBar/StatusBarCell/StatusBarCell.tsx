@@ -3,7 +3,7 @@ import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import StatusBar from '../StatusBar'
 
 export const QUERY = gql`
-  query TreatmentsQuery($patientId: String!) {
+  query GetTreatmentsQuery($patientId: String!) {
     treatments: treatmentsByPatient(patientId: $patientId) {
       id
       startDate

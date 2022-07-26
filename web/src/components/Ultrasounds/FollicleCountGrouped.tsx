@@ -65,9 +65,9 @@ const FollicleCountGrouped = ({
               </div>
             ))}
           <div className="pt-2 pb-1 sm:px-6p text-center">
-            <h3 className="text-lg leading-6 font-medium text-gray-900 w-full">
+            <h1 className="text-lg leading-6 font-medium text-gray-900 w-full">
               {follicleCount.day}
-            </h3>
+            </h1>
             <p className="mt-1 text-xs text-gray-500">
               {new Date(follicleCount.date).toLocaleDateString('en-GB')}
             </p>
