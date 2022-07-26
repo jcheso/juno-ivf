@@ -1,8 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import { Link, routes } from '@redwoodjs/router'
 
+import { PatientContext } from 'src/providers/context/PatientContext'
+import { TreatmentContext } from 'src/providers/context/TreatmentContext'
+
 const PatientSearchForm = ({ clinics, input, updateInput }) => {
+  const [patient, setPatient] = useContext(PatientContext)
+  const [activeTreatment, setActiveTreatment] = useContext(TreatmentContext)
+
+  function clearContext() {
+    setTimeout(() => {
+      localStorage.removeItem('patientCache')
+      localStorage.removeItem('treatmentCache')
+      setPatient(null)
+      setActiveTreatment(null)
+    }, 50)
+  }
+
   const handleInputChange = (event) => {
     const { name, value } = event.target
     updateInput({ ...input, [name]: value })
@@ -19,6 +34,7 @@ const PatientSearchForm = ({ clinics, input, updateInput }) => {
         <div className="ml-4 mt-2 flex-shrink-0">
           <Link
             to={routes.addPatient()}
+            onClick={() => clearContext()}
             type="button"
             className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >

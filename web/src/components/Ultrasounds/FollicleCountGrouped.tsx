@@ -16,7 +16,6 @@ const FollicleCountGrouped = ({
   const leftFollicleMap = new FollicleMapFull(follicleCount.left)
   const rightFollicleMap = new FollicleMapFull(follicleCount.right)
   const [open, setOpen] = useState(false)
-  console.log(isEggRetrieval, follicleCount.date)
   return (
     <>
       <div className="bg-white overflow-hidden w-24">

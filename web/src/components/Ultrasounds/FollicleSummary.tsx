@@ -42,7 +42,7 @@ export default function FollicleSummary({ follicleCounts, afcFollicleCount }) {
         {stats.map((item) => (
           <div
             key={item.name}
-            className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6"
+            className="px-4 py-5 bg-white shadow rounded-md overflow-hidden sm:p-6"
           >
             <dt className="text-sm font-medium text-gray-500 truncate">
               {item.name}

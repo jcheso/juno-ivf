@@ -23,9 +23,9 @@ const Treatments = ({ treatments }) => {
   const [openUpdateTreatment, setUpdateTreatmentForm] = useState(false)
   return (
     <>
-      <div className="bg-white shadow overflow-hidden sm:rounded-md">
-        <div className="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
-          <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
+      <div className="bg-white shadow overflow-hidden rounded-md">
+        <div className="bg-white px-4 py-5 border-b border-gray-200 md:px-6">
+          <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap md:flex-nowrap">
             <div className="ml-4 mt-2">
               <h3 className="text-lg leading-6 font-medium text-gray-900">
                 Treatments
@@ -87,7 +87,7 @@ const Treatments = ({ treatments }) => {
                       : 'bg-white')
                   }
                 >
-                  <div className="px-4 py-4 sm:px-6">
+                  <div className="px-4 py-4 md:px-6">
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-medium text-indigo-600 truncate">
                         {`Cycle  ${treatment.count}`}
@@ -109,29 +109,25 @@ const Treatments = ({ treatments }) => {
                         )}
                       </div>
                     </div>
-                    <div className="mt-2 sm:flex sm:justify-between">
-                      <div className="sm:flex">
-                        <div className="mt-2 flex items-center sm:text-sm text-gray-500 sm:mt-0 text-left text-xs">
-                          {treatment.type && (
-                            <>
-                              <TagIcon
-                                className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                              <p>{treatment.type}</p>
-                            </>
-                          )}
-                        </div>
-                        <p className="flex items-center text-sm text-gray-500">
+                    <div className="mt-2 md:flex md:justify-between flex-col lg:flex-row">
+                      <div className="md:flex">
+                        <p className="mt-2 flex text-sm text-gray-500 md:mt-0">
+                          <TagIcon
+                            className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                          <p>{treatment.type}</p>
+                        </p>
+                        <p className="mt-2 flex text-sm text-gray-500 md:mt-0 md:ml-3">
                           <UsersIcon
-                            className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400 sm:ml-6"
+                            className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400 md:ml-3"
                             aria-hidden="true"
                           />
                           {treatment.clinician.firstName +
                             ' ' +
                             treatment.clinician.lastName}
                         </p>
-                        <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                        <p className="mt-2 flex  text-sm text-gray-500 md:mt-0 md:ml-3">
                           <LocationMarkerIcon
                             className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                             aria-hidden="true"
@@ -139,8 +135,8 @@ const Treatments = ({ treatments }) => {
                           {treatment.patient.clinic.name}
                         </p>
                       </div>
-                      <div className="flex flex-row space-x-4">
-                        <div className="mt-2 flex items-center sm:text-sm text-gray-500 sm:mt-0 text-left text-xs">
+                      <div className="flex flex-col md:flex-row md:space-x-4 lg:mt-0 sm:mt-2 mt-0">
+                        <div className="mt-3 flex items-center text-gray-500 md:mt-0 text-left text-sm ">
                           <CalendarIcon
                             className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                             aria-hidden="true"
@@ -154,7 +150,7 @@ const Treatments = ({ treatments }) => {
                             </time>
                           </p>
                         </div>
-                        <div className="mt-2 flex items-center sm:text-sm text-gray-500 sm:mt-0 text-left text-xs">
+                        <div className="mt-2 flex items-center text-sm text-gray-500 md:mt-0 text-left">
                           {treatment.endDate ? (
                             <>
                               <CheckCircleIcon

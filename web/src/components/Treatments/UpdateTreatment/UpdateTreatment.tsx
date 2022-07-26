@@ -168,7 +168,7 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
         </Transition.Child>
 
         <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
+          <div className="flex items-center sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -178,7 +178,7 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-xl sm:w-full sm:p-6">
+              <Dialog.Panel className="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-xl sm:w-full sm:p-6 h-fit">
                 <Form className="space-y-6" onSubmit={onSubmit}>
                   <div>
                     <h3 className="text-lg font-medium leading-6 text-gray-900  px-4">
@@ -187,60 +187,58 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                     <div className="bg-white px-4 py-5 sm:rounded-lg sm:p-6">
                       <div className="md:grid md:gap-6">
                         <div className="mt-5 md:mt-0 md:col-span-2 space-y-3">
-                          <div className="grid md:grid-cols-6 md:space-x-6">
-                            <div className="col-span-6 sm:col-span-3">
-                              <Label
-                                name="startDate"
-                                className="block text-sm font-medium text-gray-700"
-                                errorClassName="block text-sm font-medium text-red-500"
-                              >
-                                Start Date
-                              </Label>
-                              <DateField
-                                name="startDate"
-                                defaultValue={activeTreatment.startDate.slice(
-                                  0,
-                                  10
-                                )}
-                                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                disabled={true}
-                                errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                              />
-                              <FieldError
-                                name="startDate"
-                                className="block text-xs font-medium text-red-500 pt-1"
-                              />
-                            </div>
-                            <div className="col-span-6 sm:col-span-3">
-                              <Label
-                                name="endDate"
-                                className="block text-sm font-medium text-gray-700"
-                                errorClassName="block text-sm font-medium text-red-500"
-                              >
-                                End Date
-                              </Label>
-                              <DateField
-                                name="endDate"
-                                defaultValue={
-                                  activeTreatment.endDate
-                                    ? activeTreatment.endDate.slice(0, 10)
-                                    : null
-                                }
-                                validation={{
-                                  required: {
-                                    value: !isActive,
-                                    message:
-                                      'An end date is required if the treatment is no longer active',
-                                  },
-                                }}
-                                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                              />
-                              <FieldError
-                                name="endDate"
-                                className="block text-xs font-medium text-red-500 pt-1"
-                              />
-                            </div>
+                          <div className="col-span-6 sm:col-span-3">
+                            <Label
+                              name="startDate"
+                              className="block text-sm font-medium text-gray-700"
+                              errorClassName="block text-sm font-medium text-red-500"
+                            >
+                              Start Date
+                            </Label>
+                            <DateField
+                              name="startDate"
+                              defaultValue={activeTreatment.startDate.slice(
+                                0,
+                                10
+                              )}
+                              className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                              disabled={true}
+                              errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            />
+                            <FieldError
+                              name="startDate"
+                              className="block text-xs font-medium text-red-500 pt-1"
+                            />
+                          </div>
+                          <div className="col-span-6 sm:col-span-3">
+                            <Label
+                              name="endDate"
+                              className="block text-sm font-medium text-gray-700"
+                              errorClassName="block text-sm font-medium text-red-500"
+                            >
+                              End Date
+                            </Label>
+                            <DateField
+                              name="endDate"
+                              defaultValue={
+                                activeTreatment.endDate
+                                  ? activeTreatment.endDate.slice(0, 10)
+                                  : null
+                              }
+                              validation={{
+                                required: {
+                                  value: !isActive,
+                                  message:
+                                    'An end date is required if the treatment is no longer active',
+                                },
+                              }}
+                              className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                              errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            />
+                            <FieldError
+                              name="endDate"
+                              className="block text-xs font-medium text-red-500 pt-1"
+                            />
                           </div>
                           <div className="col-span-6 sm:col-span-3">
                             <Label
@@ -312,7 +310,7 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-2 sm:mt-3 sm:grid sm:grid-cols-3 sm:gap-3 sm:grid-flow-row-dense px-4">
+                  <div className="mt-2 sm:mt-1 sm:grid sm:grid-cols-3 sm:gap-3 sm:grid-flow-row-dense px-4">
                     {!adding ? (
                       <Submit
                         disabled={loading}
@@ -334,12 +332,12 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                         type="button"
                         disabled={loading}
                         onClick={() => onDelete()}
-                        className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm"
+                        className="mt-3 sm:mt-0 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm"
                       >
                         Delete treatment
                       </button>
                     ) : (
-                      <div className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm">
+                      <div className="mt-3 sm:mt-0 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm">
                         <CircleLoader
                           loading={deleting}
                           color="#ffffff"

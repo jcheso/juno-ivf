@@ -103,13 +103,13 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
               className="-ml-1.5 mr-1 h-5 w-5 text-gray-400"
               aria-hidden="true"
             />
-            <span>Add new measurements</span>
+            <span>New</span>
           </button>
         </div>
       </div>
-      <div className="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
+      <div className="bg-white overflow-hidden shadow rounded-md divide-y divide-gray-200">
         <div className="px-4 py-5 sm:px-6">
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row md:justify-between justify-evenly">
             <div className="sm:hidden">
               <label htmlFor="tabs" className="sr-only">
                 Select a cycle
@@ -147,7 +147,7 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
                 ))}
               </nav>
             </div>
-            <div className="flex flex-row justify-evenly space-x-4">
+            <div className="flex flex-col md:flex-row justify-evenly md:space-x-4 space-y-2 md:space-y-0">
               <button
                 type="button"
                 onClick={() => setTrigger(!trigger)}
@@ -169,13 +169,13 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
         </div>
         <div className="px-4 py-2 sm:p-6">
           <div className="flex flex-row w-full justify-center">
-            <div className="bg-white overflow-hidden w-24">
+            <div className="bg-white ">
               <div className="flex w-full justify-center mt-0 h-6">
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium text-gray-500">
                   (mm)
                 </span>
               </div>
-              <div className=" py-2 bg-white">
+              <div className="py-2 bg-white">
                 {labels.map((label) => (
                   <div
                     key={uuidv4()}

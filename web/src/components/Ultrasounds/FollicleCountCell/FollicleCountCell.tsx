@@ -74,7 +74,12 @@ export const Success = ({
     })
   )
   if (width < 600) {
-    return <FollicleDisplay follicleCounts={treatmentFollicleCountsParsed} />
+    return (
+      <FollicleDisplayGrouped
+        follicleCounts={treatmentFollicleCountsParsed}
+        treatments={treatments}
+      />
+    )
   } else {
     return (
       <FollicleDisplayGrouped

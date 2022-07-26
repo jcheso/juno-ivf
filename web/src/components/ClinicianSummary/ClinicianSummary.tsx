@@ -17,7 +17,7 @@ export default function ClinicianSummary({ clinicianSummary }) {
     { label: 'Successful Treatments', value: clinicianSummary.totalTreatments },
   ]
   return (
-    <div className="rounded-lg bg-white overflow-hidden shadow">
+    <div className="rounded-md bg-white overflow-hidden shadow">
       <h2 className="sr-only" id="profile-overview-title">
         Profile Overview
       </h2>
