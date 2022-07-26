@@ -14,7 +14,7 @@ const PatientContextProvider = ({ children }) => {
       patientCache &&
       new Date(patient.expires) > new Date()
     ) {
-      console.log('Setting patient from cache')
+      // console.log('Setting patient from cache')
       setState(patient.value)
     }
   }

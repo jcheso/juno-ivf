@@ -11,7 +11,7 @@ const TreatmentContextProvider = ({ children }) => {
       treatmentCache &&
       new Date(treatmentCache.expires) > new Date()
     ) {
-      console.log('Setting treatment from cache')
+      // console.log('Setting treatment from cache')
       setState(treatmentCache.value)
     }
   }
