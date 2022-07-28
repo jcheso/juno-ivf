@@ -1,7 +1,6 @@
 export class FollicleMapFull {
   counts: {
-    '25+': number[]
-    '25': number[]
+    '24+': number[]
     '24': number[]
     '23': number[]
     '22': number[]
@@ -17,6 +16,11 @@ export class FollicleMapFull {
     '12': number[]
     '11': number[]
     '10': number[]
+    '9': number[]
+    '8': number[]
+    '7': number[]
+    '6': number[]
+    '5': number[]
   }
   inRange: number
 
@@ -24,8 +28,7 @@ export class FollicleMapFull {
     // Count follicles in range of 11-19mm
     this.inRange = 0
     this.counts = {
-      '25+': [],
-      '25': [],
+      '24+': [],
       '24': [],
       '23': [],
       '22': [],
@@ -41,16 +44,19 @@ export class FollicleMapFull {
       '12': [],
       '11': [],
       '10': [],
+      '9': [],
+      '8': [],
+      '7': [],
+      '6': [],
+      '5': [],
     }
     if (follicleCount) {
       follicleCount.forEach((follicle) => {
         if (follicle >= 11 && follicle <= 19) {
           this.inRange++
         }
-        if (follicle > 25) {
-          this.counts['25+'].push(0)
-        } else if (follicle == 25) {
-          this.counts['25'].push(0)
+        if (follicle > 24) {
+          this.counts['24+'].push(0)
         } else if (follicle == 24) {
           this.counts['24'].push(0)
         } else if (follicle == 23) {
@@ -79,8 +85,18 @@ export class FollicleMapFull {
           this.counts['12'].push(0)
         } else if (follicle == 11) {
           this.counts['11'].push(0)
-        } else if (follicle < 11) {
+        } else if (follicle == 10) {
           this.counts['10'].push(0)
+        } else if (follicle == 9) {
+          this.counts['9'].push(0)
+        } else if (follicle == 8) {
+          this.counts['8'].push(0)
+        } else if (follicle == 7) {
+          this.counts['7'].push(0)
+        } else if (follicle == 6) {
+          this.counts['6'].push(0)
+        } else if (follicle == 5) {
+          this.counts['5'].push(0)
         }
       })
     }

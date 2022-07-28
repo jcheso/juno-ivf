@@ -31,8 +31,8 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
   const [ovary, setOvary] = useState('left')
   const [day, setDay] = useState(follicleCount.day)
   const lengths = [
-    4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
-    24, 25, 26, 27, 28,
+    5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+    25,
   ]
 
   const closeModal = () => {
@@ -395,7 +395,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                       </span>
                     </div>
                     <div className="flex md:flex-row flex-col gap-x-4">
-                      <div className="md:w-1/2 grid grid-cols-5 w-full">
+                      <div className="md:w-1/2 grid grid-cols-3 md:grid-cols-7 w-full">
                         {lengths.map((length) => (
                           <button
                             type="button"
@@ -403,7 +403,11 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                             className="rounded-md m-1 items-center px-4 py-4 border border-gray-300 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                             onClick={() => addFollicle(length)}
                           >
-                            {length}
+                            {length === 5
+                              ? '<6'
+                              : length === 25
+                              ? '>24'
+                              : length}
                           </button>
                         ))}
                       </div>
@@ -413,14 +417,18 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                             Left Ovary Measurements
                           </h1>
                           <div className="grid grid-cols-6 md:grid-cols-10">
-                            {left.map((len, index) => (
+                            {left.map((length, index) => (
                               <button
                                 type="button"
                                 className="hover:animate-pulse hover:opacity-50 rounded-full bg-purple-400 h-10 w-10 text-sm text-white text-center inline-flex items-center justify-center my-1"
                                 key={uuidv4()}
                                 onClick={() => removeFollicle(index, 'left')}
                               >
-                                {len}
+                                {length === 5
+                                  ? '<6'
+                                  : length === 25
+                                  ? '>24'
+                                  : length}{' '}
                               </button>
                             ))}
                           </div>
@@ -430,14 +438,18 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                             Right Ovary Measurements
                           </h1>
                           <div className="grid grid-cols-6 md:grid-cols-10">
-                            {right.map((len, index) => (
+                            {right.map((length, index) => (
                               <button
                                 type="button"
                                 className="hover:animate-pulse hover:opacity-50 rounded-full bg-pink-400 h-10 w-10 text-sm text-white text-center inline-flex items-center justify-center my-1"
                                 key={uuidv4()}
                                 onClick={() => removeFollicle(index, 'right')}
                               >
-                                {len}
+                                {length === 5
+                                  ? '<6'
+                                  : length === 25
+                                  ? '>24'
+                                  : length}{' '}
                               </button>
                             ))}
                           </div>
