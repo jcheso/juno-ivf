@@ -4,6 +4,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import CircleLoader from 'react-spinners/CircleLoader'
 import { CreateTreatmentInput } from 'types/graphql'
 
+import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -26,6 +27,7 @@ export default function NewTreatment({
   clinicians,
   treatments,
 }) {
+  const { currentUser } = useAuth()
   const [patient, setPatient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
@@ -174,6 +176,7 @@ export default function NewTreatment({
                               name="clinician"
                               className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                               errorClassName="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                              defaultValue={currentUser.id}
                             >
                               {clinicians.map((clinician) => (
                                 <option key={clinician.id} value={clinician.id}>
