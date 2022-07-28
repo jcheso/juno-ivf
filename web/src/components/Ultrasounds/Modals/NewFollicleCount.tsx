@@ -354,7 +354,7 @@ export default function NewFollicleCount({ open, setOpen }) {
                       </span>
                     </div>
                     <div className="flex md:flex-row flex-col gap-x-4">
-                      <div className="md:w-1/2 grid grid-cols-3 md:grid-cols-7 w-full">
+                      <div className="md:w-1/2 grid grid-cols-3 md:grid-cols-7 w-full content-center align-middle">
                         {lengths.map((length) => (
                           <button
                             type="button"
@@ -379,7 +379,7 @@ export default function NewFollicleCount({ open, setOpen }) {
                             {left.map((length, index) => (
                               <button
                                 type="button"
-                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-purple-400 h-10 w-10 text-sm text-white text-center inline-flex items-center justify-center my-1"
+                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-purple-400 h-8 w-8  text-sm text-white text-center inline-flex items-center justify-center my-1"
                                 key={uuidv4()}
                                 onClick={() => removeFollicle(index, 'left')}
                               >
@@ -392,7 +392,7 @@ export default function NewFollicleCount({ open, setOpen }) {
                             ))}
                           </div>
                         </div>
-                        <div className="flex flex-col pt-2">
+                        <div className="flex flex-col">
                           <h1 className="text-sm font-medium text-gray-600 truncate">
                             Right Ovary Measurements (mm)
                           </h1>
@@ -400,7 +400,7 @@ export default function NewFollicleCount({ open, setOpen }) {
                             {right.map((length, index) => (
                               <button
                                 type="button"
-                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-pink-400 h-10 w-10 text-sm text-white text-center inline-flex items-center justify-center my-1"
+                                className="hover:animate-pulse hover:opacity-50 rounded-full bg-pink-400 h-8 w-8 text-sm text-white text-center inline-flex items-center justify-center my-1"
                                 key={uuidv4()}
                                 onClick={() => removeFollicle(index, 'right')}
                               >
