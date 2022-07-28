@@ -28,8 +28,7 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
   )
 
   const labels = [
-    '>25',
-    '25',
+    '>24',
     '24',
     '23',
     '22',
@@ -44,7 +43,12 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
     '13',
     '12',
     '11',
-    '<11',
+    '10',
+    '9',
+    '8',
+    '7',
+    '6',
+    '<6',
   ]
 
   const tabs = treatments.map((treatment) => {

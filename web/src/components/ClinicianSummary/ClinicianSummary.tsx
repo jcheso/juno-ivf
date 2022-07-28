@@ -55,14 +55,7 @@ export default function ClinicianSummary({ clinicianSummary }) {
               </p>
             </div>
           </div>
-          <div className="mt-5 flex justify-center sm:mt-0">
-            {/* <a
-              href="#"
-              className="flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-            >
-              View profile
-            </a> */}
-          </div>
+          <div className="mt-5 flex justify-center sm:mt-0"></div>
         </div>
       </div>
       <div className="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
