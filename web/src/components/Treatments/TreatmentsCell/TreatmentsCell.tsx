@@ -1,4 +1,4 @@
-import CircleLoader from 'react-spinners/CircleLoader'
+import BeatLoader from 'react-spinners/BeatLoader'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
@@ -34,8 +34,8 @@ export const QUERY = gql`
 `
 
 export const Loading = () => (
-  <div className="flex justify-center items-center h-screen">
-    <CircleLoader loading={true} color="#4338ca" />
+  <div className="flex justify-center items-center h-32">
+    <BeatLoader loading={true} color="#4338ca" size={8} />
   </div>
 )
 

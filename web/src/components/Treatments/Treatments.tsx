@@ -27,9 +27,9 @@ const Treatments = ({ treatments }) => {
         <div className="bg-white px-4 py-5 border-b border-gray-200 md:px-6">
           <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap md:flex-nowrap">
             <div className="ml-4 mt-2">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
+              <h1 className="text-lg leading-6 font-medium text-gray-900">
                 Treatments
-              </h3>
+              </h1>
             </div>
             <div className="flex flex-row">
               {activeTreatment !== null && (
