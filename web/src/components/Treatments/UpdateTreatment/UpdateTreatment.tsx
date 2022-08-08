@@ -110,9 +110,17 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
   const loading = adding || deleting
 
   const onSubmit = async (data) => {
+    let newEndDate
+    if (data.isActive && activeTreatment.endDate) {
+      newEndDate = null
+    } else if (!data.isActive && activeTreatment.endDate) {
+      newEndDate = activeTreatment.endDate
+    } else {
+      newEndDate = new Date().toISOString()
+    }
     const input: UpdateTreatmentInput = {
       startDate: data.startDate,
-      endDate: data.isActive ? null : data.endDate,
+      endDate: newEndDate,
       clinicianId: data.clinicianId,
       isActive: data.isActive,
       wasSuccessful: data.outcome === 'Live birth' ? true : false,
@@ -202,41 +210,10 @@ export default function NewTreatment({ open, setOpen, clinicians }) {
                                 10
                               )}
                               className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                              disabled={true}
                               errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                             />
                             <FieldError
                               name="startDate"
-                              className="block text-xs font-medium text-red-500 pt-1"
-                            />
-                          </div>
-                          <div className="col-span-6 sm:col-span-3">
-                            <Label
-                              name="endDate"
-                              className="block text-sm font-medium text-gray-700"
-                              errorClassName="block text-sm font-medium text-red-500"
-                            >
-                              End Date
-                            </Label>
-                            <DateField
-                              name="endDate"
-                              defaultValue={
-                                activeTreatment.endDate
-                                  ? activeTreatment.endDate.slice(0, 10)
-                                  : null
-                              }
-                              validation={{
-                                required: {
-                                  value: !isActive,
-                                  message:
-                                    'An end date is required if the treatment is no longer active',
-                                },
-                              }}
-                              className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                              errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                            />
-                            <FieldError
-                              name="endDate"
                               className="block text-xs font-medium text-red-500 pt-1"
                             />
                           </div>

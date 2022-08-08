@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Fragment, useContext, useRef, useState } from 'react'
+import { Fragment, useContext, useEffect, useRef, useState } from 'react'
 
 import { Dialog, Transition } from '@headlessui/react'
 import CircleLoader from 'react-spinners/CircleLoader'
@@ -23,14 +23,62 @@ import { TreatmentContext } from 'src/providers/context/TreatmentContext'
 
 import { QUERY } from '../FollicleCountCell'
 
-export default function NewFollicleCount({ open, setOpen }) {
+export default function NewFollicleCount({ open, setOpen, follicleCounts }) {
   const [patient] = useContext(PatientContext)
   const [activeTreatment, setTreatment] = useContext(TreatmentContext)
   const cancelButtonRef = useRef(null)
   const [left, setLeft] = useState([])
   const [right, setRight] = useState([])
   const [ovary, setOvary] = useState('left')
-  const [day, setDay] = useState(0)
+
+  // Go through the follicleCount and check if the date is already in the list with a count of -1
+  const checkIfExists = (date: Date) => {
+    const exists = follicleCounts.find((follicleCount) => {
+      return follicleCount.date === date.toISOString() &&
+        follicleCount.count !== -1
+        ? true
+        : false
+    })
+    return exists ? true : false
+  }
+
+  // Find the latest date in the list with a count that isnt -1
+  const findLatestDate = () => {
+    // copy follicleCounts
+    const latest = [...follicleCounts]
+    const latestResult = latest
+      .reverse()
+      .find((follicleCount) => follicleCount.date && follicleCount.count !== -1)
+    // add one day to the date
+    let latestDate = new Date()
+    if (latest) {
+      latestDate = new Date(latestResult.date)
+      latestDate.setDate(latestDate.getDate() + 1)
+    }
+    return latestDate
+  }
+
+  const latestDate = findLatestDate()
+  // Calculate the day based off activeTreatment.startDate and the latestDate
+  const calculateDay = (latestDate: string) => {
+    const day = new Date(latestDate).getDate()
+    const month = new Date(latestDate).getMonth() + 1
+    const year = new Date(latestDate).getFullYear()
+    const startDate = new Date(activeTreatment.startDate).getDate()
+    const startMonth = new Date(activeTreatment.startDate).getMonth() + 1
+    const startYear = new Date(activeTreatment.startDate).getFullYear()
+    const dayDiff =
+      (year - startYear) * 365 + (month - startMonth) * 30 + (day - startDate)
+    return dayDiff
+  }
+
+  const [day, setDay] = useState(calculateDay(latestDate.toISOString()))
+
+  useEffect(() => {
+    if (open) {
+      setDay(calculateDay(latestDate.toISOString()))
+    }
+  }, [open])
 
   const lengths = [
     5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
@@ -263,16 +311,21 @@ export default function NewFollicleCount({ open, setOpen }) {
                             </Label>
                             <DateField
                               name="date"
-                              defaultValue={activeTreatment.startDate.slice(
-                                0,
-                                10
-                              )}
+                              defaultValue={latestDate
+                                .toISOString()
+                                .slice(0, 10)}
                               className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               validation={{
                                 required: {
                                   value: true,
                                   message: 'Date is required',
+                                },
+                                validate: {
+                                  exists: (value) => {
+                                    if (checkIfExists(value))
+                                      return 'Results already exist for this date, edit them instead'
+                                  },
                                 },
                               }}
                               min={activeTreatment.startDate.slice(0, 10)}

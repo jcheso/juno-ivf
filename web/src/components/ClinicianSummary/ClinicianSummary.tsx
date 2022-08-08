@@ -40,9 +40,9 @@ export default function ClinicianSummary({ clinicianSummary }) {
           <div className="sm:flex sm:space-x-5">
             <div className="flex-shrink-0">
               <img
-                className="mx-auto h-20 w-20 rounded-full"
+                className="mx-auto md:h-20 md:w-20 h-10 w-10 rounded-full"
                 src={userSummary.imageUrl}
-                alt=""
+                alt="User profile"
               />
             </div>
             <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">

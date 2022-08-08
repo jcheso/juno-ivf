@@ -156,6 +156,13 @@ const AddPatient = ({ clinics, clinicians }) => {
                       message: 'Date of Birth is required',
                     },
                   }}
+                  min={new Date(
+                    new Date().getFullYear() - 50,
+                    new Date().getMonth(),
+                    new Date().getDate()
+                  )
+                    .toISOString()
+                    .slice(0, 10)}
                 />
                 <FieldError
                   name="dob"

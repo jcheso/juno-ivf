@@ -314,6 +314,7 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                                   message: 'Date is required',
                                 },
                               }}
+                              disabled={true}
                               // When a new value is selected, update the setDay as the difference between activeTreatment.startDate and the selected date
                               onChange={(e) => {
                                 const day = new Date(e.target.value).getDate()
