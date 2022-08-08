@@ -18,7 +18,7 @@ const FollicleCountGrouped = ({
   const [open, setOpen] = useState(false)
   return (
     <>
-      <div className="bg-white overflow-hidden w-24">
+      <div className="bg-white overflow-hidden w-20">
         <div className="flex w-full justify-center mt-0 h-6">
           {isAcf && follicleCount.count != -1 && (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-purple-100 text-purple-800">
