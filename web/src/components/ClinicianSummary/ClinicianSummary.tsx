@@ -8,7 +8,7 @@ export default function ClinicianSummary({ clinicianSummary }) {
   const userSummary = {
     name: `${currentUser.firstName} ${currentUser.lastName}`,
     role: `Clinician at ${currentUser.clinic.name}`,
-    imageUrl: 'https://img.icons8.com/office/480/000000/medical-doctor.png',
+    imageUrl: 'https://img.icons8.com/office/128/000000/medical-doctor.png',
   }
   const stats = [
     {
