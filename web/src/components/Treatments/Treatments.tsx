@@ -116,8 +116,9 @@ const Treatments = ({ treatments }) => {
                             className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                             aria-hidden="true"
                           />
-                          <p>{treatment.type}</p>
+                          {treatment.type}
                         </p>
+
                         <p className="mt-2 flex text-sm text-gray-500 md:mt-0 md:ml-3">
                           <UsersIcon
                             className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400 md:ml-3"

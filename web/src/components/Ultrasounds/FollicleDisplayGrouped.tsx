@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import { PlusSmIcon } from '@heroicons/react/solid'
-import { FaSyringe } from 'react-icons/fa'
 import { v4 as uuidv4 } from 'uuid'
 
 import { TreatmentContext } from 'src/providers/context/TreatmentContext'
@@ -243,7 +242,11 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
         setOpen={setTrigger}
         latestDate={latestFollicleCountDate}
       />
-      <NewFollicleCount open={open} setOpen={setOpen} />
+      <NewFollicleCount
+        open={open}
+        setOpen={setOpen}
+        follicleCounts={follicleCounts}
+      />
     </>
   )
 }
