@@ -448,6 +448,46 @@ const AddPatient = ({ clinics, clinicians }) => {
 
               <div className="col-span-6 sm:col-span-6">
                 <Label
+                  name="infertilityDiagnosis"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Primary Infertility Diagnosis*
+                </Label>
+                <SelectField
+                  name="infertilityDiagnosis"
+                  className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  validation={{
+                    required: true,
+                    validate: {
+                      matchesInitialValue: (value) => {
+                        return (
+                          value !== 'Please select a diagnosis' ||
+                          'Select a diagnosis'
+                        )
+                      },
+                    },
+                  }}
+                >
+                  <option value="Please select a diagnosis">
+                    Please select a diagnosis
+                  </option>
+                  <option value="Abnormal Karotype">Abnormal Karotype</option>
+                  <option value="Abnormal Vagina and Cervix">
+                    Abnormal Vagina and Cervix
+                  </option>
+                  <option value="Azoospermia">Azoospermia</option>
+                  <option value="Bicornate Uterus">Bicornate Uterus</option>
+                  <option value="Low Sperm Count">Low Sperm Count</option>
+                </SelectField>
+                <FieldError
+                  name="infertilityDiagnosis"
+                  className="block text-xs font-medium text-red-500 pt-1"
+                />
+              </div>
+
+              <div className="col-span-6 sm:col-span-6">
+                <Label
                   name="medicalHistory"
                   className="block text-sm font-medium text-gray-700"
                 >
@@ -483,20 +523,6 @@ const AddPatient = ({ clinics, clinicians }) => {
                 </Label>
                 <TextAreaField
                   name="medications"
-                  className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-
-              <div className="col-span-6 sm:col-span-6">
-                <Label
-                  name="infertilityDiagnosis"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Main Infertility-Directed Diagnosis
-                </Label>
-                <TextAreaField
-                  name="infertilityDiagnosis"
                   className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                 />

@@ -28,7 +28,7 @@ export const QUERY = gql`
 `
 
 export const Loading = () => (
-  <div className="flex justify-center items-center h-12 bg-white">
+  <div className="flex justify-center items-center h-12">
     <BeatLoader loading={true} color="#4338ca" size={8} />
   </div>
 )
