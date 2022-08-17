@@ -308,12 +308,6 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
                               max={new Date().toISOString().slice(0, 10)}
                               className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               errorClassName="mt-1 focus:ring-red-500 focus:border-red-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                              validation={{
-                                required: {
-                                  value: true,
-                                  message: 'Date is required',
-                                },
-                              }}
                               disabled={true}
                               // When a new value is selected, update the setDay as the difference between activeTreatment.startDate and the selected date
                               onChange={(e) => {
