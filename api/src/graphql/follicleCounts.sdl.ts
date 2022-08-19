@@ -46,7 +46,7 @@ export const schema = gql`
     treatmentId: String
     left: String
     right: String
-    date: DateTime!
+    date: DateTime
   }
 
   type Mutation {
