@@ -181,10 +181,10 @@ export default function EditFollicleCount({ open, setOpen, follicleCount }) {
 
   const onSubmit = async (data) => {
     const updateFollicleInput: UpdateFollicleCountInput = {
-      day: day,
+      day: undefined,
       left: JSON.stringify(left),
       right: JSON.stringify(right),
-      date: data.date,
+      date: undefined,
       patientId: undefined,
       treatmentId: undefined,
     }
