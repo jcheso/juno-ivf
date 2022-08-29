@@ -51,7 +51,7 @@ export default function NewFollicleCount({ open, setOpen, follicleCounts }) {
       .find((follicleCount) => follicleCount.date && follicleCount.count !== -1)
     // add one day to the date
     let latestDate = new Date()
-    if (latest) {
+    if (latestResult) {
       latestDate = new Date(latestResult.date)
       latestDate.setDate(latestDate.getDate() + 1)
     }
