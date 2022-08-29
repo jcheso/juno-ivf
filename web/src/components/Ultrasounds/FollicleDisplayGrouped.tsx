@@ -205,11 +205,11 @@ export default function FollicleDisplayGrouped({ follicleCounts, treatments }) {
                       follicleCount={follicleCount}
                       isAcf={afcFollicleCount?.id === follicleCount.id}
                       isTrigger={
-                        follicleCount?.date.slice(0, 10) ===
+                        follicleCount.date?.slice(0, 10) ===
                         activeTreatment.triggerDate?.slice(0, 10)
                       }
                       isEggRetrieval={
-                        follicleCount?.date.slice(0, 10) ===
+                        follicleCount.date?.slice(0, 10) ===
                         activeTreatment.eggRetrievalDate?.slice(0, 10)
                       }
                       eggsRetrieved={activeTreatment.eggsRetrieved}
